@@ -14,14 +14,14 @@
       <span class="brand-sub">Information & Announcement System</span>
     </div>
     <nav class="screen-nav" aria-label="Screen navigation">
-      <button class="nav-btn active" data-screen="login" type="button">Login</button>
-      <button class="nav-btn" data-screen="dashboard" type="button">Dashboard</button>
-      <button class="nav-btn" data-screen="public" type="button">Public</button>
+      <a class="nav-btn active" href="#screen-login">Login</a>
+      <a class="nav-btn" href="#screen-dashboard">Dashboard</a>
+      <a class="nav-btn" href="#screen-public">Public</a>
     </nav>
   </header>
 
   <main class="container">
-    <section id="screen-login" class="screen active">
+    <section id="screen-login" class="screen">
       <article class="card auth-card">
         <h2>Sign In</h2>
         <p class="muted">Use this simplified login view for demo purposes.</p>
@@ -37,8 +37,8 @@
         </label>
 
         <div class="row">
-          <button class="btn btn-primary" type="button" data-screen="dashboard">Sign In as Admin</button>
-          <button class="btn btn-outline" type="button" data-screen="public">Continue as Guest</button>
+          <a class="btn btn-primary" href="#screen-dashboard">Sign In as Admin</a>
+          <a class="btn btn-outline" href="#screen-public">Continue as Guest</a>
         </div>
       </article>
     </section>
@@ -49,7 +49,7 @@
           <h2>Dashboard</h2>
           <p class="muted">Quick summary of barangay activity</p>
         </div>
-        <button class="btn btn-outline" type="button" data-screen="login">Sign Out</button>
+        <a class="btn btn-outline" href="#screen-login">Sign Out</a>
       </div>
 
       <div class="stats-grid">
@@ -82,7 +82,7 @@
         <span class="hero-chip">📢 LIVE • Community Updates</span>
         <h2>Public <span class="accent">Information Portal</span></h2>
         <p>Find announcements, events, and emergency contacts in one place.</p>
-        <button class="btn btn-primary" type="button" data-screen="dashboard">View Admin Demo</button>
+        <a class="btn btn-primary" href="#screen-dashboard">View Admin Demo</a>
       </article>
 
       <div class="two-col">
@@ -106,29 +106,5 @@
       </div>
     </section>
   </main>
-
-  <script>
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.toggle('active', screen.id === `screen-${id}`);
-      });
-
-      document.querySelectorAll('.nav-btn').forEach(button => {
-        button.classList.toggle('active', button.dataset.screen === id);
-      });
-
-      window.scrollTo(0, 0);
-    }
-
-    document.addEventListener('click', event => {
-      const trigger = event.target.closest('[data-screen]');
-      if (!trigger) return;
-
-      const nextScreen = trigger.dataset.screen;
-      if (!nextScreen) return;
-
-      showScreen(nextScreen);
-    });
-  </script>
 </body>
 </html>

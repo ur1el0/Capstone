@@ -56,12 +56,16 @@ body {
 
 .nav-btn,
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--line);
   background: #fff;
   color: var(--text);
   border-radius: 8px;
   padding: 9px 12px;
   font-size: 14px;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -79,11 +83,8 @@ body {
 }
 
 .screen {
-  display: none;
-}
-
-.screen.active {
   display: block;
+  margin-bottom: 22px;
 }
 
 .card {
