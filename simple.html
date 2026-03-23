@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BarangayConnect — Simple Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="simple.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>BarangayConnect</h1>
+      <span class="brand-sub">Information & Announcement System</span>
+    </div>
+    <nav class="screen-nav" aria-label="Screen navigation">
+      <button class="nav-btn active" data-screen="login" type="button">Login</button>
+      <button class="nav-btn" data-screen="dashboard" type="button">Dashboard</button>
+      <button class="nav-btn" data-screen="public" type="button">Public</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="screen-login" class="screen active">
+      <article class="card auth-card">
+        <h2>Sign In</h2>
+        <p class="muted">Use this simplified login view for demo purposes.</p>
+
+        <label class="field">
+          <span>Email</span>
+          <input type="email" placeholder="admin@barangay.gov.ph" />
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input type="password" placeholder="••••••••" />
+        </label>
+
+        <div class="row">
+          <button class="btn btn-primary" type="button" data-screen="dashboard">Sign In as Admin</button>
+          <button class="btn btn-outline" type="button" data-screen="public">Continue as Guest</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screen-dashboard" class="screen">
+      <div class="row between align-center section-head">
+        <div>
+          <h2>Dashboard</h2>
+          <p class="muted">Quick summary of barangay activity</p>
+        </div>
+        <button class="btn btn-outline" type="button" data-screen="login">Sign Out</button>
+      </div>
+
+      <div class="stats-grid">
+        <article class="card stat-card">
+          <h3>48</h3>
+          <p>Total Announcements</p>
+        </article>
+        <article class="card stat-card">
+          <h3>12</h3>
+          <p>Upcoming Events</p>
+        </article>
+        <article class="card stat-card">
+          <h3>1,240</h3>
+          <p>Registered Residents</p>
+        </article>
+      </div>
+
+      <article class="card">
+        <h3>Recent Announcements</h3>
+        <ul class="simple-list">
+          <li>Ayuda Distribution Schedule — March 28–30</li>
+          <li>Anti-Rabies Vaccination Drive — April 5</li>
+          <li>Free Medical Mission — April 12</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="screen-public" class="screen">
+      <article class="card hero">
+        <span class="hero-chip">📢 LIVE • Community Updates</span>
+        <h2>Public <span class="accent">Information Portal</span></h2>
+        <p>Find announcements, events, and emergency contacts in one place.</p>
+        <button class="btn btn-primary" type="button" data-screen="dashboard">View Admin Demo</button>
+      </article>
+
+      <div class="two-col">
+        <article class="card">
+          <h3>Latest Announcements</h3>
+          <ul class="simple-list gold-list">
+            <li>Aid Distribution — Priority</li>
+            <li>Barangay Fiesta Celebration</li>
+            <li>Medical Mission Registration</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Emergency Hotlines</h3>
+          <ul class="simple-list">
+            <li>Barangay Health Center — (049) 123-4567</li>
+            <li>Barangay Tanod — (049) 234-5678</li>
+            <li>Fire Station — 911</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.toggle('active', screen.id === `screen-${id}`);
+      });
+
+      document.querySelectorAll('.nav-btn').forEach(button => {
+        button.classList.toggle('active', button.dataset.screen === id);
+      });
+
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener('click', event => {
+      const trigger = event.target.closest('[data-screen]');
+      if (!trigger) return;
+
+      const nextScreen = trigger.dataset.screen;
+      if (!nextScreen) return;
+
+      showScreen(nextScreen);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BarangayConnect — Information & Announcement System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    /* ─── CSS VARIABLES ─────────────────────────────────────── */
+    :root {
+      --navy:       #0F2D5B;
+      --navy-mid:   #1A4080;
+      --navy-light: #2859AD;
+      --gold:       #E8A020;
+      --gold-light: #F5C060;
+      --gold-pale:  #FEF5E3;
+      --sky:        #EBF3FF;
+      --sky-mid:    #C8DFFF;
+      --white:      #FFFFFF;
+      --off-white:  #F7F9FC;
+      --gray-100:   #F0F4F8;
+      --gray-200:   #E2E8F0;
+      --gray-300:   #CBD5E0;
+      --gray-400:   #A0AEC0;
+      --gray-500:   #718096;
+      --gray-700:   #2D3748;
+      --gray-900:   #1A202C;
+      --red:        #E53E3E;
+      --red-light:  #FFF5F5;
+      --green:      #2F855A;
+      --green-light:#F0FFF4;
+      --teal:       #2C7A7B;
+      --teal-light: #E6FFFA;
+      --purple:     #553C9A;
+      --purple-light:#FAF5FF;
+      --orange:     #C05621;
+      --orange-light:#FFFAF0;
+      --sidebar-w:  260px;
+      --topbar-h:   68px;
+      --radius-sm:  6px;
+      --radius-md:  12px;
+      --radius-lg:  18px;
+      --radius-xl:  28px;
+      --shadow-sm:  0 1px 3px rgba(15,45,91,.07), 0 1px 2px rgba(15,45,91,.05);
+      --shadow-md:  0 4px 16px rgba(15,45,91,.09), 0 2px 6px rgba(15,45,91,.06);
+      --shadow-lg:  0 12px 40px rgba(15,45,91,.13), 0 4px 14px rgba(15,45,91,.08);
+      --shadow-gold:0 4px 20px rgba(232,160,32,.3);
+      --transition: all .22s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ─── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--off-white);
+      color: var(--gray-900);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; }
+    img { max-width: 100%; }
+    input, textarea, select {
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    /* ─── SCREEN MANAGEMENT ────────────────────────────────── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ─── NAV TABS (dev helper hidden in final view) ───────── */
+    .nav-tabs {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      background: var(--navy);
+      border-radius: 50px;
+      padding: 8px 12px;
+      z-index: 9999;
+      box-shadow: var(--shadow-lg);
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 95vw;
+    }
+    .nav-tabs button {
+      background: transparent;
+      color: rgba(255,255,255,.65);
+      border: none;
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .3px;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .nav-tabs button:hover,
+    .nav-tabs button.active {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  SCREEN 1 — LOGIN / REGISTER                             */
+    /* ════════════════════════════════════════════════════════ */
+    #screen-login {
+      min-height: 100vh;
+      display: none;
+      background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 40%, #1e5fa0 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    #screen-login.active { display: flex; align-items: center; justify-content: center; }
+
+    /* BG pattern */
+    #screen-login::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 25%, rgba(232,160,32,.18) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(40,89,173,.4) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .login-hexagons {
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 400px; height: 400px;
+      opacity: .07;
+      background-image: repeating-linear-gradient(
+        60deg, var(--gold) 0, var(--gold) 1px, transparent 1px, transparent 30px
+      ), repeating-linear-gradient(
+        -60deg, var(--gold) 0, var(--gold) 1px, transparent 1px, transparent 30px
+      );
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 440px;
+      padding: 44px 40px 40px;
+      position: relative;
+      z-index: 2;
+      animation: cardIn .5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(32px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .login-brand-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      color: var(--gold);
+      box-shadow: var(--shadow-md);
+    }
+    .login-brand-text h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    .login-brand-text span {
+      font-size: 11px;
+      color: var(--gray-400);
+      font-weight: 500;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .tab-switcher {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .tab-switcher button {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      background: transparent;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--gray-500);
+      transition: var(--transition);
+    }
+    .tab-switcher button.active {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap .input-icon {
+      position: absolute;
+      left: 13px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: var(--transition);
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(40,89,173,.1);
+    }
+    .form-select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: var(--transition);
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+    }
+    .form-select:focus {
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(40,89,173,.1);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px rgba(15,45,91,.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(15,45,91,.35);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .divider {
+      display: flex; align-items: center;
+      gap: 10px;
+      margin: 18px 0;
+      color: var(--gray-400);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    .guest-btn {
+      width: 100%;
+      padding: 11px;
+      background: var(--white);
+      color: var(--navy);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    .guest-btn:hover {
+      border-color: var(--navy-light);
+      background: var(--sky);
+    }
+
+    .login-footer {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  ADMIN LAYOUT (sidebar + topbar)                         */
+    /* ════════════════════════════════════════════════════════ */
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--navy);
+      min-height: 100vh;
+      position: fixed;
+      left: 0; top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: var(--transition);
+    }
+    .sidebar-brand {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .sidebar-brand-row {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-logo {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+    .sidebar-brand-text h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+    .sidebar-brand-text small {
+      font-size: 10px;
+      color: rgba(255,255,255,.45);
+      font-weight: 500;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-section-label {
+      padding: 16px 20px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+    }
+    .sidebar-nav {
+      flex: 1;
+      padding: 8px 12px;
+      overflow-y: auto;
+    }
+    .sidebar-nav::-webkit-scrollbar { width: 4px; }
+    .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 4px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: rgba(255,255,255,.65);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 2px;
+    }
+    .nav-item i { width: 18px; text-align: center; font-size: 14px; }
+    .nav-item:hover {
+      background: rgba(255,255,255,.08);
+      color: var(--white);
+    }
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(232,160,32,.25), rgba(232,160,32,.1));
+      color: var(--gold-light);
+      border-left: 3px solid var(--gold);
+      padding-left: 9px;
+    }
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 50px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .user-pill:hover { background: rgba(255,255,255,.08); }
+    .user-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #ffd87a);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+    .user-info h4 { font-size: 13px; font-weight: 600; color: var(--white); }
+    .user-info span { font-size: 11px; color: rgba(255,255,255,.4); }
+
+    /* ADMIN TOPBAR */
+    .admin-topbar {
+      height: var(--topbar-h);
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 28px;
+      position: sticky;
+      top: 0; z-index: 90;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .topbar-subtitle {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-left: 8px;
+    }
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-btn {
+      width: 38px; height: 38px;
+      background: var(--gray-100);
+      border: none;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-500);
+      transition: var(--transition);
+      position: relative;
+    }
+    .topbar-btn:hover { background: var(--sky); color: var(--navy-light); }
+    .topbar-btn .notif-dot {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      border: 2px solid var(--white);
+    }
+    .topbar-search {
+      flex: 1; max-width: 320px;
+      position: relative;
+    }
+    .topbar-search input {
+      width: 100%;
+      padding: 9px 14px 9px 38px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      background: var(--gray-100);
+      font-size: 13px;
+      outline: none;
+      transition: var(--transition);
+    }
+    .topbar-search input:focus {
+      background: var(--white);
+      border-color: var(--navy-light);
+    }
+    .topbar-search i {
+      position: absolute;
+      left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+    }
+
+    /* ADMIN MAIN CONTENT */
+    .admin-main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .admin-content {
+      padding: 28px 32px;
+      flex: 1;
+    }
+
+    /* ─── STAT CARDS ─────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .stat-card.blue::before  { background: linear-gradient(90deg, var(--navy), var(--navy-light)); }
+    .stat-card.gold::before  { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .stat-card.green::before { background: linear-gradient(90deg, var(--green), #48BB78); }
+    .stat-card.teal::before  { background: linear-gradient(90deg, var(--teal), #38B2AC); }
+
+    .stat-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+    .stat-icon.blue  { background: var(--sky); color: var(--navy-light); }
+    .stat-icon.gold  { background: var(--gold-pale); color: var(--gold); }
+    .stat-icon.green { background: var(--green-light); color: var(--green); }
+    .stat-icon.teal  { background: var(--teal-light); color: var(--teal); }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      font-weight: 500;
+    }
+    .stat-change {
+      position: absolute;
+      top: 22px; right: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 50px;
+    }
+    .stat-change.up { background: var(--green-light); color: var(--green); }
+    .stat-change.down { background: var(--red-light); color: var(--red); }
+
+    /* ─── SECTION HEADERS ─────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .btn-navy {
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(15,45,91,.25);
+    }
+    .btn-navy:hover {
+      background: var(--navy-light);
+      transform: translateY(-1px);
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      box-shadow: var(--shadow-gold);
+    }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 1.5px solid var(--gray-200);
+    }
+    .btn-outline:hover { border-color: var(--navy); background: var(--sky); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-danger { background: var(--red-light); color: var(--red); border: 1.5px solid #FEB2B2; }
+    .btn-danger:hover { background: var(--red); color: var(--white); }
+    .btn-success { background: var(--green-light); color: var(--green); border: 1.5px solid #9AE6B4; }
+
+    /* ─── CARDS ───────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+    }
+    .card-pad { padding: 22px; }
+    .card-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-body { padding: 22px; }
+
+    /* ─── TWO-COL GRID ────────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+
+    /* ─── ANNOUNCEMENT CARD (ADMIN) ─────────────────────────── */
+    .announce-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .announce-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--gray-400);
+      background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .announce-table th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+    .announce-table th:last-child  { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    .announce-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+    .announce-table tr:last-child td { border-bottom: none; }
+    .announce-table tr:hover td { background: var(--off-white); }
+    .announce-table .title-cell { font-weight: 600; color: var(--gray-900); font-size: 13.5px; }
+    .announce-table .date-cell { color: var(--gray-400); font-size: 12px; }
+
+    /* ─── CATEGORY BADGES ────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+    .badge-aid      { background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2; }
+    .badge-events   { background: var(--sky); color: var(--navy); border: 1px solid var(--sky-mid); }
+    .badge-medical  { background: var(--teal-light); color: var(--teal); border: 1px solid #81E6D9; }
+    .badge-vaccine  { background: var(--green-light); color: var(--green); border: 1px solid #9AE6B4; }
+    .badge-program  { background: var(--purple-light); color: var(--purple); border: 1px solid #D6BCFA; }
+    .badge-service  { background: var(--gold-pale); color: var(--orange); border: 1px solid #FBBF72; }
+
+    /* ─── STATUS BADGES ──────────────────────────────────── */
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .status-pill::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+    .status-pill.published { background: var(--green-light); color: var(--green); }
+    .status-pill.published::before { background: var(--green); }
+    .status-pill.draft { background: var(--gray-100); color: var(--gray-500); }
+    .status-pill.draft::before { background: var(--gray-400); }
+    .status-pill.archived { background: var(--red-light); color: var(--red); }
+    .status-pill.archived::before { background: var(--red); }
+
+    /* ─── ACTION BUTTONS ─────────────────────────────────── */
+    .action-btns { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      border: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .icon-btn.edit { background: var(--sky); color: var(--navy-light); }
+    .icon-btn.edit:hover { background: var(--navy); color: var(--white); }
+    .icon-btn.delete { background: var(--red-light); color: var(--red); }
+    .icon-btn.delete:hover { background: var(--red); color: var(--white); }
+    .icon-btn.view { background: var(--green-light); color: var(--green); }
+    .icon-btn.view:hover { background: var(--green); color: var(--white); }
+
+    /* ─── FILTER BAR ─────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-bar input,
+    .filter-bar select {
+      padding: 9px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-size: 13px;
+      color: var(--gray-700);
+      outline: none;
+      transition: var(--transition);
+    }
+    .filter-bar input { width: 260px; }
+    .filter-bar input:focus,
+    .filter-bar select:focus { border-color: var(--navy-light); }
+    .filter-pill {
+      padding: 7px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-pill:hover, .filter-pill.active {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* ─── MODAL / FORM OVERLAY ───────────────────────────── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,45,91,.5);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: cardIn .3s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .modal-header {
+      padding: 22px 26px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h3 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      border: none; background: var(--gray-100);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: var(--red-light); color: var(--red); }
+    .modal-body { padding: 26px; }
+    .modal-footer {
+      padding: 18px 26px;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ─── SCHEDULE GRID ──────────────────────────────────── */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: var(--gray-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .sched-day-header {
+      background: var(--navy);
+      padding: 10px 6px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,.65);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .sched-cell {
+      background: var(--white);
+      min-height: 80px;
+      padding: 8px;
+      position: relative;
+    }
+    .sched-cell .day-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-400);
+      margin-bottom: 6px;
+    }
+    .sched-cell.today .day-num {
+      background: var(--navy);
+      color: var(--white);
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    .sched-event {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sched-event.gold { background: var(--gold-pale); color: var(--orange); }
+    .sched-event.blue { background: var(--sky); color: var(--navy); }
+    .sched-event.green { background: var(--green-light); color: var(--green); }
+    .sched-event.teal { background: var(--teal-light); color: var(--teal); }
+    .sched-event.purple { background: var(--purple-light); color: var(--purple); }
+
+    /* ─── CATEGORY CARDS ─────────────────────────────────── */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .cat-card {
+      border-radius: var(--radius-md);
+      padding: 24px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .cat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      opacity: .08;
+    }
+    .cat-card.red    { background: #FFF5F5; border-color: #FEB2B2; }
+    .cat-card.red::after { background: var(--red); }
+    .cat-card.blue   { background: var(--sky); border-color: var(--sky-mid); }
+    .cat-card.blue::after { background: var(--navy); }
+    .cat-card.teal   { background: var(--teal-light); border-color: #81E6D9; }
+    .cat-card.teal::after { background: var(--teal); }
+    .cat-card.green  { background: var(--green-light); border-color: #9AE6B4; }
+    .cat-card.green::after { background: var(--green); }
+    .cat-card.purple { background: var(--purple-light); border-color: #D6BCFA; }
+    .cat-card.purple::after { background: var(--purple); }
+    .cat-card.gold   { background: var(--gold-pale); border-color: #FBBF72; }
+    .cat-card.gold::after { background: var(--gold); }
+    .cat-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+    .cat-card h3 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .cat-card p  { font-size: 12px; color: var(--gray-500); margin-bottom: 10px; }
+    .cat-count {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .cat-count span { font-size: 12px; font-weight: 500; color: var(--gray-400); }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  PUBLIC PORTAL LAYOUT                                    */
+    /* ════════════════════════════════════════════════════════ */
+    .public-layout { background: var(--off-white); min-height: 100vh; }
+
+    .public-navbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .pub-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .pub-brand-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 16px;
+    }
+    .pub-brand-text h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 16px; font-weight: 700; color: var(--navy);
+    }
+    .pub-brand-text span { font-size: 10px; color: var(--gray-400); display: block; }
+
+    .pub-nav-links {
+      display: flex; gap: 2px; margin-left: auto;
+    }
+    .pub-nav-link {
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none; background: transparent;
+    }
+    .pub-nav-link:hover, .pub-nav-link.active {
+      color: var(--navy);
+      background: var(--sky);
+    }
+    .pub-login-btn {
+      margin-left: 8px;
+      padding: 8px 18px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .pub-login-btn:hover { background: var(--navy-light); }
+
+    /* HERO */
+    .public-hero {
+      background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 55%, var(--navy-light) 100%);
+      padding: 60px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .public-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 0%, rgba(232,160,32,.2) 0%, transparent 60%);
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 50px;
+      padding: 5px 14px;
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .hero-inner h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 14px;
+      max-width: 600px;
+    }
+    .hero-inner h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .hero-inner p {
+      color: rgba(255,255,255,.7);
+      font-size: 16px;
+      max-width: 500px;
+      margin-bottom: 28px;
+    }
+    .hero-search {
+      display: flex;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      max-width: 520px;
+      box-shadow: var(--shadow-lg);
+    }
+    .hero-search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--gray-700);
+      background: transparent;
+    }
+    .hero-search button {
+      padding: 10px 22px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .hero-search button:hover { background: var(--navy-light); }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 36px;
+    }
+    .hero-stat { color: rgba(255,255,255,.8); }
+    .hero-stat strong {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+    .hero-stat span { font-size: 12px; color: rgba(255,255,255,.55); }
+
+    /* PUBLIC CONTENT */
+    .pub-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+    }
+
+    /* CAT PILLS */
+    .cat-pills {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .cat-pill {
+      padding: 7px 16px;
+      border-radius: 50px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .cat-pill:hover { border-color: var(--navy); color: var(--navy); }
+    .cat-pill.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+    /* PUBLIC ANNOUNCEMENT CARDS */
+    .pub-announce-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      padding: 22px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      gap: 18px;
+    }
+    .pub-announce-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--sky-mid);
+    }
+    .announce-color-bar {
+      width: 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      min-height: 60px;
+    }
+    .announce-card-body { flex: 1; }
+    .announce-card-meta {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .announce-card-date {
+      font-size: 11px;
+      color: var(--gray-400);
+      font-weight: 500;
+    }
+    .announce-card-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 7px;
+      line-height: 1.3;
+    }
+    .announce-card-excerpt {
+      font-size: 13px;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .announce-card-footer {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .announce-card-author {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--gray-400); font-weight: 500;
+    }
+    .announce-card-author .av {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--sky-mid); color: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800;
+    }
+    .read-more {
+      margin-left: auto;
+      font-size: 12px; font-weight: 700;
+      color: var(--navy-light);
+    }
+    .read-more:hover { text-decoration: underline; }
+
+    /* SIDEBAR WIDGETS */
+    .sidebar-widget {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .widget-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .widget-header h3 {
+      font-size: 14px; font-weight: 700; color: var(--navy);
+    }
+    .widget-header .wi {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+    .widget-body { padding: 16px 18px; }
+
+    .event-item {
+      display: flex; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .event-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .event-date-box {
+      width: 40px;
+      flex-shrink: 0;
+      text-align: center;
+      background: var(--sky);
+      border-radius: 8px;
+      padding: 6px 4px;
+    }
+    .event-date-box .dd {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .event-date-box .mm {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--navy-light);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .event-info h4 { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+    .event-info span { font-size: 11px; color: var(--gray-400); }
+
+    .hotline-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .hotline-item:last-child { border-bottom: none; }
+    .hotline-icon {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .hotline-info h4 { font-size: 12.5px; font-weight: 600; color: var(--navy); margin-bottom: 1px; }
+    .hotline-info span { font-size: 11px; color: var(--gray-400); }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  ANNOUNCEMENT DETAIL                                     */
+    /* ════════════════════════════════════════════════════════ */
+    .detail-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 40px 0 80px;
+      position: relative;
+    }
+    .detail-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 0%, rgba(232,160,32,.15) 0%, transparent 50%);
+    }
+    .detail-hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative; z-index: 1;
+    }
+    .detail-hero-inner .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: rgba(255,255,255,.7);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      background: none; border: none;
+    }
+    .detail-hero-inner .back-btn:hover { color: var(--white); }
+    .detail-hero-inner h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.3;
+      margin: 14px 0 16px;
+    }
+    .detail-meta {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    }
+    .detail-meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12.5px; color: rgba(255,255,255,.65); font-weight: 500;
+    }
+
+    .detail-body-wrap {
+      max-width: 860px;
+      margin: -48px auto 40px;
+      padding: 0 24px;
+      position: relative; z-index: 2;
+    }
+    .detail-content-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .detail-image {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, var(--sky) 0%, var(--sky-mid) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 80px;
+      color: var(--navy-light);
+      opacity: .3;
+    }
+    .detail-text {
+      padding: 36px;
+    }
+    .detail-text p {
+      color: var(--gray-700);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+    .detail-text h3 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 24px 0 10px;
+    }
+    .detail-info-box {
+      background: var(--sky);
+      border-left: 4px solid var(--navy);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .detail-info-box h4 { font-weight: 700; color: var(--navy); margin-bottom: 6px; font-size: 14px; }
+    .detail-info-box p { font-size: 13px; color: var(--gray-700); margin: 0; }
+
+    .detail-requirements {
+      list-style: none;
+    }
+    .detail-requirements li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 14px;
+      color: var(--gray-700);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .detail-requirements li::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--navy);
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  EVENTS PAGE                                             */
+    /* ════════════════════════════════════════════════════════ */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .event-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .event-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .event-card-img {
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px;
+      position: relative;
+    }
+    .event-card-date-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--white);
+      border-radius: 10px;
+      padding: 6px 10px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .event-card-date-badge .dd { font-size: 18px; font-weight: 800; color: var(--navy); line-height: 1; }
+    .event-card-date-badge .mm { font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; }
+    .event-card-body { padding: 18px; }
+    .event-card-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--navy);
+      margin-bottom: 7px; line-height: 1.3;
+    }
+    .event-card-body p { font-size: 12.5px; color: var(--gray-500); margin-bottom: 14px; }
+    .event-card-footer {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .event-detail-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--gray-400); font-weight: 500;
+    }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  SEARCH RESULTS                                          */
+    /* ════════════════════════════════════════════════════════ */
+    .search-hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 32px 24px;
+    }
+    .search-hero-inner { max-width: 1200px; margin: 0 auto; }
+    .search-hero h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 22px; font-weight: 700; color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .search-bar-big {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--gray-200);
+      overflow: hidden;
+      max-width: 680px;
+    }
+    .search-bar-big input {
+      flex: 1; padding: 13px 18px;
+      border: none; background: transparent;
+      font-size: 15px; color: var(--gray-700);
+      outline: none;
+    }
+    .search-bar-big button {
+      padding: 13px 24px;
+      background: var(--navy); color: var(--white);
+      border: none; font-size: 14px; font-weight: 600;
+      cursor: pointer;
+    }
+    .search-content { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
+    .search-sidebar { width: 260px; flex-shrink: 0; }
+    .search-results-wrap { flex: 1; }
+    .search-layout { display: flex; gap: 28px; }
+    .search-results-count {
+      font-size: 13px; color: var(--gray-400); margin-bottom: 18px; font-weight: 500;
+    }
+    .search-results-count strong { color: var(--navy); font-weight: 700; }
+    .search-filter-group { margin-bottom: 22px; }
+    .search-filter-group h4 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .5px; color: var(--gray-400); margin-bottom: 10px;
+    }
+    .check-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 0; cursor: pointer;
+    }
+    .check-item input { cursor: pointer; accent-color: var(--navy); }
+    .check-item label { font-size: 13px; color: var(--gray-700); cursor: pointer; }
+    .check-item .count-badge {
+      margin-left: auto;
+      font-size: 10px; font-weight: 700;
+      background: var(--gray-100); color: var(--gray-500);
+      padding: 1px 6px; border-radius: 50px;
+    }
+
+    /* ─── CHART BARS (dashboard) ─────────────────────────── */
+    .chart-bars {
+      display: flex; align-items: flex-end; gap: 10px;
+      height: 120px;
+    }
+    .chart-bar-wrap {
+      display: flex; flex-direction: column; align-items: center; flex: 1; gap: 6px;
+    }
+    .chart-bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .chart-bar:hover { filter: brightness(1.1); }
+    .chart-bar-label { font-size: 10px; color: var(--gray-400); font-weight: 600; }
+
+    /* ─── ACTIVITY FEED ──────────────────────────────────── */
+    .activity-item {
+      display: flex; gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .activity-content h4 { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+    .activity-content p  { font-size: 12px; color: var(--gray-400); }
+
+    /* ─── PAGINATION ──────────────────────────────────────── */
+    .pagination {
+      display: flex; gap: 6px; align-items: center;
+      margin-top: 24px;
+    }
+    .page-btn {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .page-btn:hover, .page-btn.active {
+      background: var(--navy); border-color: var(--navy); color: var(--white);
+    }
+
+    /* ════════════════════════════════════════════════════════ */
+    /*  UTILITY                                                 */
+    /* ════════════════════════════════════════════════════════ */
+    .mb-0 { margin-bottom: 0; }
+    .mb-4 { margin-bottom: 4px; }
+    .mb-8 { margin-bottom: 8px; }
+    .mb-12 { margin-bottom: 12px; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-20 { margin-bottom: 20px; }
+    .mb-24 { margin-bottom: 24px; }
+    .mt-20 { margin-top: 20px; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .gap-8 { gap: 8px; }
+    .gap-12 { gap: 12px; }
+    .gap-16 { gap: 16px; }
+    .text-navy { color: var(--navy); }
+    .text-gold { color: var(--gold); }
+    .text-gray { color: var(--gray-500); }
+    .text-sm { font-size: 12px; }
+    .font-bold { font-weight: 700; }
+    .text-right { text-align: right; }
+    .w-full { width: 100%; }
+    .divider-line { height: 1px; background: var(--gray-200); margin: 16px 0; }
+    .loading-bar {
+      height: 3px; background: var(--gray-200); border-radius: 2px; overflow: hidden; margin-top: 4px;
+    }
+    .loading-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--navy), var(--navy-light));
+    }
+
+    /* ─── TAG ─────────────────────────────────────────────── */
+    .tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 11.5px; font-weight: 600;
+    }
+    .tag-blue { background: var(--sky); color: var(--navy); }
+    .tag-gold { background: var(--gold-pale); color: var(--orange); }
+    .tag-green { background: var(--green-light); color: var(--green); }
+
+    /* ─── FORM TEXTAREA ─────────────────────────────────── */
+    .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 14px; color: var(--gray-900);
+      background: var(--white);
+      resize: vertical;
+      outline: none;
+      transition: var(--transition);
+      min-height: 100px;
+      font-family: inherit;
+    }
+    .form-textarea:focus {
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(40,89,173,.1);
+    }
+
+    /* ─── NOTIFICATION BANNER ───────────────────────────── */
+    .notif-banner {
+      background: linear-gradient(90deg, var(--gold-pale), #fff9ee);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px;
+      font-size: 13px; color: var(--orange);
+      font-weight: 500;
+    }
+    .notif-banner i { font-size: 16px; }
+
+    /* ────────────────────────────────────────────────────── */
+    /*  MOBILE RESPONSIVE                                      */
+    /* ────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .admin-main { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .three-col { grid-template-columns: 1fr; }
+      .pub-content { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+      .events-grid { grid-template-columns: 1fr 1fr; }
+      .search-layout { flex-direction: column; }
+      .search-sidebar { width: 100%; }
+      .hero-inner h1 { font-size: 28px; }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .events-grid { grid-template-columns: 1fr; }
+      .admin-content { padding: 16px; }
+      .pub-content { padding: 20px 16px; }
+      .login-card { padding: 28px 22px; margin: 16px; }
+      .hero-inner h1 { font-size: 24px; }
+      .hero-search { flex-direction: column; }
+      .schedule-grid { grid-template-columns: repeat(7, 1fr); overflow-x: auto; }
+      .pub-nav-links { display: none; }
+      .navbar-inner { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  NAV TABS (screen switcher)                                 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="nav-tabs" id="navTabs">
+  <button data-screen="login" class="active">① Login</button>
+  <button data-screen="admin-dashboard">② Dashboard</button>
+  <button data-screen="manage-announcements">③ Manage</button>
+  <button data-screen="manage-schedules">④ Schedules</button>
+  <button data-screen="categories">⑤ Categories</button>
+  <button data-screen="public-home">⑥ Public Home</button>
+  <button data-screen="announcement-detail">⑦ Detail</button>
+  <button data-screen="events-page">⑧ Events</button>
+  <button data-screen="search-results">⑨ Search</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 1 — LOGIN / REGISTER                                -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-login" class="screen active">
+  <div class="login-hexagons"></div>
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-brand-icon">🏛️</div>
+      <div class="login-brand-text">
+        <h1>BarangayConnect</h1>
+        <span>Information Management System</span>
+      </div>
+    </div>
+
+    <div class="tab-switcher">
+      <button class="active" onclick="switchAuthTab('login')">Sign In</button>
+      <button onclick="switchAuthTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="auth-form active" id="form-login">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrap">
+          <i class="fa fa-envelope input-icon"></i>
+          <input class="form-input" type="email" placeholder="you@barangay.gov.ph" value="admin@barangay.gov.ph"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <i class="fa fa-lock input-icon"></i>
+          <input class="form-input" type="password" placeholder="Enter your password" value="••••••••"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-8 mb-20" style="justify-content:space-between;">
+        <label class="flex items-center gap-8 text-sm text-gray" style="cursor:pointer;">
+          <input type="checkbox" checked style="accent-color:var(--navy);"/>
+          Remember me
+        </label>
+        <a href="#" class="text-sm" style="color:var(--navy-light); font-weight:600;">Forgot password?</a>
+      </div>
+      <button class="btn-primary" onclick="showScreen('admin-dashboard')">
+        Sign In as Admin
+      </button>
+      <div class="divider">or</div>
+      <button class="guest-btn" onclick="showScreen('public-home')">
+        <i class="fa fa-globe" style="margin-right:7px;"></i>Continue as Resident (Guest)
+      </button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="auth-form" id="form-register">
+      <div class="two-col" style="gap:14px; margin-bottom:0;">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <div class="input-wrap">
+            <i class="fa fa-user input-icon"></i>
+            <input class="form-input" type="text" placeholder="Juan"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <div class="input-wrap">
+            <i class="fa fa-user input-icon"></i>
+            <input class="form-input" type="text" placeholder="dela Cruz"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrap">
+          <i class="fa fa-envelope input-icon"></i>
+          <input class="form-input" type="email" placeholder="juan@email.com"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-select">
+          <option>Resident</option>
+          <option>Barangay Staff</option>
+          <option>Barangay Official</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <i class="fa fa-lock input-icon"></i>
+          <input class="form-input" type="password" placeholder="Create a password"/>
+        </div>
+      </div>
+      <button class="btn-primary">Create Account</button>
+    </div>
+
+    <div class="login-footer">
+      Barangay San Isidro • Calamba, Laguna &nbsp;|&nbsp; v2.1.0
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 2 — ADMIN DASHBOARD                                 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-admin-dashboard" class="screen">
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-row">
+          <div class="sidebar-logo">🏛️</div>
+          <div class="sidebar-brand-text">
+            <h2>BarangayConnect</h2>
+            <small>Admin Portal</small>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <div class="nav-item active" data-screen="admin-dashboard" onclick="showScreen('admin-dashboard')">
+          <i class="fa fa-gauge-high"></i> Dashboard
+        </div>
+        <div class="nav-item" data-screen="manage-announcements" onclick="showScreen('manage-announcements')">
+          <i class="fa fa-bullhorn"></i> Announcements
+          <span class="badge">3</span>
+        </div>
+        <div class="nav-item" data-screen="manage-schedules" onclick="showScreen('manage-schedules')">
+          <i class="fa fa-calendar-days"></i> Schedules
+        </div>
+        <div class="nav-item" data-screen="categories" onclick="showScreen('categories')">
+          <i class="fa fa-tags"></i> Categories
+        </div>
+        <div class="nav-item" data-screen="events-page" onclick="showScreen('events-page')">
+          <i class="fa fa-star"></i> Events & Programs
+        </div>
+        <div class="sidebar-section-label">Reports</div>
+        <div class="nav-item">
+          <i class="fa fa-chart-bar"></i> Analytics
+        </div>
+        <div class="nav-item">
+          <i class="fa fa-users"></i> Residents
+        </div>
+        <div class="nav-item">
+          <i class="fa fa-file-lines"></i> Reports
+        </div>
+        <div class="sidebar-section-label">System</div>
+        <div class="nav-item">
+          <i class="fa fa-bell"></i> Notifications
+          <span class="badge">7</span>
+        </div>
+        <div class="nav-item">
+          <i class="fa fa-gear"></i> Settings
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="user-avatar">CA</div>
+          <div class="user-info">
+            <h4>Capt. Reyes</h4>
+            <span>Barangay Captain</span>
+          </div>
+          <i class="fa fa-chevron-right" style="margin-left:auto; color:rgba(255,255,255,.3); font-size:11px;"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <span class="topbar-title">Dashboard</span>
+          <span class="topbar-subtitle">/ Overview</span>
+        </div>
+        <div class="topbar-search">
+          <i class="fa fa-search"></i>
+          <input placeholder="Search announcements…" onclick="showScreen('search-results')"/>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="topbar-btn"><i class="fa fa-circle-question"></i></button>
+          <div class="user-avatar" style="width:36px;height:36px;font-size:13px;">CA</div>
+        </div>
+      </div>
+
+      <div class="admin-content">
+        <!-- NOTIFICATION BANNER -->
+        <div class="notif-banner">
+          <i class="fa fa-triangle-exclamation"></i>
+          <strong>3 announcements</strong>&nbsp;are pending review and need your approval before publishing.
+          <button class="btn btn-sm btn-gold" style="margin-left:auto;" onclick="showScreen('manage-announcements')">Review Now</button>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon blue"><i class="fa fa-bullhorn"></i></div>
+            <div class="stat-value">48</div>
+            <div class="stat-label">Total Announcements</div>
+            <div class="stat-change up">↑ 12%</div>
+          </div>
+          <div class="stat-card gold">
+            <div class="stat-icon gold"><i class="fa fa-calendar-check"></i></div>
+            <div class="stat-value">12</div>
+            <div class="stat-label">Upcoming Events</div>
+            <div class="stat-change up">↑ 4</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon green"><i class="fa fa-users"></i></div>
+            <div class="stat-value">1,240</div>
+            <div class="stat-label">Registered Residents</div>
+            <div class="stat-change up">↑ 8%</div>
+          </div>
+          <div class="stat-card teal">
+            <div class="stat-icon teal"><i class="fa fa-eye"></i></div>
+            <div class="stat-value">8.4K</div>
+            <div class="stat-label">Portal Views (30d)</div>
+            <div class="stat-change down">↓ 2%</div>
+          </div>
+        </div>
+
+        <!-- CHARTS + RECENT ACTIVITY -->
+        <div class="two-col mb-24">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="section-title">Announcements by Month</div>
+                <div class="section-subtitle">Last 7 months</div>
+              </div>
+              <select style="font-size:12px;border:1px solid var(--gray-200);border-radius:6px;padding:5px 10px;color:var(--gray-700);outline:none;">
+                <option>2025</option>
+              </select>
+            </div>
+            <div class="card-body">
+              <div class="chart-bars">
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:55px;background:var(--sky-mid);"></div><span class="chart-bar-label">Sep</span></div>
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:70px;background:var(--sky-mid);"></div><span class="chart-bar-label">Oct</span></div>
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:45px;background:var(--sky-mid);"></div><span class="chart-bar-label">Nov</span></div>
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:90px;background:var(--navy-light);"></div><span class="chart-bar-label">Dec</span></div>
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:60px;background:var(--sky-mid);"></div><span class="chart-bar-label">Jan</span></div>
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:80px;background:var(--sky-mid);"></div><span class="chart-bar-label">Feb</span></div>
+                <div class="chart-bar-wrap"><div class="chart-bar blue" style="height:110px;background:var(--navy);"></div><span class="chart-bar-label">Mar</span></div>
+              </div>
+              <div class="divider-line"></div>
+              <div class="flex items-center gap-16" style="justify-content:space-between;">
+                <div><div class="text-sm text-gray">Total This Month</div><div style="font-size:20px;font-weight:800;color:var(--navy);">14</div></div>
+                <div><div class="text-sm text-gray">Avg. Monthly</div><div style="font-size:20px;font-weight:800;color:var(--navy);">9.4</div></div>
+                <div><div class="text-sm text-gray">Peak Month</div><div style="font-size:14px;font-weight:700;color:var(--navy);">March</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="section-title">Recent Activity</div>
+                <div class="section-subtitle">Last 24 hours</div>
+              </div>
+              <button class="btn btn-sm btn-outline">View All</button>
+            </div>
+            <div class="card-body">
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--sky);color:var(--navy-light);"><i class="fa fa-plus"></i></div>
+                <div class="activity-content">
+                  <h4>New Announcement Posted</h4>
+                  <p>Aid Distribution — Barangay Hall • 2h ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--green-light);color:var(--green);"><i class="fa fa-check"></i></div>
+                <div class="activity-content">
+                  <h4>Medical Mission Approved</h4>
+                  <p>Dr. Santos approved for March 28 • 4h ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--gold-pale);color:var(--gold);"><i class="fa fa-pen"></i></div>
+                <div class="activity-content">
+                  <h4>Schedule Updated</h4>
+                  <p>Vaccination schedule revised • 6h ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--purple-light);color:var(--purple);"><i class="fa fa-user-plus"></i></div>
+                <div class="activity-content">
+                  <h4>New Resident Registered</h4>
+                  <p>Maria Santos • 8h ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--red-light);color:var(--red);"><i class="fa fa-trash"></i></div>
+                <div class="activity-content">
+                  <h4>Announcement Archived</h4>
+                  <p>Cleanup drive — expired • 10h ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORY OVERVIEW -->
+        <div class="section-header mb-16">
+          <div>
+            <div class="section-title">Announcements by Category</div>
+            <div class="section-subtitle">Distribution this month</div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Manage Categories</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="flex items-center gap-8"><span class="badge badge-aid">Aid Distribution</span><span class="text-sm text-gray" style="margin-left:auto;">8 posts</span></div>
+            <div class="loading-bar"><div class="loading-fill" style="width:62%;background:var(--red);"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="flex items-center gap-8"><span class="badge badge-events">Barangay Events</span><span class="text-sm text-gray" style="margin-left:auto;">12 posts</span></div>
+            <div class="loading-bar"><div class="loading-fill" style="width:85%;"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="flex items-center gap-8"><span class="badge badge-medical">Medical Missions</span><span class="text-sm text-gray" style="margin-left:auto;">5 posts</span></div>
+            <div class="loading-bar"><div class="loading-fill" style="width:38%;background:var(--teal);"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="flex items-center gap-8"><span class="badge badge-vaccine">Vaccination</span><span class="text-sm text-gray" style="margin-left:auto;">7 posts</span></div>
+            <div class="loading-bar"><div class="loading-fill" style="width:52%;background:var(--green);"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="flex items-center gap-8"><span class="badge badge-program">Community Programs</span><span class="text-sm text-gray" style="margin-left:auto;">9 posts</span></div>
+            <div class="loading-bar"><div class="loading-fill" style="width:68%;background:var(--purple);"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="flex items-center gap-8"><span class="badge badge-service">Services</span><span class="text-sm text-gray" style="margin-left:auto;">7 posts</span></div>
+            <div class="loading-bar"><div class="loading-fill" style="width:52%;background:var(--orange);"></div></div>
+          </div>
+        </div>
+
+        <!-- QUICK ACCESS -->
+        <div class="section-header mb-16">
+          <div class="section-title">Quick Actions</div>
+        </div>
+        <div class="three-col">
+          <button class="btn btn-navy" style="justify-content:center;padding:16px;" onclick="openModal('modalAdd')">
+            <i class="fa fa-plus"></i> New Announcement
+          </button>
+          <button class="btn btn-outline" style="justify-content:center;padding:16px;" onclick="showScreen('manage-schedules')">
+            <i class="fa fa-calendar-plus"></i> Add Schedule
+          </button>
+          <button class="btn btn-outline" style="justify-content:center;padding:16px;" onclick="showScreen('events-page')">
+            <i class="fa fa-star"></i> Create Event
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 3 — MANAGE ANNOUNCEMENTS                           -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-manage-announcements" class="screen">
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BarangayConnect</h2><small>Admin Portal</small></div></div></div>
+      <div class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <div class="nav-item" onclick="showScreen('admin-dashboard')"><i class="fa fa-gauge-high"></i> Dashboard</div>
+        <div class="nav-item active" onclick="showScreen('manage-announcements')"><i class="fa fa-bullhorn"></i> Announcements<span class="badge">3</span></div>
+        <div class="nav-item" onclick="showScreen('manage-schedules')"><i class="fa fa-calendar-days"></i> Schedules</div>
+        <div class="nav-item" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Categories</div>
+        <div class="nav-item" onclick="showScreen('events-page')"><i class="fa fa-star"></i> Events & Programs</div>
+        <div class="sidebar-section-label">System</div>
+        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
+        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
+      </div>
+      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>
+    </aside>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div><span class="topbar-title">Announcements</span><span class="topbar-subtitle">/ Manage</span></div>
+        <div class="topbar-right">
+          <button class="btn btn-gold" onclick="openModal('modalAdd')"><i class="fa fa-plus"></i> New Announcement</button>
+          <button class="topbar-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
+        </div>
+      </div>
+      <div class="admin-content">
+        <!-- FILTER BAR -->
+        <div class="filter-bar">
+          <div style="position:relative;">
+            <i class="fa fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400);"></i>
+            <input style="padding-left:36px;width:260px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);height:38px;outline:none;" placeholder="Search announcements…"/>
+          </div>
+          <select style="height:38px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-size:13px;outline:none;">
+            <option>All Categories</option>
+            <option>Aid Distribution</option>
+            <option>Barangay Events</option>
+            <option>Medical Missions</option>
+            <option>Vaccination</option>
+            <option>Community Programs</option>
+            <option>Services</option>
+          </select>
+          <select style="height:38px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-size:13px;outline:none;">
+            <option>All Status</option>
+            <option>Published</option>
+            <option>Draft</option>
+            <option>Archived</option>
+          </select>
+          <button class="filter-pill active">All</button>
+          <button class="filter-pill">This Week</button>
+          <button class="filter-pill">This Month</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="section-title">All Announcements</div><div class="section-subtitle">48 total • 3 pending review</div></div>
+            <div class="flex gap-8">
+              <button class="btn btn-sm btn-outline"><i class="fa fa-download"></i> Export</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-filter"></i> Sort</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="announce-table">
+              <thead>
+                <tr>
+                  <th style="width:32px;"><input type="checkbox" style="accent-color:var(--navy);"/></th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Posted By</th>
+                  <th>Date</th>
+                  <th>Views</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td class="title-cell" onclick="showScreen('announcement-detail')" style="cursor:pointer;">
+                    Ayuda Distribution Schedule — Q1 2025<br>
+                    <span style="font-size:11px;color:var(--gray-400);font-weight:400;">March 28–30, 2025 • Barangay Hall</span>
+                  </td>
+                  <td><span class="badge badge-aid">Aid Distribution</span></td>
+                  <td><span class="status-pill published">Published</span></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">CA</div><span style="font-size:12px;">Capt. Reyes</span></div></td>
+                  <td class="date-cell">Mar 20, 2025</td>
+                  <td class="date-cell" style="font-weight:600;color:var(--navy);">1,204</td>
+                  <td><div class="action-btns"><button class="icon-btn view" title="View" onclick="showScreen('announcement-detail')"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')" title="Edit"><i class="fa fa-pen"></i></button><button class="icon-btn delete" title="Delete"><i class="fa fa-trash"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td class="title-cell">Anti-Rabies Vaccination Drive<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 5, 2025 • Covered Court</span></td>
+                  <td><span class="badge badge-vaccine">Vaccination</span></td>
+                  <td><span class="status-pill published">Published</span></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">TS</div><span style="font-size:12px;">T. Santos</span></div></td>
+                  <td class="date-cell">Mar 18, 2025</td>
+                  <td class="date-cell" style="font-weight:600;color:var(--navy);">876</td>
+                  <td><div class="action-btns"><button class="icon-btn view" onclick="showScreen('announcement-detail')"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td class="title-cell">Free Medical Mission — Barangay Health Center<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 12, 2025 • BHC Grounds</span></td>
+                  <td><span class="badge badge-medical">Medical Missions</span></td>
+                  <td><span class="status-pill draft">Draft</span></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">JR</div><span style="font-size:12px;">J. Reyes</span></div></td>
+                  <td class="date-cell">Mar 22, 2025</td>
+                  <td class="date-cell" style="color:var(--gray-400);">—</td>
+                  <td><div class="action-btns"><button class="icon-btn view"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td class="title-cell">Barangay Fiesta Celebration 2025<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">May 15–18, 2025 • Plaza</span></td>
+                  <td><span class="badge badge-events">Barangay Events</span></td>
+                  <td><span class="status-pill published">Published</span></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">CA</div><span style="font-size:12px;">Capt. Reyes</span></div></td>
+                  <td class="date-cell">Mar 15, 2025</td>
+                  <td class="date-cell" style="font-weight:600;color:var(--navy);">2,341</td>
+                  <td><div class="action-btns"><button class="icon-btn view" onclick="showScreen('announcement-detail')"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td class="title-cell">Community Clean-Up Drive<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 6, 2025 • Sitio 3 to 6</span></td>
+                  <td><span class="badge badge-program">Community Programs</span></td>
+                  <td><span class="status-pill draft">Draft</span></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">ML</div><span style="font-size:12px;">M. Lopez</span></div></td>
+                  <td class="date-cell">Mar 21, 2025</td>
+                  <td class="date-cell" style="color:var(--gray-400);">—</td>
+                  <td><div class="action-btns"><button class="icon-btn view"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td class="title-cell">Senior Citizens Livelihood Seminar<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 10, 2025 • Multi-Purpose Hall</span></td>
+                  <td><span class="badge badge-program">Community Programs</span></td>
+                  <td><span class="status-pill archived">Archived</span></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">PG</div><span style="font-size:12px;">P. Garcia</span></div></td>
+                  <td class="date-cell">Feb 28, 2025</td>
+                  <td class="date-cell" style="font-weight:600;color:var(--navy);">543</td>
+                  <td><div class="action-btns"><button class="icon-btn view"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:16px 22px; border-top:1px solid var(--gray-100); display:flex; align-items:center; justify-content:space-between;">
+            <span class="text-sm text-gray">Showing 1–6 of 48 announcements</span>
+            <div class="pagination">
+              <button class="page-btn"><i class="fa fa-chevron-left" style="font-size:11px;"></i></button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <span style="color:var(--gray-400);padding:0 4px;">…</span>
+              <button class="page-btn">8</button>
+              <button class="page-btn"><i class="fa fa-chevron-right" style="font-size:11px;"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 4 — MANAGE SCHEDULES                               -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-manage-schedules" class="screen">
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BarangayConnect</h2><small>Admin Portal</small></div></div></div>
+      <div class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <div class="nav-item" onclick="showScreen('admin-dashboard')"><i class="fa fa-gauge-high"></i> Dashboard</div>
+        <div class="nav-item" onclick="showScreen('manage-announcements')"><i class="fa fa-bullhorn"></i> Announcements<span class="badge">3</span></div>
+        <div class="nav-item active" onclick="showScreen('manage-schedules')"><i class="fa fa-calendar-days"></i> Schedules</div>
+        <div class="nav-item" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Categories</div>
+        <div class="nav-item" onclick="showScreen('events-page')"><i class="fa fa-star"></i> Events & Programs</div>
+        <div class="sidebar-section-label">System</div>
+        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
+        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
+      </div>
+      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>
+    </aside>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div><span class="topbar-title">Schedules</span><span class="topbar-subtitle">/ March 2025</span></div>
+        <div class="topbar-right">
+          <button class="btn btn-gold" onclick="openModal('modalSchedule')"><i class="fa fa-plus"></i> Add Schedule</button>
+        </div>
+      </div>
+      <div class="admin-content">
+        <div class="two-col mb-20" style="grid-template-columns:1fr 300px;">
+          <!-- CALENDAR -->
+          <div>
+            <div class="section-header mb-16">
+              <div class="section-title">March 2025</div>
+              <div class="flex gap-8">
+                <button class="btn btn-sm btn-outline"><i class="fa fa-chevron-left"></i></button>
+                <button class="btn btn-sm btn-outline">Today</button>
+                <button class="btn btn-sm btn-outline"><i class="fa fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="card" style="overflow:hidden;">
+              <div class="schedule-grid">
+                <div class="sched-day-header">Sun</div>
+                <div class="sched-day-header">Mon</div>
+                <div class="sched-day-header">Tue</div>
+                <div class="sched-day-header">Wed</div>
+                <div class="sched-day-header">Thu</div>
+                <div class="sched-day-header">Fri</div>
+                <div class="sched-day-header">Sat</div>
+                <!-- Week 1 -->
+                <div class="sched-cell"></div>
+                <div class="sched-cell"></div>
+                <div class="sched-cell"></div>
+                <div class="sched-cell"></div>
+                <div class="sched-cell"><div class="day-num">1</div></div>
+                <div class="sched-cell"><div class="day-num">2</div></div>
+                <div class="sched-cell"><div class="day-num">3</div><div class="sched-event gold">Clean-up Drive</div></div>
+                <!-- Week 2 -->
+                <div class="sched-cell"><div class="day-num">4</div></div>
+                <div class="sched-cell"><div class="day-num">5</div><div class="sched-event blue">Brgy Assembly</div></div>
+                <div class="sched-cell"><div class="day-num">6</div></div>
+                <div class="sched-cell"><div class="day-num">7</div></div>
+                <div class="sched-cell"><div class="day-num">8</div><div class="sched-event teal">Medical Mission</div></div>
+                <div class="sched-cell"><div class="day-num">9</div></div>
+                <div class="sched-cell"><div class="day-num">10</div></div>
+                <!-- Week 3 -->
+                <div class="sched-cell"><div class="day-num">11</div></div>
+                <div class="sched-cell"><div class="day-num">12</div></div>
+                <div class="sched-cell"><div class="day-num">13</div><div class="sched-event purple">Livelihood Prog.</div></div>
+                <div class="sched-cell"><div class="day-num">14</div></div>
+                <div class="sched-cell"><div class="day-num">15</div><div class="sched-event gold">Vaccination</div></div>
+                <div class="sched-cell"><div class="day-num">16</div></div>
+                <div class="sched-cell"><div class="day-num">17</div></div>
+                <!-- Week 4 -->
+                <div class="sched-cell"><div class="day-num">18</div></div>
+                <div class="sched-cell"><div class="day-num">19</div></div>
+                <div class="sched-cell"><div class="day-num">20</div><div class="sched-event blue">Aid Distrib.</div></div>
+                <div class="sched-cell"><div class="day-num">21</div></div>
+                <div class="sched-cell"><div class="day-num">22</div></div>
+                <div class="sched-cell today"><div class="day-num">23</div><div class="sched-event green">Brgy Meeting</div></div>
+                <div class="sched-cell"><div class="day-num">24</div></div>
+                <!-- Week 5 -->
+                <div class="sched-cell"><div class="day-num">25</div><div class="sched-event teal">Health Seminar</div></div>
+                <div class="sched-cell"><div class="day-num">26</div></div>
+                <div class="sched-cell"><div class="day-num">27</div></div>
+                <div class="sched-cell"><div class="day-num">28</div><div class="sched-event gold">Ayuda Dist.</div></div>
+                <div class="sched-cell"><div class="day-num">29</div></div>
+                <div class="sched-cell"><div class="day-num">30</div></div>
+                <div class="sched-cell"><div class="day-num">31</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- UPCOMING LIST -->
+          <div>
+            <div class="section-header mb-16">
+              <div class="section-title">Upcoming</div>
+              <span class="text-sm text-gray">Next 30 days</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div class="card card-pad" style="border-left:3px solid var(--gold);">
+                <div class="flex items-center gap-8 mb-8">
+                  <span class="badge badge-service">Service</span>
+                  <span class="text-sm text-gray" style="margin-left:auto;">Mar 23</span>
+                </div>
+                <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Barangay Council Meeting</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>9:00 AM – 12:00 PM</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-location-dot"></i>Session Hall</div>
+              </div>
+              <div class="card card-pad" style="border-left:3px solid var(--red);">
+                <div class="flex items-center gap-8 mb-8">
+                  <span class="badge badge-aid">Aid Distribution</span>
+                  <span class="text-sm text-gray" style="margin-left:auto;">Mar 28</span>
+                </div>
+                <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Ayuda Distribution — Q1</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>7:00 AM – 5:00 PM</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-location-dot"></i>Covered Court</div>
+              </div>
+              <div class="card card-pad" style="border-left:3px solid var(--teal);">
+                <div class="flex items-center gap-8 mb-8">
+                  <span class="badge badge-medical">Medical</span>
+                  <span class="text-sm text-gray" style="margin-left:auto;">Apr 8</span>
+                </div>
+                <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Free Medical Mission</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>8:00 AM – 3:00 PM</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-location-dot"></i>BHC Grounds</div>
+              </div>
+              <div class="card card-pad" style="border-left:3px solid var(--green);">
+                <div class="flex items-center gap-8 mb-8">
+                  <span class="badge badge-vaccine">Vaccination</span>
+                  <span class="text-sm text-gray" style="margin-left:auto;">Apr 5</span>
+                </div>
+                <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Anti-Rabies Drive</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>8:00 AM – 12:00 PM</div>
+                <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-location-dot"></i>Covered Court</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 5 — CATEGORIES                                      -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-categories" class="screen">
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BarangayConnect</h2><small>Admin Portal</small></div></div></div>
+      <div class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <div class="nav-item" onclick="showScreen('admin-dashboard')"><i class="fa fa-gauge-high"></i> Dashboard</div>
+        <div class="nav-item" onclick="showScreen('manage-announcements')"><i class="fa fa-bullhorn"></i> Announcements<span class="badge">3</span></div>
+        <div class="nav-item" onclick="showScreen('manage-schedules')"><i class="fa fa-calendar-days"></i> Schedules</div>
+        <div class="nav-item active" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Categories</div>
+        <div class="nav-item" onclick="showScreen('events-page')"><i class="fa fa-star"></i> Events & Programs</div>
+        <div class="sidebar-section-label">System</div>
+        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
+        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
+      </div>
+      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>
+    </aside>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div><span class="topbar-title">Categories</span><span class="topbar-subtitle">/ Announcement Types</span></div>
+        <div class="topbar-right"><button class="btn btn-gold"><i class="fa fa-plus"></i> New Category</button></div>
+      </div>
+      <div class="admin-content">
+        <div class="notif-banner">
+          <i class="fa fa-circle-info"></i>
+          Categories help residents quickly find information relevant to them. Keep names clear and descriptive.
+        </div>
+        <div class="cat-grid">
+          <div class="cat-card red">
+            <div class="cat-icon" style="background:#FEB2B2; color:var(--red);">🏥</div>
+            <h3>Aid Distribution</h3>
+            <p>Cash assistance, food packs, government subsidies</p>
+            <div class="cat-count">8 <span>announcements</span></div>
+            <div class="flex gap-8 mt-20">
+              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
+            </div>
+          </div>
+          <div class="cat-card blue">
+            <div class="cat-icon" style="background:var(--sky-mid); color:var(--navy);">🎉</div>
+            <h3>Barangay Events</h3>
+            <p>Fiestas, assemblies, community gatherings</p>
+            <div class="cat-count">12 <span>announcements</span></div>
+            <div class="flex gap-8 mt-20">
+              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
+            </div>
+          </div>
+          <div class="cat-card teal">
+            <div class="cat-icon" style="background:#81E6D9; color:var(--teal);">⚕️</div>
+            <h3>Medical Missions</h3>
+            <p>Free check-ups, health screenings, consultations</p>
+            <div class="cat-count">5 <span>announcements</span></div>
+            <div class="flex gap-8 mt-20">
+              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
+            </div>
+          </div>
+          <div class="cat-card green">
+            <div class="cat-icon" style="background:#9AE6B4; color:var(--green);">💉</div>
+            <h3>Vaccination Programs</h3>
+            <p>Human & animal immunization schedules</p>
+            <div class="cat-count">7 <span>announcements</span></div>
+            <div class="flex gap-8 mt-20">
+              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
+            </div>
+          </div>
+          <div class="cat-card purple">
+            <div class="cat-icon" style="background:#D6BCFA; color:var(--purple);">🤝</div>
+            <h3>Community Programs</h3>
+            <p>Livelihood, seminars, environmental drives</p>
+            <div class="cat-count">9 <span>announcements</span></div>
+            <div class="flex gap-8 mt-20">
+              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
+            </div>
+          </div>
+          <div class="cat-card gold">
+            <div class="cat-icon" style="background:#FBBF72; color:var(--orange);">🛠️</div>
+            <h3>Services &amp; Schedules</h3>
+            <p>Government services, permits, requirements</p>
+            <div class="cat-count">7 <span>announcements</span></div>
+            <div class="flex gap-8 mt-20">
+              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 6 — PUBLIC HOME PAGE                               -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-public-home" class="screen">
+  <div class="public-layout">
+    <nav class="public-navbar">
+      <div class="navbar-inner">
+        <a class="pub-brand" href="#">
+          <div class="pub-brand-icon">🏛️</div>
+          <div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div>
+        </a>
+        <div class="pub-nav-links">
+          <button class="pub-nav-link active">Home</button>
+          <button class="pub-nav-link" onclick="showScreen('events-page')">Events</button>
+          <button class="pub-nav-link" onclick="showScreen('search-results')">Search</button>
+          <button class="pub-nav-link">Services</button>
+          <button class="pub-nav-link">About</button>
+        </div>
+        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;font-size:11px;"></i>Admin Login</button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="public-hero">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">📢 <strong>LIVE</strong> &nbsp;3 new announcements today</div>
+        <h1>Your Barangay,<br><em>Always Informed</em></h1>
+        <p>Stay up-to-date with announcements, events, and services from Barangay San Isidro.</p>
+        <div class="hero-search">
+          <input placeholder="Search announcements, events, services…" onclick="showScreen('search-results')"/>
+          <button onclick="showScreen('search-results')"><i class="fa fa-search" style="margin-right:6px;"></i>Search</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong>48</strong><span>Announcements</span></div>
+          <div class="hero-stat"><strong>12</strong><span>Upcoming Events</span></div>
+          <div class="hero-stat"><strong>1,240</strong><span>Residents</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="pub-content">
+      <!-- FEED -->
+      <div>
+        <!-- CAT PILLS -->
+        <div class="cat-pills">
+          <button class="cat-pill active">All</button>
+          <button class="cat-pill">🏥 Aid Distribution</button>
+          <button class="cat-pill">🎉 Events</button>
+          <button class="cat-pill">⚕️ Medical</button>
+          <button class="cat-pill">💉 Vaccination</button>
+          <button class="cat-pill">🤝 Programs</button>
+          <button class="cat-pill">🛠️ Services</button>
+        </div>
+
+        <!-- ANNOUNCEMENT CARDS -->
+        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+          <div class="announce-color-bar" style="background:#E53E3E;"></div>
+          <div class="announce-card-body">
+            <div class="announce-card-meta">
+              <span class="badge badge-aid">Aid Distribution</span>
+              <span class="badge badge-service" style="background:var(--gold-pale);color:var(--orange);border-color:#FBBF72;">⭐ Priority</span>
+              <span class="announce-card-date">March 20, 2025</span>
+            </div>
+            <div class="announce-card-title">Ayuda Distribution Schedule — Q1 2025</div>
+            <div class="announce-card-excerpt">The Barangay San Isidro will be distributing cash assistance and food packages to qualified beneficiaries on March 28–30. Please bring your valid ID and barangay clearance.</div>
+            <div class="announce-card-footer">
+              <div class="announce-card-author"><div class="av">CA</div>Barangay Captain Reyes</div>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>1,204 views</span>
+              <a class="read-more">Read More →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+          <div class="announce-color-bar" style="background:var(--navy);"></div>
+          <div class="announce-card-body">
+            <div class="announce-card-meta">
+              <span class="badge badge-events">Barangay Events</span>
+              <span class="announce-card-date">March 15, 2025</span>
+            </div>
+            <div class="announce-card-title">Barangay Fiesta Celebration 2025 — May 15–18</div>
+            <div class="announce-card-excerpt">Join us for four days of festivities celebrating the Feast of San Isidro Labrador! Enjoy cultural shows, sports events, food fair, and the grand parade on May 18.</div>
+            <div class="announce-card-footer">
+              <div class="announce-card-author"><div class="av">CA</div>Barangay Office</div>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>2,341 views</span>
+              <a class="read-more">Read More →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+          <div class="announce-color-bar" style="background:var(--green);"></div>
+          <div class="announce-card-body">
+            <div class="announce-card-meta">
+              <span class="badge badge-vaccine">Vaccination</span>
+              <span class="announce-card-date">March 18, 2025</span>
+            </div>
+            <div class="announce-card-title">Anti-Rabies Vaccination Drive — April 5, 2025</div>
+            <div class="announce-card-excerpt">Free anti-rabies vaccination for dogs and cats at the Covered Court. Bring your pets with a leash/carrier. Registration opens at 7:00 AM, first come first served basis.</div>
+            <div class="announce-card-footer">
+              <div class="announce-card-author"><div class="av">BH</div>Barangay Health Center</div>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>876 views</span>
+              <a class="read-more">Read More →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+          <div class="announce-color-bar" style="background:var(--teal);"></div>
+          <div class="announce-card-body">
+            <div class="announce-card-meta">
+              <span class="badge badge-medical">Medical Missions</span>
+              <span class="announce-card-date">March 22, 2025</span>
+            </div>
+            <div class="announce-card-title">Free Medical Mission — April 12, 2025</div>
+            <div class="announce-card-excerpt">A free medical mission will be held at the Barangay Health Center grounds featuring general check-up, blood pressure monitoring, blood sugar testing, and free medicines.</div>
+            <div class="announce-card-footer">
+              <div class="announce-card-author"><div class="av">BH</div>BHC Staff</div>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>654 views</span>
+              <a class="read-more">Read More →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn"><i class="fa fa-chevron-right" style="font-size:11px;"></i></button>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside>
+        <div class="sidebar-widget">
+          <div class="widget-header">
+            <div class="wi" style="background:var(--sky);color:var(--navy);"><i class="fa fa-calendar-days"></i></div>
+            <h3>Upcoming Events</h3>
+          </div>
+          <div class="widget-body">
+            <div class="event-item">
+              <div class="event-date-box"><div class="dd">23</div><div class="mm">Mar</div></div>
+              <div class="event-info"><h4>Barangay Council Meeting</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>9:00 AM • Session Hall</span></div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-box"><div class="dd">28</div><div class="mm">Mar</div></div>
+              <div class="event-info"><h4>Ayuda Distribution</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>7:00 AM • Covered Court</span></div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-box"><div class="dd">05</div><div class="mm">Apr</div></div>
+              <div class="event-info"><h4>Anti-Rabies Drive</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>8:00 AM • Covered Court</span></div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-box"><div class="dd">12</div><div class="mm">Apr</div></div>
+              <div class="event-info"><h4>Free Medical Mission</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>8:00 AM • BHC Grounds</span></div>
+            </div>
+            <button class="btn btn-outline btn-sm w-full mt-20" style="justify-content:center;" onclick="showScreen('events-page')">View All Events →</button>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <div class="widget-header">
+            <div class="wi" style="background:var(--red-light);color:var(--red);"><i class="fa fa-phone-volume"></i></div>
+            <h3>Emergency Hotlines</h3>
+          </div>
+          <div class="widget-body">
+            <div class="hotline-item">
+              <div class="hotline-icon" style="background:var(--red-light);color:var(--red);"><i class="fa fa-hospital"></i></div>
+              <div class="hotline-info"><h4>Barangay Health Center</h4><span>(049) 123-4567</span></div>
+            </div>
+            <div class="hotline-item">
+              <div class="hotline-icon" style="background:var(--sky);color:var(--navy);"><i class="fa fa-shield-halved"></i></div>
+              <div class="hotline-info"><h4>Barangay Tanod</h4><span>(049) 234-5678</span></div>
+            </div>
+            <div class="hotline-item">
+              <div class="hotline-icon" style="background:var(--gold-pale);color:var(--orange);"><i class="fa fa-fire-extinguisher"></i></div>
+              <div class="hotline-info"><h4>BFP – Fire Station</h4><span>911 / (049) 345-6789</span></div>
+            </div>
+            <div class="hotline-item">
+              <div class="hotline-icon" style="background:var(--green-light);color:var(--green);"><i class="fa fa-building-columns"></i></div>
+              <div class="hotline-info"><h4>Barangay Office</h4><span>(049) 456-7890</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <div class="widget-header">
+            <div class="wi" style="background:var(--gold-pale);color:var(--gold);"><i class="fa fa-clock"></i></div>
+            <h3>Office Hours</h3>
+          </div>
+          <div class="widget-body">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex items-center gap-8" style="justify-content:space-between;font-size:13px;"><span style="color:var(--gray-500);">Monday–Friday</span><strong style="color:var(--navy);">8:00 AM – 5:00 PM</strong></div>
+              <div class="flex items-center gap-8" style="justify-content:space-between;font-size:13px;"><span style="color:var(--gray-500);">Saturday</span><strong style="color:var(--navy);">8:00 AM – 12:00 PM</strong></div>
+              <div class="flex items-center gap-8" style="justify-content:space-between;font-size:13px;"><span style="color:var(--gray-500);">Sunday</span><strong style="color:var(--red);">Closed</strong></div>
+              <div class="divider-line"></div>
+              <div style="background:var(--green-light);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--green);"></div>
+                <span style="font-size:12px;font-weight:600;color:var(--green);">Currently Open</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 7 — ANNOUNCEMENT DETAIL                            -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-announcement-detail" class="screen">
+  <div class="public-layout">
+    <nav class="public-navbar">
+      <div class="navbar-inner">
+        <a class="pub-brand" href="#">
+          <div class="pub-brand-icon">🏛️</div>
+          <div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div>
+        </a>
+        <div class="pub-nav-links">
+          <button class="pub-nav-link" onclick="showScreen('public-home')">Home</button>
+          <button class="pub-nav-link" onclick="showScreen('events-page')">Events</button>
+          <button class="pub-nav-link" onclick="showScreen('search-results')">Search</button>
+          <button class="pub-nav-link">Services</button>
+        </div>
+        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;font-size:11px;"></i>Admin Login</button>
+      </div>
+    </nav>
+
+    <div class="detail-hero">
+      <div class="detail-hero-inner">
+        <button class="back-btn" onclick="showScreen('public-home')"><i class="fa fa-arrow-left"></i> Back to Announcements</button>
+        <div class="flex items-center gap-8">
+          <span class="badge badge-aid">Aid Distribution</span>
+          <span class="badge" style="background:rgba(255,255,255,.15);color:#fff;border:none;font-size:11px;">⭐ Priority</span>
+        </div>
+        <h1>Ayuda Distribution Schedule — Q1 2025</h1>
+        <div class="detail-meta">
+          <div class="detail-meta-item"><i class="fa fa-calendar"></i>Posted: March 20, 2025</div>
+          <div class="detail-meta-item"><i class="fa fa-user"></i>Barangay Captain Reyes</div>
+          <div class="detail-meta-item"><i class="fa fa-eye"></i>1,204 views</div>
+          <div class="detail-meta-item"><i class="fa fa-clock"></i>March 28–30, 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-body-wrap">
+      <div class="detail-content-card">
+        <div class="detail-image"><i class="fa fa-hand-holding-heart" style="opacity:.4;"></i></div>
+        <div class="detail-text">
+          <p>The Office of the Barangay Captain is pleased to announce the first quarter distribution of the <strong>Ayuda sa Barangay</strong> program. This assistance package is intended to support qualified residents in meeting basic household needs.</p>
+
+          <div class="detail-info-box">
+            <h4>📅 Distribution Schedule</h4>
+            <p><strong>March 28 (Thursday):</strong> Sitio 1 &amp; 2 — 7:00 AM to 12:00 PM<br>
+            <strong>March 29 (Friday):</strong> Sitio 3 &amp; 4 — 7:00 AM to 12:00 PM<br>
+            <strong>March 30 (Saturday):</strong> Sitio 5, 6 &amp; Remaining — 7:00 AM to 3:00 PM<br>
+            <strong>Venue:</strong> Barangay Covered Court, San Isidro</p>
+          </div>
+
+          <h3>What's Included in the Ayuda Package?</h3>
+          <p>Each qualified household will receive the following:</p>
+          <ul class="detail-requirements">
+            <li>5 kg National Food Authority (NFA) rice</li>
+            <li>Sardines (3 cans, 425g each)</li>
+            <li>Cooking oil (1 liter)</li>
+            <li>Noodles (5 packs)</li>
+            <li>₱500.00 cash assistance voucher</li>
+          </ul>
+
+          <h3>Requirements for Claiming</h3>
+          <p>To receive your assistance package, please bring the following documents:</p>
+          <ul class="detail-requirements">
+            <li>Valid government-issued ID (any one)</li>
+            <li>Barangay Clearance or Barangay ID</li>
+            <li>4Ps beneficiary card (if applicable)</li>
+            <li>Authorization letter (if claiming on behalf of another)</li>
+          </ul>
+
+          <p>Walk-in residents who are not yet registered in the beneficiary list are encouraged to bring proof of residency and may be accommodated on a case-by-case basis depending on remaining supplies.</p>
+
+          <div class="detail-info-box" style="background:var(--green-light);border-color:var(--green);">
+            <h4 style="color:var(--green);">✅ Important Reminders</h4>
+            <p style="color:var(--gray-700);">One (1) package per household only. Please follow your assigned sitio schedule. Bring your own eco-bag or container. Strictly observe proper queuing and health protocols.</p>
+          </div>
+
+          <div class="flex items-center gap-12 mt-20" style="flex-wrap:wrap;">
+            <button class="btn btn-navy"><i class="fa fa-share-nodes"></i> Share Announcement</button>
+            <button class="btn btn-outline"><i class="fa fa-print"></i> Print</button>
+            <button class="btn btn-outline" onclick="showScreen('public-home')"><i class="fa fa-arrow-left"></i> Back to Feed</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 8 — EVENTS & PROGRAMS                              -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-events-page" class="screen">
+  <div class="public-layout">
+    <nav class="public-navbar">
+      <div class="navbar-inner">
+        <a class="pub-brand" href="#"><div class="pub-brand-icon">🏛️</div><div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div></a>
+        <div class="pub-nav-links">
+          <button class="pub-nav-link" onclick="showScreen('public-home')">Home</button>
+          <button class="pub-nav-link active" onclick="showScreen('events-page')">Events</button>
+          <button class="pub-nav-link" onclick="showScreen('search-results')">Search</button>
+          <button class="pub-nav-link">Services</button>
+        </div>
+        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;"></i>Admin Login</button>
+      </div>
+    </nav>
+
+    <div class="public-hero" style="padding:40px 24px;">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">📅 Events &amp; Programs</div>
+        <h1>Community <em>Events</em></h1>
+        <p>Upcoming events, programs, and activities organized by Barangay San Isidro.</p>
+      </div>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:36px 24px;">
+      <div class="filter-bar mb-20">
+        <button class="filter-pill active">All Events</button>
+        <button class="filter-pill">This Month</button>
+        <button class="filter-pill">Next Month</button>
+        <button class="filter-pill">🎉 Social</button>
+        <button class="filter-pill">⚕️ Health</button>
+        <button class="filter-pill">🏫 Education</button>
+        <button class="filter-pill">🤝 Community</button>
+      </div>
+
+      <div class="events-grid">
+        <div class="event-card" onclick="showScreen('announcement-detail')">
+          <div class="event-card-img" style="background:linear-gradient(135deg,var(--gold-pale),#fff3cd);">🎉<div class="event-card-date-badge"><div class="dd">15</div><div class="mm">May</div></div></div>
+          <div class="event-card-body">
+            <span class="badge badge-events mb-8">Barangay Events</span>
+            <h3>Barangay Fiesta Celebration 2025</h3>
+            <p>Four-day celebration of the Feast of San Isidro Labrador featuring cultural shows, sports events, and a grand parade.</p>
+            <div class="event-card-footer">
+              <div class="event-detail-item"><i class="fa fa-clock"></i>May 15–18, 2025</div>
+              <div class="event-detail-item"><i class="fa fa-location-dot"></i>Plaza & Covered Court</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card" onclick="showScreen('announcement-detail')">
+          <div class="event-card-img" style="background:linear-gradient(135deg,var(--teal-light),#b2f5ea);">⚕️<div class="event-card-date-badge"><div class="dd">12</div><div class="mm">Apr</div></div></div>
+          <div class="event-card-body">
+            <span class="badge badge-medical mb-8">Medical Mission</span>
+            <h3>Free Medical Mission — April 2025</h3>
+            <p>General check-up, blood pressure monitoring, blood sugar testing, and free medicines for all residents.</p>
+            <div class="event-card-footer">
+              <div class="event-detail-item"><i class="fa fa-clock"></i>8:00 AM – 3:00 PM</div>
+              <div class="event-detail-item"><i class="fa fa-location-dot"></i>BHC Grounds</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card" onclick="showScreen('announcement-detail')">
+          <div class="event-card-img" style="background:linear-gradient(135deg,var(--green-light),#c6f6d5);">💉<div class="event-card-date-badge"><div class="dd">05</div><div class="mm">Apr</div></div></div>
+          <div class="event-card-body">
+            <span class="badge badge-vaccine mb-8">Vaccination</span>
+            <h3>Anti-Rabies Vaccination Drive</h3>
+            <p>Free anti-rabies vaccination for dogs and cats. Bring your pets with a leash or carrier. First come, first served.</p>
+            <div class="event-card-footer">
+              <div class="event-detail-item"><i class="fa fa-clock"></i>8:00 AM – 12:00 PM</div>
+              <div class="event-detail-item"><i class="fa fa-location-dot"></i>Covered Court</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card" onclick="showScreen('announcement-detail')">
+          <div class="event-card-img" style="background:linear-gradient(135deg,var(--sky),var(--sky-mid));">🏥<div class="event-card-date-badge"><div class="dd">28</div><div class="mm">Mar</div></div></div>
+          <div class="event-card-body">
+            <span class="badge badge-aid mb-8">Aid Distribution</span>
+            <h3>Q1 Ayuda Distribution</h3>
+            <p>Cash assistance and food packages for qualified beneficiaries. March 28–30, 2025. Bring valid ID.</p>
+            <div class="event-card-footer">
+              <div class="event-detail-item"><i class="fa fa-clock"></i>7:00 AM – 5:00 PM</div>
+              <div class="event-detail-item"><i class="fa fa-location-dot"></i>Barangay Covered Court</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-card-img" style="background:linear-gradient(135deg,var(--purple-light),#e9d8fd);">🤝<div class="event-card-date-badge"><div class="dd">10</div><div class="mm">Apr</div></div></div>
+          <div class="event-card-body">
+            <span class="badge badge-program mb-8">Community Program</span>
+            <h3>Senior Citizens Livelihood Seminar</h3>
+            <p>Skills training and livelihood program for senior citizens. Topics: handicrafts, food processing, container gardening.</p>
+            <div class="event-card-footer">
+              <div class="event-detail-item"><i class="fa fa-clock"></i>9:00 AM – 4:00 PM</div>
+              <div class="event-detail-item"><i class="fa fa-location-dot"></i>Multi-Purpose Hall</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-card-img" style="background:linear-gradient(135deg,#f0fff4,#c6f6d5);">♻️<div class="event-card-date-badge"><div class="dd">06</div><div class="mm">Apr</div></div></div>
+          <div class="event-card-body">
+            <span class="badge badge-program mb-8">Community Program</span>
+            <h3>Community Clean-Up Drive</h3>
+            <p>Participate in our quarterly clean-up drive. Sitio 3 to 6. Wear comfortable clothes and bring gloves.</p>
+            <div class="event-card-footer">
+              <div class="event-detail-item"><i class="fa fa-clock"></i>6:00 AM – 10:00 AM</div>
+              <div class="event-detail-item"><i class="fa fa-location-dot"></i>Sitio 3–6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  SCREEN 9 — SEARCH RESULTS                                 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="screen-search-results" class="screen">
+  <div class="public-layout">
+    <nav class="public-navbar">
+      <div class="navbar-inner">
+        <a class="pub-brand" href="#"><div class="pub-brand-icon">🏛️</div><div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div></a>
+        <div class="pub-nav-links">
+          <button class="pub-nav-link" onclick="showScreen('public-home')">Home</button>
+          <button class="pub-nav-link" onclick="showScreen('events-page')">Events</button>
+          <button class="pub-nav-link active">Search</button>
+          <button class="pub-nav-link">Services</button>
+        </div>
+        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;"></i>Admin Login</button>
+      </div>
+    </nav>
+
+    <div class="search-hero">
+      <div class="search-hero-inner">
+        <h2>Search Announcements &amp; Events</h2>
+        <div class="search-bar-big">
+          <input value="vaccination" placeholder="Search announcements, events…"/>
+          <button><i class="fa fa-search" style="margin-right:6px;"></i>Search</button>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:var(--gray-400);">Popular searches:</span>
+          <button class="cat-pill" style="padding:4px 12px;font-size:11px;">ayuda distribution</button>
+          <button class="cat-pill" style="padding:4px 12px;font-size:11px;">medical mission</button>
+          <button class="cat-pill" style="padding:4px 12px;font-size:11px;">vaccination schedule</button>
+          <button class="cat-pill" style="padding:4px 12px;font-size:11px;">barangay fiesta</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-content">
+      <div class="search-layout">
+        <!-- FILTERS SIDEBAR -->
+        <aside class="search-sidebar">
+          <div class="card card-pad mb-20">
+            <div class="section-title mb-16" style="font-size:15px;">Filters</div>
+            <div class="search-filter-group">
+              <h4>Category</h4>
+              <div class="check-item"><input type="checkbox" id="f1"/><label for="f1">Aid Distribution</label><span class="count-badge">8</span></div>
+              <div class="check-item"><input type="checkbox" id="f2" checked/><label for="f2">Barangay Events</label><span class="count-badge">12</span></div>
+              <div class="check-item"><input type="checkbox" id="f3"/><label for="f3">Medical Missions</label><span class="count-badge">5</span></div>
+              <div class="check-item"><input type="checkbox" id="f4" checked/><label for="f4">Vaccination</label><span class="count-badge">7</span></div>
+              <div class="check-item"><input type="checkbox" id="f5"/><label for="f5">Community Programs</label><span class="count-badge">9</span></div>
+              <div class="check-item"><input type="checkbox" id="f6"/><label for="f6">Services</label><span class="count-badge">7</span></div>
+            </div>
+            <div class="divider-line"></div>
+            <div class="search-filter-group">
+              <h4>Status</h4>
+              <div class="check-item"><input type="checkbox" id="s1" checked/><label for="s1">Published</label></div>
+              <div class="check-item"><input type="checkbox" id="s2"/><label for="s2">Upcoming</label></div>
+              <div class="check-item"><input type="checkbox" id="s3"/><label for="s3">Past Events</label></div>
+            </div>
+            <div class="divider-line"></div>
+            <div class="search-filter-group mb-0">
+              <h4>Date Range</h4>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div>
+                  <label class="form-label">From</label>
+                  <input type="date" class="form-input" style="padding-left:14px;" value="2025-03-01"/>
+                </div>
+                <div>
+                  <label class="form-label">To</label>
+                  <input type="date" class="form-input" style="padding-left:14px;" value="2025-04-30"/>
+                </div>
+              </div>
+            </div>
+            <div class="divider-line"></div>
+            <button class="btn btn-navy w-full" style="justify-content:center;">Apply Filters</button>
+            <button class="btn btn-outline w-full mt-20" style="justify-content:center;">Clear All</button>
+          </div>
+        </aside>
+
+        <!-- RESULTS -->
+        <div class="search-results-wrap">
+          <div class="search-results-count">Showing <strong>3 results</strong> for "<strong>vaccination</strong>"</div>
+
+          <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+            <div class="announce-color-bar" style="background:var(--green);"></div>
+            <div class="announce-card-body">
+              <div class="announce-card-meta"><span class="badge badge-vaccine">Vaccination</span><span class="announce-card-date">March 18, 2025</span></div>
+              <div class="announce-card-title">Anti-Rabies <mark style="background:#FFF59D;border-radius:3px;padding:0 2px;">Vaccination</mark> Drive — April 5, 2025</div>
+              <div class="announce-card-excerpt">Free anti-rabies vaccination for dogs and cats at the Covered Court. Bring your pets with a leash/carrier. Registration opens at 7:00 AM.</div>
+              <div class="announce-card-footer">
+                <div class="announce-card-author"><div class="av">BH</div>Barangay Health Center</div>
+                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>876 views</span>
+                <a class="read-more">Read More →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-announce-card">
+            <div class="announce-color-bar" style="background:var(--navy);"></div>
+            <div class="announce-card-body">
+              <div class="announce-card-meta"><span class="badge badge-vaccine">Vaccination</span><span class="announce-card-date">February 10, 2025</span></div>
+              <div class="announce-card-title">COVID-19 Booster <mark style="background:#FFF59D;border-radius:3px;padding:0 2px;">Vaccination</mark> Schedule — Q1 2025</div>
+              <div class="announce-card-excerpt">Updated schedule for COVID-19 booster doses. Residents 60 years and above are prioritized. Bring vaccination card and valid ID.</div>
+              <div class="announce-card-footer">
+                <div class="announce-card-author"><div class="av">BH</div>Barangay Health Center</div>
+                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>432 views</span>
+                <a class="read-more">Read More →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-announce-card">
+            <div class="announce-color-bar" style="background:var(--teal);"></div>
+            <div class="announce-card-body">
+              <div class="announce-card-meta"><span class="badge badge-medical">Medical Mission</span><span class="announce-card-date">January 5, 2025</span></div>
+              <div class="announce-card-title">Flu <mark style="background:#FFF59D;border-radius:3px;padding:0 2px;">Vaccination</mark> for Children — January 2025</div>
+              <div class="announce-card-excerpt">Free flu vaccination for children aged 6 months to 5 years. Coordinated with the City Health Office. Priority registration for 4Ps families.</div>
+              <div class="announce-card-footer">
+                <div class="announce-card-author"><div class="av">CH</div>City Health Office</div>
+                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>1,102 views</span>
+                <a class="read-more">Read More →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn"><i class="fa fa-chevron-right" style="font-size:11px;"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  MODAL — ADD / EDIT ANNOUNCEMENT                            -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="modalAdd" onclick="closeOnBackdrop(event, 'modalAdd')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Create Announcement</h3>
+      <button class="modal-close" onclick="closeModal('modalAdd')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Announcement Title</label>
+        <div class="input-wrap">
+          <i class="fa fa-heading input-icon"></i>
+          <input class="form-input" type="text" placeholder="Enter a clear, descriptive title"/>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select">
+            <option>Aid Distribution</option>
+            <option>Barangay Events</option>
+            <option>Medical Missions</option>
+            <option>Vaccination Programs</option>
+            <option>Community Programs</option>
+            <option>Services &amp; Schedules</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select">
+            <option>Draft</option>
+            <option>Published</option>
+            <option>Archived</option>
+          </select>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Event Date (From)</label>
+          <div class="input-wrap">
+            <i class="fa fa-calendar input-icon"></i>
+            <input class="form-input" type="date" style="padding-left:38px;"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Event Date (To)</label>
+          <div class="input-wrap">
+            <i class="fa fa-calendar input-icon"></i>
+            <input class="form-input" type="date" style="padding-left:38px;"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location / Venue</label>
+        <div class="input-wrap">
+          <i class="fa fa-location-dot input-icon"></i>
+          <input class="form-input" type="text" placeholder="e.g. Barangay Covered Court"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Content / Description</label>
+        <textarea class="form-textarea" placeholder="Write the full announcement details here…" style="min-height:120px;"></textarea>
+      </div>
+      <div class="form-group mb-0">
+        <label class="form-label">Priority</label>
+        <label class="flex items-center gap-8" style="cursor:pointer;font-size:13px;color:var(--gray-700);">
+          <input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"/> Mark as Priority Announcement
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalAdd')">Cancel</button>
+      <button class="btn btn-outline">Save as Draft</button>
+      <button class="btn btn-gold"><i class="fa fa-paper-plane"></i> Publish</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  MODAL — ADD SCHEDULE                                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="modalSchedule" onclick="closeOnBackdrop(event, 'modalSchedule')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Schedule / Activity</h3>
+      <button class="modal-close" onclick="closeModal('modalSchedule')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Activity Name</label>
+        <div class="input-wrap">
+          <i class="fa fa-calendar-plus input-icon"></i>
+          <input class="form-input" type="text" placeholder="e.g. Barangay Council Meeting"/>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <div class="input-wrap">
+            <i class="fa fa-calendar input-icon"></i>
+            <input class="form-input" type="date" style="padding-left:38px;"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-select">
+            <option>Service</option>
+            <option>Event</option>
+            <option>Meeting</option>
+            <option>Health Activity</option>
+            <option>Community Program</option>
+          </select>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Start Time</label>
+          <input class="form-input" type="time" style="padding-left:14px;"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Time</label>
+          <input class="form-input" type="time" style="padding-left:14px;"/>
+        </div>
+      </div>
+      <div class="form-group mb-0">
+        <label class="form-label">Venue</label>
+        <div class="input-wrap">
+          <i class="fa fa-location-dot input-icon"></i>
+          <input class="form-input" type="text" placeholder="e.g. Session Hall"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalSchedule')">Cancel</button>
+      <button class="btn btn-navy"><i class="fa fa-calendar-check"></i> Add to Schedule</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  STYLE GUIDE OVERLAY (shown on first load)                 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="styleGuide" style="display:none;position:fixed;inset:0;background:rgba(15,45,91,.6);backdrop-filter:blur(6px);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:var(--white);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);max-width:640px;width:100%;max-height:85vh;overflow-y:auto;margin:16px;">
+    <div style="padding:28px 32px;border-bottom:1px solid var(--gray-200);">
+      <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--navy);">🎨 UI Style Guide</div>
+      <div style="font-size:13px;color:var(--gray-400);margin-top:4px;">BarangayConnect Design System</div>
+    </div>
+    <div style="padding:28px 32px;">
+      <!-- COLORS -->
+      <div style="margin-bottom:24px;">
+        <div class="section-title mb-12">Color Palette</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--navy);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Navy<br>#0F2D5B</div></div>
+          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--navy-light);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Navy Light<br>#2859AD</div></div>
+          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--gold);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Gold<br>#E8A020</div></div>
+          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--sky);border:1px solid var(--gray-200);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Sky<br>#EBF3FF</div></div>
+          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--off-white);border:1px solid var(--gray-200);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Off-White<br>#F7F9FC</div></div>
+        </div>
+      </div>
+      <!-- TYPOGRAPHY -->
+      <div style="margin-bottom:24px;">
+        <div class="section-title mb-12">Typography</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:var(--gray-100);padding:14px 18px;border-radius:10px;">
+            <div style="font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--navy);">Libre Baskerville — Display</div>
+            <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Used for headings, page titles, hero text</div>
+          </div>
+          <div style="background:var(--gray-100);padding:14px 18px;border-radius:10px;">
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:400;color:var(--gray-700);">Plus Jakarta Sans — Body text, UI elements</div>
+            <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Used for all body copy, labels, navigation</div>
+          </div>
+        </div>
+      </div>
+      <!-- CATEGORY BADGES -->
+      <div style="margin-bottom:24px;">
+        <div class="section-title mb-12">Category Badges</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge badge-aid">Aid Distribution</span>
+          <span class="badge badge-events">Barangay Events</span>
+          <span class="badge badge-medical">Medical Missions</span>
+          <span class="badge badge-vaccine">Vaccination</span>
+          <span class="badge badge-program">Community Programs</span>
+          <span class="badge badge-service">Services</span>
+        </div>
+      </div>
+      <!-- BUTTONS -->
+      <div style="margin-bottom:24px;">
+        <div class="section-title mb-12">Buttons</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-navy">Primary (Navy)</button>
+          <button class="btn btn-gold">Accent (Gold)</button>
+          <button class="btn btn-outline">Outline</button>
+          <button class="btn btn-danger btn-sm">Danger</button>
+          <button class="btn btn-success btn-sm">Success</button>
+        </div>
+      </div>
+      <!-- STATUS PILLS -->
+      <div>
+        <div class="section-title mb-12">Status Indicators</div>
+        <div style="display:flex;gap:8px;">
+          <span class="status-pill published">Published</span>
+          <span class="status-pill draft">Draft</span>
+          <span class="status-pill archived">Archived</span>
+        </div>
+      </div>
+    </div>
+    <div style="padding:20px 32px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;">
+      <button class="btn btn-navy" onclick="document.getElementById('styleGuide').style.display='none'"><i class="fa fa-check"></i> Got it — View Prototype</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const screenSelector = '.screen';
+  const modalOpenSelector = '.modal-backdrop.open';
+
+  function setActiveWithin(container, itemSelector, activeElement) {
+    container?.querySelectorAll(itemSelector).forEach(item => {
+      item.classList.toggle('active', item === activeElement);
+    });
+  }
+
+  function toggleActiveByData(selector, dataKey, activeValue) {
+    document.querySelectorAll(selector).forEach(element => {
+      element.classList.toggle('active', element.dataset[dataKey] === activeValue);
+    });
+  }
+
+  function setBodyScrollLocked(isLocked) {
+    document.body.style.overflow = isLocked ? 'hidden' : '';
+  }
+
+  function closeAllModals() {
+    document.querySelectorAll(modalOpenSelector).forEach(modal => {
+      modal.classList.remove('open');
+    });
+    setBodyScrollLocked(false);
+  }
+
+  // ─── SCREEN MANAGEMENT ────────────────────────────────── //
+  function showScreen(id) {
+    document.querySelectorAll(screenSelector).forEach(screen => screen.classList.remove('active'));
+
+    const screen = document.getElementById(`screen-${id}`);
+    if (!screen) return;
+
+    screen.classList.add('active');
+    window.scrollTo(0, 0);
+
+    toggleActiveByData('.nav-tabs button', 'screen', id);
+    toggleActiveByData('.nav-item[data-screen]', 'screen', id);
+  }
+
+  // ─── AUTH TABS ─────────────────────────────────────────── //
+  function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+    document.getElementById(`form-${tab}`)?.classList.add('active');
+
+    const switcher = document.querySelector('.tab-switcher');
+    const tabButtons = switcher?.querySelectorAll('button');
+    if (!tabButtons?.length) return;
+
+    const activeIndex = tab === 'register' ? 1 : 0;
+    tabButtons.forEach((button, index) => {
+      button.classList.toggle('active', index === activeIndex);
+    });
+  }
+
+  // ─── MODALS ────────────────────────────────────────────── //
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.add('open');
+    setBodyScrollLocked(true);
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.remove('open');
+
+    const hasOpenModal = document.querySelector(modalOpenSelector);
+    setBodyScrollLocked(Boolean(hasOpenModal));
+  }
+
+  function closeOnBackdrop(event, id) {
+    if (event.target.classList.contains('modal-backdrop')) closeModal(id);
+  }
+
+  // ─── NAVIGATION + FILTER INTERACTIONS ─────────────────── //
+  document.addEventListener('click', event => {
+    const screenTrigger = event.target.closest('[data-screen]');
+    if (screenTrigger?.dataset.screen) {
+      showScreen(screenTrigger.dataset.screen);
+      return;
+    }
+
+    const filterPill = event.target.closest('.filter-pill');
+    if (filterPill) {
+      setActiveWithin(filterPill.closest('.filter-bar'), '.filter-pill', filterPill);
+      return;
+    }
+
+    const categoryPill = event.target.closest('.cat-pill');
+    if (categoryPill) {
+      setActiveWithin(categoryPill.closest('.cat-pills'), '.cat-pill', categoryPill);
+      return;
+    }
+
+    const publicNavLink = event.target.closest('.pub-nav-link');
+    if (publicNavLink) {
+      setActiveWithin(publicNavLink.closest('.pub-nav-links'), '.pub-nav-link', publicNavLink);
+    }
+  });
+
+  // ─── SHOW STYLE GUIDE ON FIRST LOAD ──────────────────── //
+  window.addEventListener('load', () => {
+    const styleGuide = document.getElementById('styleGuide');
+    if (!styleGuide) return;
+    styleGuide.style.display = 'flex';
+    styleGuide.style.animation = 'cardIn .4s ease both';
+  });
+
+  // ─── ESC KEY TO CLOSE MODALS ──────────────────────────── //
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeAllModals();
+  });
+</script>
+</body>
+</html>
