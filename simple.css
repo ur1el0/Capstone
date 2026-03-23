@@ -1,0 +1,267 @@
+:root {
+  --navy: #0f2d5b;
+  --navy-light: #2859ad;
+  --gold: #e8a020;
+  --gold-light: #f5c060;
+  --gold-pale: #fef5e3;
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --line: #e2e8f0;
+  --text: #1a202c;
+  --muted: #718096;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  background: var(--navy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 20px;
+  font-family: "Libre Baskerville", Georgia, serif;
+  color: #fff;
+}
+
+.brand-sub {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.screen-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn,
+.btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nav-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.container {
+  max-width: 980px;
+  margin: 20px auto;
+  padding: 0 16px 28px;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 10px rgba(15, 45, 91, 0.06);
+}
+
+.auth-card {
+  max-width: 480px;
+}
+
+.section-head {
+  margin-bottom: 6px;
+}
+
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(40, 89, 173, 0.14);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.row.between {
+  justify-content: space-between;
+}
+
+.row.align-center {
+  align-items: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-outline:hover {
+  border-color: var(--navy-light);
+  color: var(--navy);
+  background: #ebf3ff;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat-card h3 {
+  font-size: 28px;
+  margin-bottom: 4px;
+  font-family: "Libre Baskerville", Georgia, serif;
+  color: var(--navy);
+}
+
+.stat-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.simple-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.hero {
+  background: linear-gradient(145deg, var(--navy) 0%, #1a4080 55%, var(--navy-light) 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hero h2 {
+  font-family: "Libre Baskerville", Georgia, serif;
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  color: var(--gold-light);
+}
+
+.hero .btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+  font-weight: 700;
+}
+
+.hero .btn-primary:hover {
+  background: var(--gold-light);
+}
+
+.accent {
+  color: var(--gold-light);
+}
+
+.gold-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.gold-list li::before {
+  content: "•";
+  color: var(--gold);
+  margin-right: 8px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-grid,
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
