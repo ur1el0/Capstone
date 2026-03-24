@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Barangay Announcement System</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 14px; background: #f4f6f9; color: #333; }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; font-family: Arial, sans-serif; font-size: 14px; }
+
+  /* ── LAYOUT ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .sidebar {
+    width: 220px; background: #1a3a6b; color: #fff;
+    height: 100vh; position: fixed; top: 0; left: 0;
+    display: flex; flex-direction: column;
+  }
+  .sidebar .brand {
+    padding: 18px 16px; font-size: 15px; font-weight: bold;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+  }
+  .sidebar .brand small { display: block; font-size: 11px; font-weight: normal; opacity: .6; margin-top: 2px; }
+  .sidebar nav { flex: 1; padding: 10px 8px; }
+  .sidebar nav a {
+    display: block; padding: 9px 12px; border-radius: 6px;
+    color: rgba(255,255,255,.75); margin-bottom: 2px;
+  }
+  .sidebar nav a:hover, .sidebar nav a.active { background: rgba(255,255,255,.15); color: #fff; }
+  .sidebar .user { padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.15); font-size: 13px; opacity: .8; }
+
+  .main { margin-left: 220px; min-height: 100vh; }
+  .topbar {
+    background: #fff; border-bottom: 1px solid #ddd;
+    padding: 0 24px; height: 58px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .topbar h1 { font-size: 17px; color: #1a3a6b; }
+  .content { padding: 24px; }
+
+  /* ── COMPONENTS ── */
+  .btn {
+    padding: 8px 16px; border-radius: 5px; border: none;
+    font-size: 13px; font-weight: bold;
+  }
+  .btn-primary { background: #1a3a6b; color: #fff; }
+  .btn-primary:hover { background: #254f96; }
+  .btn-outline { background: #fff; color: #333; border: 1px solid #ccc; }
+  .btn-outline:hover { border-color: #1a3a6b; color: #1a3a6b; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; }
+  .card-body { padding: 18px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; }
+  .stat .num { font-size: 28px; font-weight: bold; color: #1a3a6b; }
+  .stat .lbl { font-size: 12px; color: #777; margin-top: 4px; }
+
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+  .b-aid     { background: #fee2e2; color: #b91c1c; }
+  .b-event   { background: #dbeafe; color: #1d4ed8; }
+  .b-medical { background: #ccfbf1; color: #0f766e; }
+  .b-vaccine { background: #dcfce7; color: #15803d; }
+  .b-program { background: #ede9fe; color: #6d28d9; }
+  .b-service { background: #fef9c3; color: #854d0e; }
+
+  .status { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+  .s-published { background: #dcfce7; color: #15803d; }
+  .s-draft     { background: #f3f4f6; color: #6b7280; }
+  .s-archived  { background: #fee2e2; color: #b91c1c; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 9px 12px; font-size: 11px; text-transform: uppercase; color: #888; background: #f9fafb; border-bottom: 1px solid #eee; }
+  td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .td-title { font-weight: bold; color: #1a3a6b; cursor: pointer; }
+  .td-title:hover { text-decoration: underline; }
+  .td-sub { font-size: 11px; color: #999; margin-top: 2px; }
+
+  .actions { display: flex; gap: 6px; }
+  .icon-btn { width: 28px; height: 28px; border-radius: 5px; border: none; font-size: 13px; cursor: pointer; }
+  .ib-edit   { background: #dbeafe; color: #1d4ed8; }
+  .ib-delete { background: #fee2e2; color: #b91c1c; }
+  .ib-view   { background: #dcfce7; color: #15803d; }
+
+  .filter-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .filter-bar input, .filter-bar select {
+    padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; outline: none;
+  }
+  .filter-bar input { width: 240px; }
+
+  /* ── MODAL ── */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: center; justify-content: center; }
+  .overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 8px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+  .modal-head { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+  .modal-head h3 { font-size: 16px; color: #1a3a6b; }
+  .modal-body { padding: 20px; }
+  .modal-foot { padding: 14px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 8px; }
+
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
+  input[type=text], input[type=email], input[type=password], input[type=date],
+  select, textarea {
+    width: 100%; padding: 9px 11px; border: 1px solid #ccc;
+    border-radius: 5px; font-size: 14px; outline: none; font-family: Arial, sans-serif;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #1a3a6b; }
+  textarea { resize: vertical; min-height: 80px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── LOGIN ── */
+  #screen-login { background: #1a3a6b; min-height: 100vh; display: none; align-items: center; justify-content: center; }
+  #screen-login.active { display: flex; }
+  .login-box { background: #fff; border-radius: 10px; padding: 36px 32px; width: 100%; max-width: 380px; }
+  .login-box h2 { font-size: 20px; color: #1a3a6b; margin-bottom: 4px; }
+  .login-box p { font-size: 12px; color: #888; margin-bottom: 22px; }
+  .tabs { display: flex; background: #f3f4f6; border-radius: 6px; padding: 3px; margin-bottom: 20px; }
+  .tabs button { flex: 1; padding: 8px; border: none; background: transparent; border-radius: 5px; font-weight: bold; color: #888; }
+  .tabs button.active { background: #fff; color: #1a3a6b; }
+  .form-hidden { display: none; }
+  .btn-full { width: 100%; padding: 10px; }
+  .or { text-align: center; color: #aaa; font-size: 12px; margin: 12px 0; }
+  .guest-btn { width: 100%; padding: 9px; border: 1px solid #ddd; background: #fff; border-radius: 5px; color: #555; }
+
+  /* ── PUBLIC ── */
+  .pub-nav {
+    background: #1a3a6b; padding: 0 24px; height: 56px;
+    display: flex; align-items: center; gap: 16px; color: #fff;
+  }
+  .pub-nav .brand { font-size: 16px; font-weight: bold; flex: 1; }
+  .pub-nav a { color: rgba(255,255,255,.75); font-size: 13px; padding: 6px 10px; border-radius: 4px; }
+  .pub-nav a:hover, .pub-nav a.active { background: rgba(255,255,255,.15); color: #fff; }
+  .pub-nav .login-link { background: #e8a020; color: #1a3a6b; font-weight: bold; padding: 7px 14px; border-radius: 5px; }
+
+  .hero { background: #254f96; color: #fff; padding: 40px 24px; }
+  .hero h2 { font-size: 26px; margin-bottom: 8px; }
+  .hero p { opacity: .8; margin-bottom: 16px; }
+  .hero-search { display: flex; max-width: 460px; }
+  .hero-search input { flex: 1; padding: 10px 14px; border: none; border-radius: 5px 0 0 5px; font-size: 14px; outline: none; }
+  .hero-search button { padding: 10px 18px; background: #e8a020; color: #1a3a6b; border: none; font-weight: bold; border-radius: 0 5px 5px 0; }
+
+  .pub-body { max-width: 960px; margin: 0 auto; padding: 28px 16px; display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
+  .cat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .pill { padding: 6px 14px; border-radius: 20px; border: 1px solid #ccc; background: #fff; font-size: 12px; cursor: pointer; }
+  .pill:hover, .pill.active { background: #1a3a6b; color: #fff; border-color: #1a3a6b; }
+
+  .ann-card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; margin-bottom: 14px; cursor: pointer; display: flex; gap: 14px; }
+  .ann-card:hover { border-color: #1a3a6b; }
+  .ann-bar { width: 4px; border-radius: 4px; flex-shrink: 0; }
+  .ann-info .meta { display: flex; gap: 10px; margin-bottom: 7px; align-items: center; flex-wrap: wrap; }
+  .ann-info .date { font-size: 11px; color: #999; }
+  .ann-info h3 { font-size: 15px; color: #1a3a6b; margin-bottom: 6px; }
+  .ann-info p  { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 10px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .ann-info .footer { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #999; }
+  .read-more { margin-left: auto; color: #254f96; font-weight: bold; font-size: 12px; }
+
+  .widget { background: #fff; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+  .widget h4 { padding: 12px 16px; border-bottom: 1px solid #eee; font-size: 13px; color: #1a3a6b; }
+  .widget ul { list-style: none; padding: 8px 0; }
+  .widget ul li { padding: 8px 16px; border-bottom: 1px solid #f5f5f5; font-size: 12.5px; color: #444; }
+  .widget ul li:last-child { border-bottom: none; }
+  .widget ul li strong { display: block; color: #1a3a6b; }
+
+  /* ── DETAIL ── */
+  .detail-wrap { max-width: 760px; margin: 0 auto; padding: 28px 16px; }
+  .back-btn { background: none; border: none; color: #254f96; font-size: 13px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+  .detail-card { background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  .detail-header { background: #1a3a6b; color: #fff; padding: 28px; }
+  .detail-header .badges { display: flex; gap: 8px; margin-bottom: 12px; }
+  .detail-header h2 { font-size: 22px; margin-bottom: 12px; }
+  .detail-header .dmeta { font-size: 12px; opacity: .75; display: flex; gap: 16px; flex-wrap: wrap; }
+  .detail-body { padding: 24px; }
+  .detail-body p { font-size: 14px; line-height: 1.8; color: #444; margin-bottom: 14px; }
+  .info-box { background: #eff6ff; border-left: 4px solid #1a3a6b; padding: 14px 16px; border-radius: 0 6px 6px 0; margin: 16px 0; }
+  .info-box h4 { font-size: 13px; color: #1a3a6b; margin-bottom: 6px; }
+  .info-box p { font-size: 13px; color: #555; margin: 0; }
+  .req-list { list-style: none; margin: 0 0 14px; }
+  .req-list li { padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 13.5px; color: #444; padding-left: 14px; position: relative; }
+  .req-list li::before { content: '•'; position: absolute; left: 0; color: #1a3a6b; }
+
+  /* ── SEARCH ── */
+  .search-wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  .search-bar-lg { display: flex; margin-bottom: 20px; max-width: 600px; }
+  .search-bar-lg input { flex: 1; padding: 10px 14px; border: 1px solid #ccc; border-radius: 5px 0 0 5px; font-size: 14px; outline: none; }
+  .search-bar-lg button { padding: 10px 18px; background: #1a3a6b; color: #fff; border: none; font-weight: bold; border-radius: 0 5px 5px 0; }
+  .result-count { font-size: 13px; color: #888; margin-bottom: 14px; }
+  .result-count strong { color: #333; }
+
+  .pagination { display: flex; gap: 6px; margin-top: 20px; }
+  .pg-btn { width: 34px; height: 34px; border: 1px solid #ddd; background: #fff; border-radius: 5px; font-size: 13px; }
+  .pg-btn.active { background: #1a3a6b; color: #fff; border-color: #1a3a6b; }
+
+  /* ── NAV TABS ── */
+  .nav-tabs { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); background: #1a3a6b; border-radius: 50px; padding: 6px 10px; display: flex; gap: 4px; z-index: 9999; flex-wrap: wrap; justify-content: center; max-width: 95vw; }
+  .nav-tabs button { background: transparent; color: rgba(255,255,255,.65); border: none; padding: 5px 11px; border-radius: 50px; font-size: 11px; font-weight: bold; }
+  .nav-tabs button:hover, .nav-tabs button.active { background: #e8a020; color: #1a3a6b; }
+
+  @media(max-width:700px){
+    .stats { grid-template-columns: 1fr 1fr; }
+    .pub-body { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-tabs">
+  <button onclick="go('login')" class="active">Login</button>
+  <button onclick="go('dashboard')">Dashboard</button>
+  <button onclick="go('announcements')">Manage</button>
+  <button onclick="go('public')">Public</button>
+  <button onclick="go('detail')">Detail</button>
+  <button onclick="go('search')">Search</button>
+</div>
+
+<!-- ════ LOGIN ════ -->
+<div id="screen-login" class="screen active">
+  <div class="login-box">
+    <h2>🏛️ BarangayConnect</h2>
+    <p>Barangay San Isidro — Announcement System</p>
+    <div class="tabs">
+      <button class="active" onclick="authTab('login', this)">Sign In</button>
+      <button onclick="authTab('register', this)">Register</button>
+    </div>
+    <div id="form-login">
+      <div class="form-group"><label>Email</label><input type="email" value="admin@barangay.gov.ph"/></div>
+      <div class="form-group"><label>Password</label><input type="password" value="••••••••"/></div>
+      <button class="btn btn-primary btn-full" onclick="go('dashboard')">Sign In as Admin</button>
+      <div class="or">— or —</div>
+      <button class="guest-btn" onclick="go('public')">👤 Continue as Resident</button>
+    </div>
+    <div id="form-register" class="form-hidden">
+      <div class="two-col">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Juan"/></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="dela Cruz"/></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="juan@email.com"/></div>
+      <div class="form-group"><label>Role</label>
+        <select><option>Resident</option><option>Barangay Staff</option><option>Barangay Official</option></select>
+      </div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Create password"/></div>
+      <button class="btn btn-primary btn-full">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ DASHBOARD ════ -->
+<div id="screen-dashboard" class="screen">
+  <div class="sidebar">
+    <div class="brand">🏛️ BarangayConnect<small>Admin Portal</small></div>
+    <nav>
+      <a class="active" onclick="go('dashboard')">📊 Dashboard</a>
+      <a onclick="go('announcements')">📢 Announcements</a>
+      <a onclick="go('public')">🌐 Public View</a>
+      <a>👥 Residents</a>
+      <a>⚙️ Settings</a>
+    </nav>
+    <div class="user">👤 Capt. Reyes — Admin</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h1>Dashboard</h1>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modalAdd')">+ New Announcement</button>
+    </div>
+    <div class="content">
+      <div class="stats">
+        <div class="stat"><div class="num">48</div><div class="lbl">Total Announcements</div></div>
+        <div class="stat"><div class="num">14</div><div class="lbl">Published This Month</div></div>
+        <div class="stat"><div class="num">3</div><div class="lbl">Pending Review</div></div>
+        <div class="stat"><div class="num">8.4K</div><div class="lbl">Portal Views (30d)</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><strong>Recent Announcements</strong><button class="btn btn-outline btn-sm" onclick="go('announcements')">View All</button></div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th><th>Views</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="td-title" onclick="go('detail')">Ayuda Distribution Schedule — Q1 2025</div><div class="td-sub">Mar 28–30 • Covered Court</div></td>
+                <td><span class="badge b-aid">Aid Distribution</span></td>
+                <td><span class="status s-published">Published</span></td>
+                <td>Mar 20</td><td>1,204</td>
+              </tr>
+              <tr>
+                <td><div class="td-title" onclick="go('detail')">Anti-Rabies Vaccination Drive</div><div class="td-sub">Apr 5 • Covered Court</div></td>
+                <td><span class="badge b-vaccine">Vaccination</span></td>
+                <td><span class="status s-published">Published</span></td>
+                <td>Mar 18</td><td>876</td>
+              </tr>
+              <tr>
+                <td><div class="td-title">Free Medical Mission — BHC</div><div class="td-sub">Apr 12 • BHC Grounds</div></td>
+                <td><span class="badge b-medical">Medical Mission</span></td>
+                <td><span class="status s-draft">Draft</span></td>
+                <td>Mar 22</td><td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MANAGE ANNOUNCEMENTS ════ -->
+<div id="screen-announcements" class="screen">
+  <div class="sidebar">
+    <div class="brand">🏛️ BarangayConnect<small>Admin Portal</small></div>
+    <nav>
+      <a onclick="go('dashboard')">📊 Dashboard</a>
+      <a class="active" onclick="go('announcements')">📢 Announcements</a>
+      <a onclick="go('public')">🌐 Public View</a>
+      <a>👥 Residents</a>
+      <a>⚙️ Settings</a>
+    </nav>
+    <div class="user">👤 Capt. Reyes — Admin</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h1>Manage Announcements</h1>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modalAdd')">+ New Announcement</button>
+    </div>
+    <div class="content">
+      <div class="filter-bar">
+        <input type="text" placeholder="🔍  Search announcements…"/>
+        <select>
+          <option>All Categories</option>
+          <option>Aid Distribution</option>
+          <option>Barangay Events</option>
+          <option>Medical Missions</option>
+          <option>Vaccination Programs</option>
+          <option>Community Programs</option>
+          <option>Services</option>
+        </select>
+        <select>
+          <option>All Status</option>
+          <option>Published</option>
+          <option>Draft</option>
+          <option>Archived</option>
+        </select>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>48 announcements &nbsp;·&nbsp; 3 pending review</span></div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Posted By</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="td-title" onclick="go('detail')">Ayuda Distribution Schedule — Q1 2025</div><div class="td-sub">Mar 28–30 • Covered Court</div></td>
+                <td><span class="badge b-aid">Aid Distribution</span></td>
+                <td><span class="status s-published">Published</span></td>
+                <td>Capt. Reyes</td><td>Mar 20</td>
+                <td><div class="actions"><button class="icon-btn ib-view" onclick="go('detail')">👁</button><button class="icon-btn ib-edit" onclick="openModal('modalAdd')">✏️</button><button class="icon-btn ib-delete">🗑</button></div></td>
+              </tr>
+              <tr>
+                <td><div class="td-title" onclick="go('detail')">Anti-Rabies Vaccination Drive</div><div class="td-sub">Apr 5 • Covered Court</div></td>
+                <td><span class="badge b-vaccine">Vaccination</span></td>
+                <td><span class="status s-published">Published</span></td>
+                <td>T. Santos</td><td>Mar 18</td>
+                <td><div class="actions"><button class="icon-btn ib-view" onclick="go('detail')">👁</button><button class="icon-btn ib-edit" onclick="openModal('modalAdd')">✏️</button><button class="icon-btn ib-delete">🗑</button></div></td>
+              </tr>
+              <tr>
+                <td><div class="td-title">Free Medical Mission — BHC</div><div class="td-sub">Apr 12 • BHC Grounds</div></td>
+                <td><span class="badge b-medical">Medical Mission</span></td>
+                <td><span class="status s-draft">Draft</span></td>
+                <td>J. Reyes</td><td>Mar 22</td>
+                <td><div class="actions"><button class="icon-btn ib-view">👁</button><button class="icon-btn ib-edit" onclick="openModal('modalAdd')">✏️</button><button class="icon-btn ib-delete">🗑</button></div></td>
+              </tr>
+              <tr>
+                <td><div class="td-title" onclick="go('detail')">Barangay Fiesta Celebration 2025</div><div class="td-sub">May 15–18 • Plaza</div></td>
+                <td><span class="badge b-event">Barangay Events</span></td>
+                <td><span class="status s-published">Published</span></td>
+                <td>Capt. Reyes</td><td>Mar 15</td>
+                <td><div class="actions"><button class="icon-btn ib-view" onclick="go('detail')">👁</button><button class="icon-btn ib-edit" onclick="openModal('modalAdd')">✏️</button><button class="icon-btn ib-delete">🗑</button></div></td>
+              </tr>
+              <tr>
+                <td><div class="td-title">Community Clean-Up Drive</div><div class="td-sub">Apr 6 • Sitio 3–6</div></td>
+                <td><span class="badge b-program">Community Programs</span></td>
+                <td><span class="status s-draft">Draft</span></td>
+                <td>M. Lopez</td><td>Mar 21</td>
+                <td><div class="actions"><button class="icon-btn ib-view">👁</button><button class="icon-btn ib-edit" onclick="openModal('modalAdd')">✏️</button><button class="icon-btn ib-delete">🗑</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:12px 18px; border-top:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px;color:#888;">Showing 1–5 of 48</span>
+          <div class="pagination">
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">2</button>
+            <button class="pg-btn">3</button>
+            <button class="pg-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PUBLIC HOME ════ -->
+<div id="screen-public" class="screen">
+  <nav class="pub-nav">
+    <div class="brand">🏛️ BarangayConnect</div>
+    <a class="active">Home</a>
+    <a onclick="go('search')">Search</a>
+    <a>Services</a>
+    <a class="login-link" onclick="go('login')">Admin Login</a>
+  </nav>
+  <div class="hero">
+    <h2>Barangay San Isidro</h2>
+    <p>Official announcements, events, and updates for residents.</p>
+    <div class="hero-search">
+      <input placeholder="Search announcements…" onclick="go('search')"/>
+      <button onclick="go('search')">Search</button>
+    </div>
+  </div>
+  <div class="pub-body">
+    <div>
+      <div class="cat-pills">
+        <button class="pill active">All</button>
+        <button class="pill">🏥 Aid Distribution</button>
+        <button class="pill">🎉 Events</button>
+        <button class="pill">⚕️ Medical</button>
+        <button class="pill">💉 Vaccination</button>
+        <button class="pill">🤝 Programs</button>
+      </div>
+      <div class="ann-card" onclick="go('detail')">
+        <div class="ann-bar" style="background:#b91c1c;"></div>
+        <div class="ann-info">
+          <div class="meta"><span class="badge b-aid">Aid Distribution</span><span class="date">March 20, 2025</span></div>
+          <h3>Ayuda Distribution Schedule — Q1 2025</h3>
+          <p>Distribution of cash assistance and food packages to qualified beneficiaries on March 28–30. Bring valid ID and barangay clearance.</p>
+          <div class="footer"><span>👤 Capt. Reyes</span><span>👁 1,204 views</span><span class="read-more">Read More →</span></div>
+        </div>
+      </div>
+      <div class="ann-card" onclick="go('detail')">
+        <div class="ann-bar" style="background:#1d4ed8;"></div>
+        <div class="ann-info">
+          <div class="meta"><span class="badge b-event">Barangay Events</span><span class="date">March 15, 2025</span></div>
+          <h3>Barangay Fiesta Celebration 2025 — May 15–18</h3>
+          <p>Four-day celebration of the Feast of San Isidro Labrador. Cultural shows, sports events, food fair, and grand parade on May 18.</p>
+          <div class="footer"><span>👤 Barangay Office</span><span>👁 2,341 views</span><span class="read-more">Read More →</span></div>
+        </div>
+      </div>
+      <div class="ann-card" onclick="go('detail')">
+        <div class="ann-bar" style="background:#15803d;"></div>
+        <div class="ann-info">
+          <div class="meta"><span class="badge b-vaccine">Vaccination</span><span class="date">March 18, 2025</span></div>
+          <h3>Anti-Rabies Vaccination Drive — April 5, 2025</h3>
+          <p>Free anti-rabies vaccination for dogs and cats at the Covered Court. First come, first served.</p>
+          <div class="footer"><span>👤 BHC Staff</span><span>👁 876 views</span><span class="read-more">Read More →</span></div>
+        </div>
+      </div>
+      <div class="ann-card" onclick="go('detail')">
+        <div class="ann-bar" style="background:#0f766e;"></div>
+        <div class="ann-info">
+          <div class="meta"><span class="badge b-medical">Medical Mission</span><span class="date">March 22, 2025</span></div>
+          <h3>Free Medical Mission — April 12, 2025</h3>
+          <p>General check-up, blood pressure monitoring, blood sugar testing, and free medicines at the BHC grounds.</p>
+          <div class="footer"><span>👤 BHC Staff</span><span>👁 654 views</span><span class="read-more">Read More →</span></div>
+        </div>
+      </div>
+      <div class="pagination">
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn">3</button>
+        <button class="pg-btn">›</button>
+      </div>
+    </div>
+    <aside>
+      <div class="widget">
+        <h4>📅 Upcoming Events</h4>
+        <ul>
+          <li><strong>Mar 23 — Council Meeting</strong>9:00 AM • Session Hall</li>
+          <li><strong>Mar 28 — Ayuda Distribution</strong>7:00 AM • Covered Court</li>
+          <li><strong>Apr 5 — Anti-Rabies Drive</strong>8:00 AM • Covered Court</li>
+          <li><strong>Apr 12 — Medical Mission</strong>8:00 AM • BHC Grounds</li>
+        </ul>
+      </div>
+      <div class="widget">
+        <h4>📞 Emergency Hotlines</h4>
+        <ul>
+          <li><strong>Barangay Health Center</strong>(049) 123-4567</li>
+          <li><strong>Barangay Tanod</strong>(049) 234-5678</li>
+          <li><strong>BFP Fire Station</strong>911 / (049) 345-6789</li>
+          <li><strong>Barangay Office</strong>(049) 456-7890</li>
+        </ul>
+      </div>
+      <div class="widget">
+        <h4>🕐 Office Hours</h4>
+        <ul>
+          <li><strong>Mon–Fri</strong>8:00 AM – 5:00 PM</li>
+          <li><strong>Saturday</strong>8:00 AM – 12:00 PM</li>
+          <li><strong>Sunday</strong>Closed</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ════ ANNOUNCEMENT DETAIL ════ -->
+<div id="screen-detail" class="screen">
+  <nav class="pub-nav">
+    <div class="brand">🏛️ BarangayConnect</div>
+    <a onclick="go('public')">Home</a>
+    <a onclick="go('search')">Search</a>
+    <a class="login-link" onclick="go('login')">Admin Login</a>
+  </nav>
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="go('public')">← Back to Announcements</button>
+    <div class="detail-card">
+      <div class="detail-header">
+        <div class="badges"><span class="badge b-aid">Aid Distribution</span><span class="badge" style="background:rgba(255,255,255,.2);color:#fff;">⭐ Priority</span></div>
+        <h2>Ayuda Distribution Schedule — Q1 2025</h2>
+        <div class="dmeta">
+          <span>📅 March 20, 2025</span>
+          <span>👤 Barangay Captain Reyes</span>
+          <span>👁 1,204 views</span>
+          <span>🗓 March 28–30, 2025</span>
+        </div>
+      </div>
+      <div class="detail-body">
+        <p>The Office of the Barangay Captain announces the first quarter distribution of the <strong>Ayuda sa Barangay</strong> program to support qualified residents in meeting basic household needs.</p>
+        <div class="info-box">
+          <h4>📅 Distribution Schedule</h4>
+          <p><strong>March 28 (Thu):</strong> Sitio 1 &amp; 2 — 7:00 AM to 12:00 PM<br>
+          <strong>March 29 (Fri):</strong> Sitio 3 &amp; 4 — 7:00 AM to 12:00 PM<br>
+          <strong>March 30 (Sat):</strong> Sitio 5, 6 &amp; Remaining — 7:00 AM to 3:00 PM<br>
+          <strong>Venue:</strong> Barangay Covered Court, San Isidro</p>
+        </div>
+        <p><strong>Each household will receive:</strong></p>
+        <ul class="req-list">
+          <li>5 kg NFA Rice</li>
+          <li>Sardines (3 cans, 425g each)</li>
+          <li>Cooking oil (1 liter)</li>
+          <li>Noodles (5 packs)</li>
+          <li>₱500.00 cash assistance voucher</li>
+        </ul>
+        <p><strong>Requirements for claiming:</strong></p>
+        <ul class="req-list">
+          <li>Valid government-issued ID</li>
+          <li>Barangay Clearance or Barangay ID</li>
+          <li>4Ps beneficiary card (if applicable)</li>
+          <li>Authorization letter (if claiming on behalf of another)</li>
+        </ul>
+        <div class="info-box" style="background:#f0fdf4;border-color:#15803d;">
+          <h4 style="color:#15803d;">✅ Reminders</h4>
+          <p>One (1) package per household only. Follow your assigned sitio schedule. Bring your own eco-bag. Observe proper queuing and health protocols.</p>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+          <button class="btn btn-primary">🔗 Share</button>
+          <button class="btn btn-outline">🖨 Print</button>
+          <button class="btn btn-outline" onclick="go('public')">← Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SEARCH RESULTS ════ -->
+<div id="screen-search" class="screen">
+  <nav class="pub-nav">
+    <div class="brand">🏛️ BarangayConnect</div>
+    <a onclick="go('public')">Home</a>
+    <a class="active">Search</a>
+    <a class="login-link" onclick="go('login')">Admin Login</a>
+  </nav>
+  <div class="search-wrap">
+    <div class="search-bar-lg">
+      <input value="vaccination" placeholder="Search…"/>
+      <button>Search</button>
+    </div>
+    <div class="filter-bar">
+      <select><option>All Categories</option><option>Aid Distribution</option><option>Vaccination</option><option>Medical Missions</option><option>Barangay Events</option></select>
+      <select><option>Any Date</option><option>This Month</option><option>Last 3 Months</option></select>
+    </div>
+    <div class="result-count">Showing <strong>3 results</strong> for "<strong>vaccination</strong>"</div>
+    <div class="ann-card" onclick="go('detail')">
+      <div class="ann-bar" style="background:#15803d;"></div>
+      <div class="ann-info">
+        <div class="meta"><span class="badge b-vaccine">Vaccination</span><span class="date">March 18, 2025</span></div>
+        <h3>Anti-Rabies <mark style="background:#fef08a;border-radius:2px;">Vaccination</mark> Drive — April 5, 2025</h3>
+        <p>Free anti-rabies vaccination for dogs and cats at the Covered Court. First come, first served.</p>
+        <div class="footer"><span>👤 BHC Staff</span><span>👁 876</span><span class="read-more">Read More →</span></div>
+      </div>
+    </div>
+    <div class="ann-card">
+      <div class="ann-bar" style="background:#1d4ed8;"></div>
+      <div class="ann-info">
+        <div class="meta"><span class="badge b-vaccine">Vaccination</span><span class="date">February 10, 2025</span></div>
+        <h3>COVID-19 Booster <mark style="background:#fef08a;border-radius:2px;">Vaccination</mark> Schedule — Q1 2025</h3>
+        <p>Updated schedule for COVID-19 booster doses. Residents 60 years and above are prioritized.</p>
+        <div class="footer"><span>👤 BHC Staff</span><span>👁 432</span><span class="read-more">Read More →</span></div>
+      </div>
+    </div>
+    <div class="ann-card">
+      <div class="ann-bar" style="background:#0f766e;"></div>
+      <div class="ann-info">
+        <div class="meta"><span class="badge b-medical">Medical Mission</span><span class="date">January 5, 2025</span></div>
+        <h3>Flu <mark style="background:#fef08a;border-radius:2px;">Vaccination</mark> for Children — January 2025</h3>
+        <p>Free flu vaccination for children aged 6 months to 5 years. Priority registration for 4Ps families.</p>
+        <div class="footer"><span>👤 City Health Office</span><span>👁 1,102</span><span class="read-more">Read More →</span></div>
+      </div>
+    </div>
+    <div class="pagination">
+      <button class="pg-btn active">1</button>
+      <button class="pg-btn">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: ADD/EDIT ANNOUNCEMENT ════ -->
+<div class="overlay" id="modalAdd" onclick="closeBack(event,'modalAdd')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Create Announcement</h3>
+      <button class="btn btn-outline btn-sm" onclick="closeModal('modalAdd')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Title</label><input type="text" placeholder="Enter announcement title"/></div>
+      <div class="two-col">
+        <div class="form-group"><label>Category</label>
+          <select><option>Aid Distribution</option><option>Barangay Events</option><option>Medical Missions</option><option>Vaccination Programs</option><option>Community Programs</option><option>Services</option></select>
+        </div>
+        <div class="form-group"><label>Status</label>
+          <select><option>Draft</option><option>Published</option><option>Archived</option></select>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group"><label>Date From</label><input type="date"/></div>
+        <div class="form-group"><label>Date To</label><input type="date"/></div>
+      </div>
+      <div class="form-group"><label>Venue / Location</label><input type="text" placeholder="e.g. Barangay Covered Court"/></div>
+      <div class="form-group"><label>Content</label><textarea placeholder="Write full announcement details…"></textarea></div>
+      <div class="form-group"><label><input type="checkbox" style="width:auto;margin-right:6px;"/> Mark as Priority</label></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('modalAdd')">Cancel</button>
+      <button class="btn btn-outline">Save Draft</button>
+      <button class="btn btn-primary">Publish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function go(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+    const map = { login:0, dashboard:1, announcements:2, public:3, detail:4, search:5 };
+    document.querySelectorAll('.nav-tabs button').forEach((b,i) => b.classList.toggle('active', i === map[id]));
+  }
+  function authTab(tab, el) {
+    document.getElementById('form-login').classList.toggle('form-hidden', tab !== 'login');
+    document.getElementById('form-register').classList.toggle('form-hidden', tab !== 'register');
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  function closeBack(e, id) { if (e.target.classList.contains('overlay')) closeModal(id); }
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('pill')) {
+      e.target.closest('.cat-pills')?.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      e.target.classList.add('active');
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.overlay.open').forEach(m => m.classList.remove('open'));
+  });
+</script>
+</body>
+</html>

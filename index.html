@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BarangayConnect — Information & Announcement System</title>
+  <title>BC — Information & Announcement System</title>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <style>
-    /* ─── CSS VARIABLES ─────────────────────────────────────── */
+    
     :root {
       --navy:       #0F2D5B;
       --navy-mid:   #1A4080;
@@ -49,7 +49,7 @@
       --transition: all .22s cubic-bezier(.4,0,.2,1);
     }
 
-    /* ─── RESET & BASE ─────────────────────────────────────── */
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -68,11 +68,11 @@
       font-size: 14px;
     }
 
-    /* ─── SCREEN MANAGEMENT ────────────────────────────────── */
+    
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* ─── NAV TABS (dev helper hidden in final view) ───────── */
+    
     .nav-tabs {
       position: fixed;
       bottom: 16px;
@@ -107,9 +107,9 @@
       color: var(--navy);
     }
 
-    /* ════════════════════════════════════════════════════════ */
-    /*  SCREEN 1 — LOGIN / REGISTER                             */
-    /* ════════════════════════════════════════════════════════ */
+    
+    
+    
     #screen-login {
       min-height: 100vh;
       display: none;
@@ -119,7 +119,7 @@
     }
     #screen-login.active { display: flex; align-items: center; justify-content: center; }
 
-    /* BG pattern */
+    
     #screen-login::before {
       content: '';
       position: absolute; inset: 0;
@@ -321,15 +321,15 @@
       color: var(--gray-400);
     }
 
-    /* ════════════════════════════════════════════════════════ */
-    /*  ADMIN LAYOUT (sidebar + topbar)                         */
-    /* ════════════════════════════════════════════════════════ */
+    
+    
+    
     .admin-layout {
       display: flex;
       min-height: 100vh;
     }
 
-    /* SIDEBAR */
+    
     .sidebar {
       width: var(--sidebar-w);
       background: var(--navy);
@@ -450,7 +450,7 @@
     .user-info h4 { font-size: 13px; font-weight: 600; color: var(--white); }
     .user-info span { font-size: 11px; color: rgba(255,255,255,.4); }
 
-    /* ADMIN TOPBAR */
+    
     .admin-topbar {
       height: var(--topbar-h);
       background: var(--white);
@@ -524,7 +524,7 @@
       color: var(--gray-400);
     }
 
-    /* ADMIN MAIN CONTENT */
+    
     .admin-main {
       margin-left: var(--sidebar-w);
       flex: 1;
@@ -537,7 +537,7 @@
       flex: 1;
     }
 
-    /* ─── STAT CARDS ─────────────────────────────────────── */
+    
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -604,7 +604,7 @@
     .stat-change.up { background: var(--green-light); color: var(--green); }
     .stat-change.down { background: var(--red-light); color: var(--red); }
 
-    /* ─── SECTION HEADERS ─────────────────────────────────── */
+    
     .section-header {
       display: flex;
       align-items: center;
@@ -623,7 +623,7 @@
       margin-top: 2px;
     }
 
-    /* ─── BUTTONS ─────────────────────────────────────────── */
+    
     .btn {
       display: inline-flex;
       align-items: center;
@@ -663,7 +663,7 @@
     .btn-danger:hover { background: var(--red); color: var(--white); }
     .btn-success { background: var(--green-light); color: var(--green); border: 1.5px solid #9AE6B4; }
 
-    /* ─── CARDS ───────────────────────────────────────────── */
+    
     .card {
       background: var(--white);
       border-radius: var(--radius-md);
@@ -680,11 +680,11 @@
     }
     .card-body { padding: 22px; }
 
-    /* ─── TWO-COL GRID ────────────────────────────────────── */
+    
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
 
-    /* ─── ANNOUNCEMENT CARD (ADMIN) ─────────────────────────── */
+    
     .announce-table {
       width: 100%;
       border-collapse: collapse;
@@ -712,7 +712,7 @@
     .announce-table .title-cell { font-weight: 600; color: var(--gray-900); font-size: 13.5px; }
     .announce-table .date-cell { color: var(--gray-400); font-size: 12px; }
 
-    /* ─── CATEGORY BADGES ────────────────────────────────── */
+    
     .badge {
       display: inline-flex;
       align-items: center;
@@ -730,7 +730,7 @@
     .badge-program  { background: var(--purple-light); color: var(--purple); border: 1px solid #D6BCFA; }
     .badge-service  { background: var(--gold-pale); color: var(--orange); border: 1px solid #FBBF72; }
 
-    /* ─── STATUS BADGES ──────────────────────────────────── */
+    
     .status-pill {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 4px 10px;
@@ -750,7 +750,7 @@
     .status-pill.archived { background: var(--red-light); color: var(--red); }
     .status-pill.archived::before { background: var(--red); }
 
-    /* ─── ACTION BUTTONS ─────────────────────────────────── */
+    
     .action-btns { display: flex; gap: 6px; }
     .icon-btn {
       width: 30px; height: 30px;
@@ -768,7 +768,7 @@
     .icon-btn.view { background: var(--green-light); color: var(--green); }
     .icon-btn.view:hover { background: var(--green); color: var(--white); }
 
-    /* ─── FILTER BAR ─────────────────────────────────────── */
+    
     .filter-bar {
       display: flex;
       align-items: center;
@@ -807,7 +807,7 @@
       color: var(--white);
     }
 
-    /* ─── MODAL / FORM OVERLAY ───────────────────────────── */
+    
     .modal-backdrop {
       position: fixed; inset: 0;
       background: rgba(15,45,91,.5);
@@ -860,7 +860,7 @@
       gap: 10px;
     }
 
-    /* ─── SCHEDULE GRID ──────────────────────────────────── */
+    
     .schedule-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -917,7 +917,7 @@
     .sched-event.teal { background: var(--teal-light); color: var(--teal); }
     .sched-event.purple { background: var(--purple-light); color: var(--purple); }
 
-    /* ─── CATEGORY CARDS ─────────────────────────────────── */
+    
     .cat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -972,9 +972,9 @@
     }
     .cat-count span { font-size: 12px; font-weight: 500; color: var(--gray-400); }
 
-    /* ════════════════════════════════════════════════════════ */
-    /*  PUBLIC PORTAL LAYOUT                                    */
-    /* ════════════════════════════════════════════════════════ */
+    
+    
+    
     .public-layout { background: var(--off-white); min-height: 100vh; }
 
     .public-navbar {
@@ -1041,7 +1041,7 @@
     }
     .pub-login-btn:hover { background: var(--navy-light); }
 
-    /* HERO */
+    
     .public-hero {
       background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 55%, var(--navy-light) 100%);
       padding: 60px 24px;
@@ -1135,7 +1135,7 @@
     }
     .hero-stat span { font-size: 12px; color: rgba(255,255,255,.55); }
 
-    /* PUBLIC CONTENT */
+    
     .pub-content {
       max-width: 1200px;
       margin: 0 auto;
@@ -1145,7 +1145,7 @@
       gap: 28px;
     }
 
-    /* CAT PILLS */
+    
     .cat-pills {
       display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
     }
@@ -1163,7 +1163,7 @@
     .cat-pill:hover { border-color: var(--navy); color: var(--navy); }
     .cat-pill.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
 
-    /* PUBLIC ANNOUNCEMENT CARDS */
+    
     .pub-announce-card {
       background: var(--white);
       border-radius: var(--radius-md);
@@ -1234,7 +1234,7 @@
     }
     .read-more:hover { text-decoration: underline; }
 
-    /* SIDEBAR WIDGETS */
+    
     .sidebar-widget {
       background: var(--white);
       border-radius: var(--radius-md);
@@ -1305,9 +1305,9 @@
     .hotline-info h4 { font-size: 12.5px; font-weight: 600; color: var(--navy); margin-bottom: 1px; }
     .hotline-info span { font-size: 11px; color: var(--gray-400); }
 
-    /* ════════════════════════════════════════════════════════ */
-    /*  ANNOUNCEMENT DETAIL                                     */
-    /* ════════════════════════════════════════════════════════ */
+    
+    
+    
     .detail-hero {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
       padding: 40px 0 80px;
@@ -1416,9 +1416,9 @@
       flex-shrink: 0;
     }
 
-    /* ════════════════════════════════════════════════════════ */
-    /*  EVENTS PAGE                                             */
-    /* ════════════════════════════════════════════════════════ */
+    
+    
+    
     .events-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1467,10 +1467,7 @@
       display: flex; align-items: center; gap: 5px;
       font-size: 11px; color: var(--gray-400); font-weight: 500;
     }
-
-    /* ════════════════════════════════════════════════════════ */
-    /*  SEARCH RESULTS                                          */
-    /* ════════════════════════════════════════════════════════ */
+    
     .search-hero {
       background: var(--white);
       border-bottom: 1px solid var(--gray-200);
@@ -1528,7 +1525,7 @@
       padding: 1px 6px; border-radius: 50px;
     }
 
-    /* ─── CHART BARS (dashboard) ─────────────────────────── */
+    
     .chart-bars {
       display: flex; align-items: flex-end; gap: 10px;
       height: 120px;
@@ -1545,7 +1542,7 @@
     .chart-bar:hover { filter: brightness(1.1); }
     .chart-bar-label { font-size: 10px; color: var(--gray-400); font-weight: 600; }
 
-    /* ─── ACTIVITY FEED ──────────────────────────────────── */
+    
     .activity-item {
       display: flex; gap: 12px;
       padding: 12px 0;
@@ -1563,7 +1560,7 @@
     .activity-content h4 { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
     .activity-content p  { font-size: 12px; color: var(--gray-400); }
 
-    /* ─── PAGINATION ──────────────────────────────────────── */
+    
     .pagination {
       display: flex; gap: 6px; align-items: center;
       margin-top: 24px;
@@ -1583,9 +1580,9 @@
       background: var(--navy); border-color: var(--navy); color: var(--white);
     }
 
-    /* ════════════════════════════════════════════════════════ */
-    /*  UTILITY                                                 */
-    /* ════════════════════════════════════════════════════════ */
+    
+    
+    
     .mb-0 { margin-bottom: 0; }
     .mb-4 { margin-bottom: 4px; }
     .mb-8 { margin-bottom: 8px; }
@@ -1606,6 +1603,13 @@
     .font-bold { font-weight: 700; }
     .text-right { text-align: right; }
     .w-full { width: 100%; }
+    .ml-auto { margin-left: auto; }
+    .mr-4 { margin-right: 4px; }
+    .text-12-gray { font-size: 12px; color: var(--gray-400); }
+    .text-11-gray-regular { font-size: 11px; color: var(--gray-400); font-weight: 400; }
+    .accent-navy { accent-color: var(--navy); }
+    .avatar-26 { width: 26px; height: 26px; font-size: 10px; }
+    .flex-col-gap-6 { display: flex; flex-direction: column; gap: 6px; }
     .divider-line { height: 1px; background: var(--gray-200); margin: 16px 0; }
     .loading-bar {
       height: 3px; background: var(--gray-200); border-radius: 2px; overflow: hidden; margin-top: 4px;
@@ -1615,7 +1619,7 @@
       background: linear-gradient(90deg, var(--navy), var(--navy-light));
     }
 
-    /* ─── TAG ─────────────────────────────────────────────── */
+    
     .tag {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 4px 10px; border-radius: 6px;
@@ -1625,7 +1629,7 @@
     .tag-gold { background: var(--gold-pale); color: var(--orange); }
     .tag-green { background: var(--green-light); color: var(--green); }
 
-    /* ─── FORM TEXTAREA ─────────────────────────────────── */
+    
     .form-textarea {
       width: 100%;
       padding: 11px 14px;
@@ -1644,7 +1648,7 @@
       box-shadow: 0 0 0 3px rgba(40,89,173,.1);
     }
 
-    /* ─── NOTIFICATION BANNER ───────────────────────────── */
+    
     .notif-banner {
       background: linear-gradient(90deg, var(--gold-pale), #fff9ee);
       border-left: 4px solid var(--gold);
@@ -1657,9 +1661,9 @@
     }
     .notif-banner i { font-size: 16px; }
 
-    /* ────────────────────────────────────────────────────── */
-    /*  MOBILE RESPONSIVE                                      */
-    /* ────────────────────────────────────────────────────── */
+    
+    
+    
     @media (max-width: 900px) {
       .sidebar { transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); }
@@ -1691,10 +1695,7 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  NAV TABS (screen switcher)                                 -->
-<!-- ═══════════════════════════════════════════════════════════ -->
-<div class="nav-tabs" id="navTabs">
+<!-- <div class="nav-tabs" id="navTabs">
   <button data-screen="login" class="active">① Login</button>
   <button data-screen="admin-dashboard">② Dashboard</button>
   <button data-screen="manage-announcements">③ Manage</button>
@@ -1704,18 +1705,15 @@
   <button data-screen="announcement-detail">⑦ Detail</button>
   <button data-screen="events-page">⑧ Events</button>
   <button data-screen="search-results">⑨ Search</button>
-</div>
+</div> -->
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 1 — LOGIN / REGISTER                                -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-login" class="screen active">
   <div class="login-hexagons"></div>
   <div class="login-card">
     <div class="login-brand">
       <div class="login-brand-icon">🏛️</div>
       <div class="login-brand-text">
-        <h1>BarangayConnect</h1>
+        <h1>BC</h1>
         <span>Information Management System</span>
       </div>
     </div>
@@ -1725,7 +1723,7 @@
       <button onclick="switchAuthTab('register')">Register</button>
     </div>
 
-    <!-- LOGIN FORM -->
+    
     <div class="auth-form active" id="form-login">
       <div class="form-group">
         <label class="form-label">Email Address</label>
@@ -1743,21 +1741,21 @@
       </div>
       <div class="flex items-center gap-8 mb-20" style="justify-content:space-between;">
         <label class="flex items-center gap-8 text-sm text-gray" style="cursor:pointer;">
-          <input type="checkbox" checked style="accent-color:var(--navy);"/>
+          <input type="checkbox" checked class="accent-navy"/>
           Remember me
         </label>
         <a href="#" class="text-sm" style="color:var(--navy-light); font-weight:600;">Forgot password?</a>
       </div>
-      <button class="btn-primary" onclick="showScreen('admin-dashboard')">
+      <button class="btn-primary" data-screen="admin-dashboard">
         Sign In as Admin
       </button>
       <div class="divider">or</div>
-      <button class="guest-btn" onclick="showScreen('public-home')">
+      <button class="guest-btn" data-screen="public-home">
         <i class="fa fa-globe" style="margin-right:7px;"></i>Continue as Resident (Guest)
       </button>
     </div>
 
-    <!-- REGISTER FORM -->
+    
     <div class="auth-form" id="form-register">
       <div class="two-col" style="gap:14px; margin-bottom:0;">
         <div class="form-group">
@@ -1806,38 +1804,35 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 2 — ADMIN DASHBOARD                                 -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-admin-dashboard" class="screen">
   <div class="admin-layout">
-    <!-- SIDEBAR -->
+    
     <aside class="sidebar" id="adminSidebar">
       <div class="sidebar-brand">
         <div class="sidebar-brand-row">
           <div class="sidebar-logo">🏛️</div>
           <div class="sidebar-brand-text">
-            <h2>BarangayConnect</h2>
+            <h2>BC</h2>
             <small>Admin Portal</small>
           </div>
         </div>
       </div>
       <div class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
-        <div class="nav-item active" data-screen="admin-dashboard" onclick="showScreen('admin-dashboard')">
+        <div class="nav-item active" data-screen="admin-dashboard">
           <i class="fa fa-gauge-high"></i> Dashboard
         </div>
-        <div class="nav-item" data-screen="manage-announcements" onclick="showScreen('manage-announcements')">
+        <div class="nav-item" data-screen="manage-announcements">
           <i class="fa fa-bullhorn"></i> Announcements
           <span class="badge">3</span>
         </div>
-        <div class="nav-item" data-screen="manage-schedules" onclick="showScreen('manage-schedules')">
+        <div class="nav-item" data-screen="manage-schedules">
           <i class="fa fa-calendar-days"></i> Schedules
         </div>
-        <div class="nav-item" data-screen="categories" onclick="showScreen('categories')">
+        <div class="nav-item" data-screen="categories">
           <i class="fa fa-tags"></i> Categories
         </div>
-        <div class="nav-item" data-screen="events-page" onclick="showScreen('events-page')">
+        <div class="nav-item" data-screen="events-page">
           <i class="fa fa-star"></i> Events & Programs
         </div>
         <div class="sidebar-section-label">Reports</div>
@@ -1871,33 +1866,19 @@
       </div>
     </aside>
 
-    <!-- MAIN -->
+    
     <div class="admin-main">
-      <div class="admin-topbar">
-        <div>
-          <span class="topbar-title">Dashboard</span>
-          <span class="topbar-subtitle">/ Overview</span>
-        </div>
-        <div class="topbar-search">
-          <i class="fa fa-search"></i>
-          <input placeholder="Search announcements…" onclick="showScreen('search-results')"/>
-        </div>
-        <div class="topbar-right">
-          <button class="topbar-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
-          <button class="topbar-btn"><i class="fa fa-circle-question"></i></button>
-          <div class="user-avatar" style="width:36px;height:36px;font-size:13px;">CA</div>
-        </div>
-      </div>
+      <div class="admin-topbar" data-admin-topbar="admin-dashboard"></div>
 
       <div class="admin-content">
-        <!-- NOTIFICATION BANNER -->
+        
         <div class="notif-banner">
           <i class="fa fa-triangle-exclamation"></i>
           <strong>3 announcements</strong>&nbsp;are pending review and need your approval before publishing.
-          <button class="btn btn-sm btn-gold" style="margin-left:auto;" onclick="showScreen('manage-announcements')">Review Now</button>
+          <button class="btn btn-sm btn-gold ml-auto" data-screen="manage-announcements">Review Now</button>
         </div>
 
-        <!-- STAT CARDS -->
+        
         <div class="stats-grid">
           <div class="stat-card blue">
             <div class="stat-icon blue"><i class="fa fa-bullhorn"></i></div>
@@ -1925,7 +1906,7 @@
           </div>
         </div>
 
-        <!-- CHARTS + RECENT ACTIVITY -->
+        
         <div class="two-col mb-24">
           <div class="card">
             <div class="card-header">
@@ -2004,42 +1985,42 @@
           </div>
         </div>
 
-        <!-- CATEGORY OVERVIEW -->
+        
         <div class="section-header mb-16">
           <div>
             <div class="section-title">Announcements by Category</div>
             <div class="section-subtitle">Distribution this month</div>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Manage Categories</button>
+          <button class="btn btn-outline btn-sm" data-screen="categories"><i class="fa fa-tags"></i> Manage Categories</button>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;">
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="flex items-center gap-8"><span class="badge badge-aid">Aid Distribution</span><span class="text-sm text-gray" style="margin-left:auto;">8 posts</span></div>
+            <div class="flex items-center gap-8"><span class="badge badge-aid">Aid Distribution</span><span class="text-sm text-gray ml-auto">8 posts</span></div>
             <div class="loading-bar"><div class="loading-fill" style="width:62%;background:var(--red);"></div></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="flex items-center gap-8"><span class="badge badge-events">Barangay Events</span><span class="text-sm text-gray" style="margin-left:auto;">12 posts</span></div>
+            <div class="flex items-center gap-8"><span class="badge badge-events">Barangay Events</span><span class="text-sm text-gray ml-auto">12 posts</span></div>
             <div class="loading-bar"><div class="loading-fill" style="width:85%;"></div></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="flex items-center gap-8"><span class="badge badge-medical">Medical Missions</span><span class="text-sm text-gray" style="margin-left:auto;">5 posts</span></div>
+            <div class="flex items-center gap-8"><span class="badge badge-medical">Medical Missions</span><span class="text-sm text-gray ml-auto">5 posts</span></div>
             <div class="loading-bar"><div class="loading-fill" style="width:38%;background:var(--teal);"></div></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="flex items-center gap-8"><span class="badge badge-vaccine">Vaccination</span><span class="text-sm text-gray" style="margin-left:auto;">7 posts</span></div>
+            <div class="flex items-center gap-8"><span class="badge badge-vaccine">Vaccination</span><span class="text-sm text-gray ml-auto">7 posts</span></div>
             <div class="loading-bar"><div class="loading-fill" style="width:52%;background:var(--green);"></div></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="flex items-center gap-8"><span class="badge badge-program">Community Programs</span><span class="text-sm text-gray" style="margin-left:auto;">9 posts</span></div>
+            <div class="flex items-center gap-8"><span class="badge badge-program">Community Programs</span><span class="text-sm text-gray ml-auto">9 posts</span></div>
             <div class="loading-bar"><div class="loading-fill" style="width:68%;background:var(--purple);"></div></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="flex items-center gap-8"><span class="badge badge-service">Services</span><span class="text-sm text-gray" style="margin-left:auto;">7 posts</span></div>
+            <div class="flex items-center gap-8"><span class="badge badge-service">Services</span><span class="text-sm text-gray ml-auto">7 posts</span></div>
             <div class="loading-bar"><div class="loading-fill" style="width:52%;background:var(--orange);"></div></div>
           </div>
         </div>
 
-        <!-- QUICK ACCESS -->
+        
         <div class="section-header mb-16">
           <div class="section-title">Quick Actions</div>
         </div>
@@ -2047,10 +2028,10 @@
           <button class="btn btn-navy" style="justify-content:center;padding:16px;" onclick="openModal('modalAdd')">
             <i class="fa fa-plus"></i> New Announcement
           </button>
-          <button class="btn btn-outline" style="justify-content:center;padding:16px;" onclick="showScreen('manage-schedules')">
+          <button class="btn btn-outline" style="justify-content:center;padding:16px;" data-screen="manage-schedules">
             <i class="fa fa-calendar-plus"></i> Add Schedule
           </button>
-          <button class="btn btn-outline" style="justify-content:center;padding:16px;" onclick="showScreen('events-page')">
+          <button class="btn btn-outline" style="justify-content:center;padding:16px;" data-screen="events-page">
             <i class="fa fa-star"></i> Create Event
           </button>
         </div>
@@ -2059,36 +2040,13 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 3 — MANAGE ANNOUNCEMENTS                           -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-manage-announcements" class="screen">
   <div class="admin-layout">
-    <aside class="sidebar">
-      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BarangayConnect</h2><small>Admin Portal</small></div></div></div>
-      <div class="sidebar-nav">
-        <div class="sidebar-section-label">Main</div>
-        <div class="nav-item" onclick="showScreen('admin-dashboard')"><i class="fa fa-gauge-high"></i> Dashboard</div>
-        <div class="nav-item active" onclick="showScreen('manage-announcements')"><i class="fa fa-bullhorn"></i> Announcements<span class="badge">3</span></div>
-        <div class="nav-item" onclick="showScreen('manage-schedules')"><i class="fa fa-calendar-days"></i> Schedules</div>
-        <div class="nav-item" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Categories</div>
-        <div class="nav-item" onclick="showScreen('events-page')"><i class="fa fa-star"></i> Events & Programs</div>
-        <div class="sidebar-section-label">System</div>
-        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
-        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
-      </div>
-      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>
-    </aside>
+    <aside class="sidebar" data-admin-sidebar="manage-announcements"></aside>
     <div class="admin-main">
-      <div class="admin-topbar">
-        <div><span class="topbar-title">Announcements</span><span class="topbar-subtitle">/ Manage</span></div>
-        <div class="topbar-right">
-          <button class="btn btn-gold" onclick="openModal('modalAdd')"><i class="fa fa-plus"></i> New Announcement</button>
-          <button class="topbar-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
-        </div>
-      </div>
+      <div class="admin-topbar" data-admin-topbar="manage-announcements"></div>
       <div class="admin-content">
-        <!-- FILTER BAR -->
+        
         <div class="filter-bar">
           <div style="position:relative;">
             <i class="fa fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400);"></i>
@@ -2126,7 +2084,7 @@
             <table class="announce-table">
               <thead>
                 <tr>
-                  <th style="width:32px;"><input type="checkbox" style="accent-color:var(--navy);"/></th>
+                  <th style="width:32px;"><input type="checkbox" class="accent-navy"/></th>
                   <th>Title</th>
                   <th>Category</th>
                   <th>Status</th>
@@ -2138,64 +2096,64 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
-                  <td class="title-cell" onclick="showScreen('announcement-detail')" style="cursor:pointer;">
+                  <td><input type="checkbox" class="accent-navy"/></td>
+                  <td class="title-cell" data-screen="announcement-detail" style="cursor:pointer;">
                     Ayuda Distribution Schedule — Q1 2025<br>
                     <span style="font-size:11px;color:var(--gray-400);font-weight:400;">March 28–30, 2025 • Barangay Hall</span>
                   </td>
                   <td><span class="badge badge-aid">Aid Distribution</span></td>
                   <td><span class="status-pill published">Published</span></td>
-                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">CA</div><span style="font-size:12px;">Capt. Reyes</span></div></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar avatar-26">CA</div><span style="font-size:12px;">Capt. Reyes</span></div></td>
                   <td class="date-cell">Mar 20, 2025</td>
                   <td class="date-cell" style="font-weight:600;color:var(--navy);">1,204</td>
-                  <td><div class="action-btns"><button class="icon-btn view" title="View" onclick="showScreen('announcement-detail')"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')" title="Edit"><i class="fa fa-pen"></i></button><button class="icon-btn delete" title="Delete"><i class="fa fa-trash"></i></button></div></td>
+                  <td><div class="action-btns"><button class="icon-btn view" title="View" data-screen="announcement-detail"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')" title="Edit"><i class="fa fa-pen"></i></button><button class="icon-btn delete" title="Delete"><i class="fa fa-trash"></i></button></div></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td><input type="checkbox" class="accent-navy"/></td>
                   <td class="title-cell">Anti-Rabies Vaccination Drive<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 5, 2025 • Covered Court</span></td>
                   <td><span class="badge badge-vaccine">Vaccination</span></td>
                   <td><span class="status-pill published">Published</span></td>
-                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">TS</div><span style="font-size:12px;">T. Santos</span></div></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar avatar-26">TS</div><span style="font-size:12px;">T. Santos</span></div></td>
                   <td class="date-cell">Mar 18, 2025</td>
                   <td class="date-cell" style="font-weight:600;color:var(--navy);">876</td>
-                  <td><div class="action-btns"><button class="icon-btn view" onclick="showScreen('announcement-detail')"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                  <td><div class="action-btns"><button class="icon-btn view" data-screen="announcement-detail"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td><input type="checkbox" class="accent-navy"/></td>
                   <td class="title-cell">Free Medical Mission — Barangay Health Center<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 12, 2025 • BHC Grounds</span></td>
                   <td><span class="badge badge-medical">Medical Missions</span></td>
                   <td><span class="status-pill draft">Draft</span></td>
-                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">JR</div><span style="font-size:12px;">J. Reyes</span></div></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar avatar-26">JR</div><span style="font-size:12px;">J. Reyes</span></div></td>
                   <td class="date-cell">Mar 22, 2025</td>
                   <td class="date-cell" style="color:var(--gray-400);">—</td>
                   <td><div class="action-btns"><button class="icon-btn view"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td><input type="checkbox" class="accent-navy"/></td>
                   <td class="title-cell">Barangay Fiesta Celebration 2025<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">May 15–18, 2025 • Plaza</span></td>
                   <td><span class="badge badge-events">Barangay Events</span></td>
                   <td><span class="status-pill published">Published</span></td>
-                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">CA</div><span style="font-size:12px;">Capt. Reyes</span></div></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar avatar-26">CA</div><span style="font-size:12px;">Capt. Reyes</span></div></td>
                   <td class="date-cell">Mar 15, 2025</td>
                   <td class="date-cell" style="font-weight:600;color:var(--navy);">2,341</td>
-                  <td><div class="action-btns"><button class="icon-btn view" onclick="showScreen('announcement-detail')"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
+                  <td><div class="action-btns"><button class="icon-btn view" data-screen="announcement-detail"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td><input type="checkbox" class="accent-navy"/></td>
                   <td class="title-cell">Community Clean-Up Drive<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 6, 2025 • Sitio 3 to 6</span></td>
                   <td><span class="badge badge-program">Community Programs</span></td>
                   <td><span class="status-pill draft">Draft</span></td>
-                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">ML</div><span style="font-size:12px;">M. Lopez</span></div></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar avatar-26">ML</div><span style="font-size:12px;">M. Lopez</span></div></td>
                   <td class="date-cell">Mar 21, 2025</td>
                   <td class="date-cell" style="color:var(--gray-400);">—</td>
                   <td><div class="action-btns"><button class="icon-btn view"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" style="accent-color:var(--navy);"/></td>
+                  <td><input type="checkbox" class="accent-navy"/></td>
                   <td class="title-cell">Senior Citizens Livelihood Seminar<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">April 10, 2025 • Multi-Purpose Hall</span></td>
                   <td><span class="badge badge-program">Community Programs</span></td>
                   <td><span class="status-pill archived">Archived</span></td>
-                  <td><div class="flex items-center gap-8"><div class="user-avatar" style="width:26px;height:26px;font-size:10px;">PG</div><span style="font-size:12px;">P. Garcia</span></div></td>
+                  <td><div class="flex items-center gap-8"><div class="user-avatar avatar-26">PG</div><span style="font-size:12px;">P. Garcia</span></div></td>
                   <td class="date-cell">Feb 28, 2025</td>
                   <td class="date-cell" style="font-weight:600;color:var(--navy);">543</td>
                   <td><div class="action-btns"><button class="icon-btn view"><i class="fa fa-eye"></i></button><button class="icon-btn edit" onclick="openModal('modalAdd')"><i class="fa fa-pen"></i></button><button class="icon-btn delete"><i class="fa fa-trash"></i></button></div></td>
@@ -2221,36 +2179,14 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 4 — MANAGE SCHEDULES                               -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-manage-schedules" class="screen">
   <div class="admin-layout">
-    <aside class="sidebar">
-      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BarangayConnect</h2><small>Admin Portal</small></div></div></div>
-      <div class="sidebar-nav">
-        <div class="sidebar-section-label">Main</div>
-        <div class="nav-item" onclick="showScreen('admin-dashboard')"><i class="fa fa-gauge-high"></i> Dashboard</div>
-        <div class="nav-item" onclick="showScreen('manage-announcements')"><i class="fa fa-bullhorn"></i> Announcements<span class="badge">3</span></div>
-        <div class="nav-item active" onclick="showScreen('manage-schedules')"><i class="fa fa-calendar-days"></i> Schedules</div>
-        <div class="nav-item" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Categories</div>
-        <div class="nav-item" onclick="showScreen('events-page')"><i class="fa fa-star"></i> Events & Programs</div>
-        <div class="sidebar-section-label">System</div>
-        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
-        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
-      </div>
-      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>
-    </aside>
+    <aside class="sidebar" data-admin-sidebar="manage-schedules"></aside>
     <div class="admin-main">
-      <div class="admin-topbar">
-        <div><span class="topbar-title">Schedules</span><span class="topbar-subtitle">/ March 2025</span></div>
-        <div class="topbar-right">
-          <button class="btn btn-gold" onclick="openModal('modalSchedule')"><i class="fa fa-plus"></i> Add Schedule</button>
-        </div>
-      </div>
+      <div class="admin-topbar" data-admin-topbar="manage-schedules"></div>
       <div class="admin-content">
         <div class="two-col mb-20" style="grid-template-columns:1fr 300px;">
-          <!-- CALENDAR -->
+          
           <div>
             <div class="section-header mb-16">
               <div class="section-title">March 2025</div>
@@ -2269,7 +2205,7 @@
                 <div class="sched-day-header">Thu</div>
                 <div class="sched-day-header">Fri</div>
                 <div class="sched-day-header">Sat</div>
-                <!-- Week 1 -->
+                
                 <div class="sched-cell"></div>
                 <div class="sched-cell"></div>
                 <div class="sched-cell"></div>
@@ -2277,7 +2213,7 @@
                 <div class="sched-cell"><div class="day-num">1</div></div>
                 <div class="sched-cell"><div class="day-num">2</div></div>
                 <div class="sched-cell"><div class="day-num">3</div><div class="sched-event gold">Clean-up Drive</div></div>
-                <!-- Week 2 -->
+                
                 <div class="sched-cell"><div class="day-num">4</div></div>
                 <div class="sched-cell"><div class="day-num">5</div><div class="sched-event blue">Brgy Assembly</div></div>
                 <div class="sched-cell"><div class="day-num">6</div></div>
@@ -2285,7 +2221,7 @@
                 <div class="sched-cell"><div class="day-num">8</div><div class="sched-event teal">Medical Mission</div></div>
                 <div class="sched-cell"><div class="day-num">9</div></div>
                 <div class="sched-cell"><div class="day-num">10</div></div>
-                <!-- Week 3 -->
+                
                 <div class="sched-cell"><div class="day-num">11</div></div>
                 <div class="sched-cell"><div class="day-num">12</div></div>
                 <div class="sched-cell"><div class="day-num">13</div><div class="sched-event purple">Livelihood Prog.</div></div>
@@ -2293,7 +2229,7 @@
                 <div class="sched-cell"><div class="day-num">15</div><div class="sched-event gold">Vaccination</div></div>
                 <div class="sched-cell"><div class="day-num">16</div></div>
                 <div class="sched-cell"><div class="day-num">17</div></div>
-                <!-- Week 4 -->
+                
                 <div class="sched-cell"><div class="day-num">18</div></div>
                 <div class="sched-cell"><div class="day-num">19</div></div>
                 <div class="sched-cell"><div class="day-num">20</div><div class="sched-event blue">Aid Distrib.</div></div>
@@ -2301,7 +2237,7 @@
                 <div class="sched-cell"><div class="day-num">22</div></div>
                 <div class="sched-cell today"><div class="day-num">23</div><div class="sched-event green">Brgy Meeting</div></div>
                 <div class="sched-cell"><div class="day-num">24</div></div>
-                <!-- Week 5 -->
+                
                 <div class="sched-cell"><div class="day-num">25</div><div class="sched-event teal">Health Seminar</div></div>
                 <div class="sched-cell"><div class="day-num">26</div></div>
                 <div class="sched-cell"><div class="day-num">27</div></div>
@@ -2313,7 +2249,7 @@
             </div>
           </div>
 
-          <!-- UPCOMING LIST -->
+          
           <div>
             <div class="section-header mb-16">
               <div class="section-title">Upcoming</div>
@@ -2323,7 +2259,7 @@
               <div class="card card-pad" style="border-left:3px solid var(--gold);">
                 <div class="flex items-center gap-8 mb-8">
                   <span class="badge badge-service">Service</span>
-                  <span class="text-sm text-gray" style="margin-left:auto;">Mar 23</span>
+                  <span class="text-sm text-gray ml-auto">Mar 23</span>
                 </div>
                 <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Barangay Council Meeting</div>
                 <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>9:00 AM – 12:00 PM</div>
@@ -2332,7 +2268,7 @@
               <div class="card card-pad" style="border-left:3px solid var(--red);">
                 <div class="flex items-center gap-8 mb-8">
                   <span class="badge badge-aid">Aid Distribution</span>
-                  <span class="text-sm text-gray" style="margin-left:auto;">Mar 28</span>
+                  <span class="text-sm text-gray ml-auto">Mar 28</span>
                 </div>
                 <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Ayuda Distribution — Q1</div>
                 <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>7:00 AM – 5:00 PM</div>
@@ -2341,7 +2277,7 @@
               <div class="card card-pad" style="border-left:3px solid var(--teal);">
                 <div class="flex items-center gap-8 mb-8">
                   <span class="badge badge-medical">Medical</span>
-                  <span class="text-sm text-gray" style="margin-left:auto;">Apr 8</span>
+                  <span class="text-sm text-gray ml-auto">Apr 8</span>
                 </div>
                 <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Free Medical Mission</div>
                 <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>8:00 AM – 3:00 PM</div>
@@ -2350,7 +2286,7 @@
               <div class="card card-pad" style="border-left:3px solid var(--green);">
                 <div class="flex items-center gap-8 mb-8">
                   <span class="badge badge-vaccine">Vaccination</span>
-                  <span class="text-sm text-gray" style="margin-left:auto;">Apr 5</span>
+                  <span class="text-sm text-gray ml-auto">Apr 5</span>
                 </div>
                 <div style="font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:4px;">Anti-Rabies Drive</div>
                 <div class="flex items-center gap-8 text-sm text-gray"><i class="fa fa-clock"></i>8:00 AM – 12:00 PM</div>
@@ -2364,31 +2300,11 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 5 — CATEGORIES                                      -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-categories" class="screen">
   <div class="admin-layout">
-    <aside class="sidebar">
-      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BarangayConnect</h2><small>Admin Portal</small></div></div></div>
-      <div class="sidebar-nav">
-        <div class="sidebar-section-label">Main</div>
-        <div class="nav-item" onclick="showScreen('admin-dashboard')"><i class="fa fa-gauge-high"></i> Dashboard</div>
-        <div class="nav-item" onclick="showScreen('manage-announcements')"><i class="fa fa-bullhorn"></i> Announcements<span class="badge">3</span></div>
-        <div class="nav-item" onclick="showScreen('manage-schedules')"><i class="fa fa-calendar-days"></i> Schedules</div>
-        <div class="nav-item active" onclick="showScreen('categories')"><i class="fa fa-tags"></i> Categories</div>
-        <div class="nav-item" onclick="showScreen('events-page')"><i class="fa fa-star"></i> Events & Programs</div>
-        <div class="sidebar-section-label">System</div>
-        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
-        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
-      </div>
-      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>
-    </aside>
+    <aside class="sidebar" data-admin-sidebar="categories"></aside>
     <div class="admin-main">
-      <div class="admin-topbar">
-        <div><span class="topbar-title">Categories</span><span class="topbar-subtitle">/ Announcement Types</span></div>
-        <div class="topbar-right"><button class="btn btn-gold"><i class="fa fa-plus"></i> New Category</button></div>
-      </div>
+      <div class="admin-topbar" data-admin-topbar="categories"></div>
       <div class="admin-content">
         <div class="notif-banner">
           <i class="fa fa-circle-info"></i>
@@ -2401,7 +2317,7 @@
             <p>Cash assistance, food packs, government subsidies</p>
             <div class="cat-count">8 <span>announcements</span></div>
             <div class="flex gap-8 mt-20">
-              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline" data-screen="manage-announcements"><i class="fa fa-eye"></i> View</button>
               <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
             </div>
           </div>
@@ -2411,7 +2327,7 @@
             <p>Fiestas, assemblies, community gatherings</p>
             <div class="cat-count">12 <span>announcements</span></div>
             <div class="flex gap-8 mt-20">
-              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline" data-screen="manage-announcements"><i class="fa fa-eye"></i> View</button>
               <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
             </div>
           </div>
@@ -2421,7 +2337,7 @@
             <p>Free check-ups, health screenings, consultations</p>
             <div class="cat-count">5 <span>announcements</span></div>
             <div class="flex gap-8 mt-20">
-              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline" data-screen="manage-announcements"><i class="fa fa-eye"></i> View</button>
               <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
             </div>
           </div>
@@ -2431,7 +2347,7 @@
             <p>Human & animal immunization schedules</p>
             <div class="cat-count">7 <span>announcements</span></div>
             <div class="flex gap-8 mt-20">
-              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline" data-screen="manage-announcements"><i class="fa fa-eye"></i> View</button>
               <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
             </div>
           </div>
@@ -2441,7 +2357,7 @@
             <p>Livelihood, seminars, environmental drives</p>
             <div class="cat-count">9 <span>announcements</span></div>
             <div class="flex gap-8 mt-20">
-              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline" data-screen="manage-announcements"><i class="fa fa-eye"></i> View</button>
               <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
             </div>
           </div>
@@ -2451,7 +2367,7 @@
             <p>Government services, permits, requirements</p>
             <div class="cat-count">7 <span>announcements</span></div>
             <div class="flex gap-8 mt-20">
-              <button class="btn btn-sm btn-outline" onclick="showScreen('manage-announcements')"><i class="fa fa-eye"></i> View</button>
+              <button class="btn btn-sm btn-outline" data-screen="manage-announcements"><i class="fa fa-eye"></i> View</button>
               <button class="btn btn-sm btn-outline"><i class="fa fa-pen"></i> Edit</button>
             </div>
           </div>
@@ -2461,37 +2377,19 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 6 — PUBLIC HOME PAGE                               -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-public-home" class="screen">
   <div class="public-layout">
-    <nav class="public-navbar">
-      <div class="navbar-inner">
-        <a class="pub-brand" href="#">
-          <div class="pub-brand-icon">🏛️</div>
-          <div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div>
-        </a>
-        <div class="pub-nav-links">
-          <button class="pub-nav-link active">Home</button>
-          <button class="pub-nav-link" onclick="showScreen('events-page')">Events</button>
-          <button class="pub-nav-link" onclick="showScreen('search-results')">Search</button>
-          <button class="pub-nav-link">Services</button>
-          <button class="pub-nav-link">About</button>
-        </div>
-        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;font-size:11px;"></i>Admin Login</button>
-      </div>
-    </nav>
+    <nav class="public-navbar" data-public-nav="public-home"></nav>
 
-    <!-- HERO -->
+    
     <div class="public-hero">
       <div class="hero-inner">
         <div class="hero-eyebrow">📢 <strong>LIVE</strong> &nbsp;3 new announcements today</div>
         <h1>Your Barangay,<br><em>Always Informed</em></h1>
         <p>Stay up-to-date with announcements, events, and services from Barangay San Isidro.</p>
         <div class="hero-search">
-          <input placeholder="Search announcements, events, services…" onclick="showScreen('search-results')"/>
-          <button onclick="showScreen('search-results')"><i class="fa fa-search" style="margin-right:6px;"></i>Search</button>
+          <input placeholder="Search announcements, events, services…" data-screen="search-results"/>
+          <button data-screen="search-results"><i class="fa fa-search" style="margin-right:6px;"></i>Search</button>
         </div>
         <div class="hero-stats">
           <div class="hero-stat"><strong>48</strong><span>Announcements</span></div>
@@ -2501,11 +2399,11 @@
       </div>
     </div>
 
-    <!-- CONTENT -->
+    
     <div class="pub-content">
-      <!-- FEED -->
+      
       <div>
-        <!-- CAT PILLS -->
+        
         <div class="cat-pills">
           <button class="cat-pill active">All</button>
           <button class="cat-pill">🏥 Aid Distribution</button>
@@ -2516,8 +2414,8 @@
           <button class="cat-pill">🛠️ Services</button>
         </div>
 
-        <!-- ANNOUNCEMENT CARDS -->
-        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+        
+        <div class="pub-announce-card" data-screen="announcement-detail">
           <div class="announce-color-bar" style="background:#E53E3E;"></div>
           <div class="announce-card-body">
             <div class="announce-card-meta">
@@ -2529,13 +2427,13 @@
             <div class="announce-card-excerpt">The Barangay San Isidro will be distributing cash assistance and food packages to qualified beneficiaries on March 28–30. Please bring your valid ID and barangay clearance.</div>
             <div class="announce-card-footer">
               <div class="announce-card-author"><div class="av">CA</div>Barangay Captain Reyes</div>
-              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>1,204 views</span>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>1,204 views</span>
               <a class="read-more">Read More →</a>
             </div>
           </div>
         </div>
 
-        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+        <div class="pub-announce-card" data-screen="announcement-detail">
           <div class="announce-color-bar" style="background:var(--navy);"></div>
           <div class="announce-card-body">
             <div class="announce-card-meta">
@@ -2546,13 +2444,13 @@
             <div class="announce-card-excerpt">Join us for four days of festivities celebrating the Feast of San Isidro Labrador! Enjoy cultural shows, sports events, food fair, and the grand parade on May 18.</div>
             <div class="announce-card-footer">
               <div class="announce-card-author"><div class="av">CA</div>Barangay Office</div>
-              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>2,341 views</span>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>2,341 views</span>
               <a class="read-more">Read More →</a>
             </div>
           </div>
         </div>
 
-        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+        <div class="pub-announce-card" data-screen="announcement-detail">
           <div class="announce-color-bar" style="background:var(--green);"></div>
           <div class="announce-card-body">
             <div class="announce-card-meta">
@@ -2563,13 +2461,13 @@
             <div class="announce-card-excerpt">Free anti-rabies vaccination for dogs and cats at the Covered Court. Bring your pets with a leash/carrier. Registration opens at 7:00 AM, first come first served basis.</div>
             <div class="announce-card-footer">
               <div class="announce-card-author"><div class="av">BH</div>Barangay Health Center</div>
-              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>876 views</span>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>876 views</span>
               <a class="read-more">Read More →</a>
             </div>
           </div>
         </div>
 
-        <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+        <div class="pub-announce-card" data-screen="announcement-detail">
           <div class="announce-color-bar" style="background:var(--teal);"></div>
           <div class="announce-card-body">
             <div class="announce-card-meta">
@@ -2580,7 +2478,7 @@
             <div class="announce-card-excerpt">A free medical mission will be held at the Barangay Health Center grounds featuring general check-up, blood pressure monitoring, blood sugar testing, and free medicines.</div>
             <div class="announce-card-footer">
               <div class="announce-card-author"><div class="av">BH</div>BHC Staff</div>
-              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>654 views</span>
+              <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>654 views</span>
               <a class="read-more">Read More →</a>
             </div>
           </div>
@@ -2594,7 +2492,7 @@
         </div>
       </div>
 
-      <!-- SIDEBAR -->
+      
       <aside>
         <div class="sidebar-widget">
           <div class="widget-header">
@@ -2604,21 +2502,21 @@
           <div class="widget-body">
             <div class="event-item">
               <div class="event-date-box"><div class="dd">23</div><div class="mm">Mar</div></div>
-              <div class="event-info"><h4>Barangay Council Meeting</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>9:00 AM • Session Hall</span></div>
+              <div class="event-info"><h4>Barangay Council Meeting</h4><span><i class="fa fa-clock mr-4"></i>9:00 AM • Session Hall</span></div>
             </div>
             <div class="event-item">
               <div class="event-date-box"><div class="dd">28</div><div class="mm">Mar</div></div>
-              <div class="event-info"><h4>Ayuda Distribution</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>7:00 AM • Covered Court</span></div>
+              <div class="event-info"><h4>Ayuda Distribution</h4><span><i class="fa fa-clock mr-4"></i>7:00 AM • Covered Court</span></div>
             </div>
             <div class="event-item">
               <div class="event-date-box"><div class="dd">05</div><div class="mm">Apr</div></div>
-              <div class="event-info"><h4>Anti-Rabies Drive</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>8:00 AM • Covered Court</span></div>
+              <div class="event-info"><h4>Anti-Rabies Drive</h4><span><i class="fa fa-clock mr-4"></i>8:00 AM • Covered Court</span></div>
             </div>
             <div class="event-item">
               <div class="event-date-box"><div class="dd">12</div><div class="mm">Apr</div></div>
-              <div class="event-info"><h4>Free Medical Mission</h4><span><i class="fa fa-clock" style="margin-right:4px;"></i>8:00 AM • BHC Grounds</span></div>
+              <div class="event-info"><h4>Free Medical Mission</h4><span><i class="fa fa-clock mr-4"></i>8:00 AM • BHC Grounds</span></div>
             </div>
-            <button class="btn btn-outline btn-sm w-full mt-20" style="justify-content:center;" onclick="showScreen('events-page')">View All Events →</button>
+            <button class="btn btn-outline btn-sm w-full mt-20" style="justify-content:center;" data-screen="events-page">View All Events →</button>
           </div>
         </div>
 
@@ -2670,30 +2568,13 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 7 — ANNOUNCEMENT DETAIL                            -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-announcement-detail" class="screen">
   <div class="public-layout">
-    <nav class="public-navbar">
-      <div class="navbar-inner">
-        <a class="pub-brand" href="#">
-          <div class="pub-brand-icon">🏛️</div>
-          <div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div>
-        </a>
-        <div class="pub-nav-links">
-          <button class="pub-nav-link" onclick="showScreen('public-home')">Home</button>
-          <button class="pub-nav-link" onclick="showScreen('events-page')">Events</button>
-          <button class="pub-nav-link" onclick="showScreen('search-results')">Search</button>
-          <button class="pub-nav-link">Services</button>
-        </div>
-        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;font-size:11px;"></i>Admin Login</button>
-      </div>
-    </nav>
+    <nav class="public-navbar" data-public-nav="announcement-detail"></nav>
 
     <div class="detail-hero">
       <div class="detail-hero-inner">
-        <button class="back-btn" onclick="showScreen('public-home')"><i class="fa fa-arrow-left"></i> Back to Announcements</button>
+        <button class="back-btn" data-screen="public-home"><i class="fa fa-arrow-left"></i> Back to Announcements</button>
         <div class="flex items-center gap-8">
           <span class="badge badge-aid">Aid Distribution</span>
           <span class="badge" style="background:rgba(255,255,255,.15);color:#fff;border:none;font-size:11px;">⭐ Priority</span>
@@ -2751,7 +2632,7 @@
           <div class="flex items-center gap-12 mt-20" style="flex-wrap:wrap;">
             <button class="btn btn-navy"><i class="fa fa-share-nodes"></i> Share Announcement</button>
             <button class="btn btn-outline"><i class="fa fa-print"></i> Print</button>
-            <button class="btn btn-outline" onclick="showScreen('public-home')"><i class="fa fa-arrow-left"></i> Back to Feed</button>
+            <button class="btn btn-outline" data-screen="public-home"><i class="fa fa-arrow-left"></i> Back to Feed</button>
           </div>
         </div>
       </div>
@@ -2759,23 +2640,9 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 8 — EVENTS & PROGRAMS                              -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-events-page" class="screen">
   <div class="public-layout">
-    <nav class="public-navbar">
-      <div class="navbar-inner">
-        <a class="pub-brand" href="#"><div class="pub-brand-icon">🏛️</div><div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div></a>
-        <div class="pub-nav-links">
-          <button class="pub-nav-link" onclick="showScreen('public-home')">Home</button>
-          <button class="pub-nav-link active" onclick="showScreen('events-page')">Events</button>
-          <button class="pub-nav-link" onclick="showScreen('search-results')">Search</button>
-          <button class="pub-nav-link">Services</button>
-        </div>
-        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;"></i>Admin Login</button>
-      </div>
-    </nav>
+    <nav class="public-navbar" data-public-nav="events-page"></nav>
 
     <div class="public-hero" style="padding:40px 24px;">
       <div class="hero-inner">
@@ -2797,7 +2664,7 @@
       </div>
 
       <div class="events-grid">
-        <div class="event-card" onclick="showScreen('announcement-detail')">
+        <div class="event-card" data-screen="announcement-detail">
           <div class="event-card-img" style="background:linear-gradient(135deg,var(--gold-pale),#fff3cd);">🎉<div class="event-card-date-badge"><div class="dd">15</div><div class="mm">May</div></div></div>
           <div class="event-card-body">
             <span class="badge badge-events mb-8">Barangay Events</span>
@@ -2809,7 +2676,7 @@
             </div>
           </div>
         </div>
-        <div class="event-card" onclick="showScreen('announcement-detail')">
+        <div class="event-card" data-screen="announcement-detail">
           <div class="event-card-img" style="background:linear-gradient(135deg,var(--teal-light),#b2f5ea);">⚕️<div class="event-card-date-badge"><div class="dd">12</div><div class="mm">Apr</div></div></div>
           <div class="event-card-body">
             <span class="badge badge-medical mb-8">Medical Mission</span>
@@ -2821,7 +2688,7 @@
             </div>
           </div>
         </div>
-        <div class="event-card" onclick="showScreen('announcement-detail')">
+        <div class="event-card" data-screen="announcement-detail">
           <div class="event-card-img" style="background:linear-gradient(135deg,var(--green-light),#c6f6d5);">💉<div class="event-card-date-badge"><div class="dd">05</div><div class="mm">Apr</div></div></div>
           <div class="event-card-body">
             <span class="badge badge-vaccine mb-8">Vaccination</span>
@@ -2833,7 +2700,7 @@
             </div>
           </div>
         </div>
-        <div class="event-card" onclick="showScreen('announcement-detail')">
+        <div class="event-card" data-screen="announcement-detail">
           <div class="event-card-img" style="background:linear-gradient(135deg,var(--sky),var(--sky-mid));">🏥<div class="event-card-date-badge"><div class="dd">28</div><div class="mm">Mar</div></div></div>
           <div class="event-card-body">
             <span class="badge badge-aid mb-8">Aid Distribution</span>
@@ -2874,23 +2741,9 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  SCREEN 9 — SEARCH RESULTS                                 -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div id="screen-search-results" class="screen">
   <div class="public-layout">
-    <nav class="public-navbar">
-      <div class="navbar-inner">
-        <a class="pub-brand" href="#"><div class="pub-brand-icon">🏛️</div><div class="pub-brand-text"><h1>BarangayConnect</h1><span>San Isidro, Calamba City</span></div></a>
-        <div class="pub-nav-links">
-          <button class="pub-nav-link" onclick="showScreen('public-home')">Home</button>
-          <button class="pub-nav-link" onclick="showScreen('events-page')">Events</button>
-          <button class="pub-nav-link active">Search</button>
-          <button class="pub-nav-link">Services</button>
-        </div>
-        <button class="pub-login-btn" onclick="showScreen('login')"><i class="fa fa-lock" style="margin-right:6px;"></i>Admin Login</button>
-      </div>
-    </nav>
+    <nav class="public-navbar" data-public-nav="search-results"></nav>
 
     <div class="search-hero">
       <div class="search-hero-inner">
@@ -2911,7 +2764,7 @@
 
     <div class="search-content">
       <div class="search-layout">
-        <!-- FILTERS SIDEBAR -->
+        
         <aside class="search-sidebar">
           <div class="card card-pad mb-20">
             <div class="section-title mb-16" style="font-size:15px;">Filters</div>
@@ -2951,11 +2804,11 @@
           </div>
         </aside>
 
-        <!-- RESULTS -->
+        
         <div class="search-results-wrap">
           <div class="search-results-count">Showing <strong>3 results</strong> for "<strong>vaccination</strong>"</div>
 
-          <div class="pub-announce-card" onclick="showScreen('announcement-detail')">
+          <div class="pub-announce-card" data-screen="announcement-detail">
             <div class="announce-color-bar" style="background:var(--green);"></div>
             <div class="announce-card-body">
               <div class="announce-card-meta"><span class="badge badge-vaccine">Vaccination</span><span class="announce-card-date">March 18, 2025</span></div>
@@ -2963,7 +2816,7 @@
               <div class="announce-card-excerpt">Free anti-rabies vaccination for dogs and cats at the Covered Court. Bring your pets with a leash/carrier. Registration opens at 7:00 AM.</div>
               <div class="announce-card-footer">
                 <div class="announce-card-author"><div class="av">BH</div>Barangay Health Center</div>
-                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>876 views</span>
+                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>876 views</span>
                 <a class="read-more">Read More →</a>
               </div>
             </div>
@@ -2977,7 +2830,7 @@
               <div class="announce-card-excerpt">Updated schedule for COVID-19 booster doses. Residents 60 years and above are prioritized. Bring vaccination card and valid ID.</div>
               <div class="announce-card-footer">
                 <div class="announce-card-author"><div class="av">BH</div>Barangay Health Center</div>
-                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>432 views</span>
+                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>432 views</span>
                 <a class="read-more">Read More →</a>
               </div>
             </div>
@@ -2991,7 +2844,7 @@
               <div class="announce-card-excerpt">Free flu vaccination for children aged 6 months to 5 years. Coordinated with the City Health Office. Priority registration for 4Ps families.</div>
               <div class="announce-card-footer">
                 <div class="announce-card-author"><div class="av">CH</div>City Health Office</div>
-                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye" style="margin-right:4px;"></i>1,102 views</span>
+                <span style="font-size:12px;color:var(--gray-400);"><i class="fa fa-eye mr-4"></i>1,102 views</span>
                 <a class="read-more">Read More →</a>
               </div>
             </div>
@@ -3007,9 +2860,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  MODAL — ADD / EDIT ANNOUNCEMENT                            -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div class="modal-backdrop" id="modalAdd" onclick="closeOnBackdrop(event, 'modalAdd')">
   <div class="modal">
     <div class="modal-header">
@@ -3087,9 +2937,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  MODAL — ADD SCHEDULE                                       -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <div class="modal-backdrop" id="modalSchedule" onclick="closeOnBackdrop(event, 'modalSchedule')">
   <div class="modal">
     <div class="modal-header">
@@ -3148,80 +2995,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--  STYLE GUIDE OVERLAY (shown on first load)                 -->
-<!-- ═══════════════════════════════════════════════════════════ -->
-<div id="styleGuide" style="display:none;position:fixed;inset:0;background:rgba(15,45,91,.6);backdrop-filter:blur(6px);z-index:9998;align-items:center;justify-content:center;">
-  <div style="background:var(--white);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);max-width:640px;width:100%;max-height:85vh;overflow-y:auto;margin:16px;">
-    <div style="padding:28px 32px;border-bottom:1px solid var(--gray-200);">
-      <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--navy);">🎨 UI Style Guide</div>
-      <div style="font-size:13px;color:var(--gray-400);margin-top:4px;">BarangayConnect Design System</div>
-    </div>
-    <div style="padding:28px 32px;">
-      <!-- COLORS -->
-      <div style="margin-bottom:24px;">
-        <div class="section-title mb-12">Color Palette</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
-          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--navy);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Navy<br>#0F2D5B</div></div>
-          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--navy-light);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Navy Light<br>#2859AD</div></div>
-          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--gold);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Gold<br>#E8A020</div></div>
-          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--sky);border:1px solid var(--gray-200);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Sky<br>#EBF3FF</div></div>
-          <div style="text-align:center;"><div style="height:48px;border-radius:10px;background:var(--off-white);border:1px solid var(--gray-200);margin-bottom:6px;"></div><div style="font-size:10px;font-weight:600;color:var(--gray-500);">Off-White<br>#F7F9FC</div></div>
-        </div>
-      </div>
-      <!-- TYPOGRAPHY -->
-      <div style="margin-bottom:24px;">
-        <div class="section-title mb-12">Typography</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="background:var(--gray-100);padding:14px 18px;border-radius:10px;">
-            <div style="font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--navy);">Libre Baskerville — Display</div>
-            <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Used for headings, page titles, hero text</div>
-          </div>
-          <div style="background:var(--gray-100);padding:14px 18px;border-radius:10px;">
-            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:400;color:var(--gray-700);">Plus Jakarta Sans — Body text, UI elements</div>
-            <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Used for all body copy, labels, navigation</div>
-          </div>
-        </div>
-      </div>
-      <!-- CATEGORY BADGES -->
-      <div style="margin-bottom:24px;">
-        <div class="section-title mb-12">Category Badges</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span class="badge badge-aid">Aid Distribution</span>
-          <span class="badge badge-events">Barangay Events</span>
-          <span class="badge badge-medical">Medical Missions</span>
-          <span class="badge badge-vaccine">Vaccination</span>
-          <span class="badge badge-program">Community Programs</span>
-          <span class="badge badge-service">Services</span>
-        </div>
-      </div>
-      <!-- BUTTONS -->
-      <div style="margin-bottom:24px;">
-        <div class="section-title mb-12">Buttons</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <button class="btn btn-navy">Primary (Navy)</button>
-          <button class="btn btn-gold">Accent (Gold)</button>
-          <button class="btn btn-outline">Outline</button>
-          <button class="btn btn-danger btn-sm">Danger</button>
-          <button class="btn btn-success btn-sm">Success</button>
-        </div>
-      </div>
-      <!-- STATUS PILLS -->
-      <div>
-        <div class="section-title mb-12">Status Indicators</div>
-        <div style="display:flex;gap:8px;">
-          <span class="status-pill published">Published</span>
-          <span class="status-pill draft">Draft</span>
-          <span class="status-pill archived">Archived</span>
-        </div>
-      </div>
-    </div>
-    <div style="padding:20px 32px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;">
-      <button class="btn btn-navy" onclick="document.getElementById('styleGuide').style.display='none'"><i class="fa fa-check"></i> Got it — View Prototype</button>
-    </div>
-  </div>
-</div>
-
 <script>
   const screenSelector = '.screen';
   const modalOpenSelector = '.modal-backdrop.open';
@@ -3249,7 +3022,104 @@
     setBodyScrollLocked(false);
   }
 
-  // ─── SCREEN MANAGEMENT ────────────────────────────────── //
+  function getAdminSidebarTemplate(activeScreen) {
+    const navItems = [
+      { screen: 'admin-dashboard', icon: 'fa-gauge-high', label: 'Dashboard' },
+      { screen: 'manage-announcements', icon: 'fa-bullhorn', label: 'Announcements', badge: '3' },
+      { screen: 'manage-schedules', icon: 'fa-calendar-days', label: 'Schedules' },
+      { screen: 'categories', icon: 'fa-tags', label: 'Categories' },
+      { screen: 'events-page', icon: 'fa-star', label: 'Events & Programs' }
+    ];
+
+    const mainNav = navItems.map(item => `
+        <div class="nav-item${item.screen === activeScreen ? ' active' : ''}" data-screen="${item.screen}">
+          <i class="fa ${item.icon}"></i> ${item.label}${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+        </div>`).join('');
+
+    return `
+      <div class="sidebar-brand"><div class="sidebar-brand-row"><div class="sidebar-logo">🏛️</div><div class="sidebar-brand-text"><h2>BC</h2><small>Admin Portal</small></div></div></div>
+      <div class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>${mainNav}
+        <div class="sidebar-section-label">System</div>
+        <div class="nav-item"><i class="fa fa-bell"></i> Notifications<span class="badge">7</span></div>
+        <div class="nav-item"><i class="fa fa-gear"></i> Settings</div>
+      </div>
+      <div class="sidebar-footer"><div class="user-pill"><div class="user-avatar">CA</div><div class="user-info"><h4>Capt. Reyes</h4><span>Barangay Captain</span></div></div></div>`;
+  }
+
+  function getPublicNavbarTemplate(activeScreen) {
+    const links = [
+      { screen: 'public-home', label: 'Home' },
+      { screen: 'events-page', label: 'Events' },
+      { screen: 'search-results', label: 'Search' },
+      { label: 'Services' }
+    ];
+
+    if (activeScreen === 'public-home') links.push({ label: 'About' });
+
+    const navLinks = links.map(link => `
+          <button class="pub-nav-link${link.screen === activeScreen ? ' active' : ''}"${link.screen ? ` data-screen="${link.screen}"` : ''}>${link.label}</button>`).join('');
+
+    return `
+      <div class="navbar-inner">
+        <a class="pub-brand" href="#"><div class="pub-brand-icon">🏛️</div><div class="pub-brand-text"><h1>BC</h1><span>San Isidro, Calamba City</span></div></a>
+        <div class="pub-nav-links">${navLinks}
+        </div>
+        <button class="pub-login-btn" data-screen="login"><i class="fa fa-lock" style="margin-right:6px;font-size:11px;"></i>Admin Login</button>
+      </div>`;
+  }
+
+  function getAdminTopbarTemplate(screen) {
+    const topbars = {
+      'admin-dashboard': `
+        <div>
+          <span class="topbar-title">Dashboard</span>
+          <span class="topbar-subtitle">/ Overview</span>
+        </div>
+        <div class="topbar-search">
+          <i class="fa fa-search"></i>
+          <input placeholder="Search announcements…" data-screen="search-results"/>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="topbar-btn"><i class="fa fa-circle-question"></i></button>
+          <div class="user-avatar" style="width:36px;height:36px;font-size:13px;">CA</div>
+        </div>`,
+      'manage-announcements': `
+        <div><span class="topbar-title">Announcements</span><span class="topbar-subtitle">/ Manage</span></div>
+        <div class="topbar-right">
+          <button class="btn btn-gold" onclick="openModal('modalAdd')"><i class="fa fa-plus"></i> New Announcement</button>
+          <button class="topbar-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
+        </div>`,
+      'manage-schedules': `
+        <div><span class="topbar-title">Schedules</span><span class="topbar-subtitle">/ March 2025</span></div>
+        <div class="topbar-right">
+          <button class="btn btn-gold" onclick="openModal('modalSchedule')"><i class="fa fa-plus"></i> Add Schedule</button>
+        </div>`,
+      'categories': `
+        <div><span class="topbar-title">Categories</span><span class="topbar-subtitle">/ Announcement Types</span></div>
+        <div class="topbar-right"><button class="btn btn-gold"><i class="fa fa-plus"></i> New Category</button></div>`
+    };
+
+    return topbars[screen] || '';
+  }
+
+  function renderSharedLayouts() {
+    document.querySelectorAll('[data-admin-sidebar]').forEach(sidebar => {
+      sidebar.innerHTML = getAdminSidebarTemplate(sidebar.dataset.adminSidebar);
+    });
+
+    document.querySelectorAll('[data-admin-topbar]').forEach(topbar => {
+      topbar.innerHTML = getAdminTopbarTemplate(topbar.dataset.adminTopbar);
+    });
+
+    document.querySelectorAll('[data-public-nav]').forEach(navbar => {
+      navbar.innerHTML = getPublicNavbarTemplate(navbar.dataset.publicNav);
+    });
+  }
+
+  renderSharedLayouts();
+
   function showScreen(id) {
     document.querySelectorAll(screenSelector).forEach(screen => screen.classList.remove('active'));
 
@@ -3262,8 +3132,6 @@
     toggleActiveByData('.nav-tabs button', 'screen', id);
     toggleActiveByData('.nav-item[data-screen]', 'screen', id);
   }
-
-  // ─── AUTH TABS ─────────────────────────────────────────── //
   function switchAuthTab(tab) {
     document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
     document.getElementById(`form-${tab}`)?.classList.add('active');
@@ -3277,8 +3145,6 @@
       button.classList.toggle('active', index === activeIndex);
     });
   }
-
-  // ─── MODALS ────────────────────────────────────────────── //
   function openModal(id) {
     const modal = document.getElementById(id);
     if (!modal) return;
@@ -3298,8 +3164,6 @@
   function closeOnBackdrop(event, id) {
     if (event.target.classList.contains('modal-backdrop')) closeModal(id);
   }
-
-  // ─── NAVIGATION + FILTER INTERACTIONS ─────────────────── //
   document.addEventListener('click', event => {
     const screenTrigger = event.target.closest('[data-screen]');
     if (screenTrigger?.dataset.screen) {
@@ -3324,16 +3188,6 @@
       setActiveWithin(publicNavLink.closest('.pub-nav-links'), '.pub-nav-link', publicNavLink);
     }
   });
-
-  // ─── SHOW STYLE GUIDE ON FIRST LOAD ──────────────────── //
-  window.addEventListener('load', () => {
-    const styleGuide = document.getElementById('styleGuide');
-    if (!styleGuide) return;
-    styleGuide.style.display = 'flex';
-    styleGuide.style.animation = 'cardIn .4s ease both';
-  });
-
-  // ─── ESC KEY TO CLOSE MODALS ──────────────────────────── //
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeAllModals();
   });

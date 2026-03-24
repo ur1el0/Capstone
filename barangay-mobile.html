@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BarangayConnect — Mobile</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e0e0e0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 24px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  /* ── PHONE FRAME ── */
+  .phone {
+    width: 375px;
+    min-height: 812px;
+    background: #fff;
+    border-radius: 40px;
+    border: 8px solid #222;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    display: flex;
+    flex-direction: column;
+  }
+  .screen-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+
+  /* ── NOTCH ── */
+  .notch {
+    background: #222;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .notch-bar {
+    width: 120px; height: 14px;
+    background: #222;
+    border-radius: 0 0 12px 12px;
+    border: 2px solid #444;
+  }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    background: #1a3a6b;
+    color: #fff;
+    padding: 4px 18px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  /* ── BOTTOM HOME BAR ── */
+  .home-bar {
+    height: 20px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+  }
+  .home-bar div {
+    width: 100px; height: 4px;
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  /* ── SCROLL AREA ── */
+  .scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  /* ── NAV HEADER ── */
+  .nav-header {
+    background: #1a3a6b;
+    color: #fff;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .nav-header h1 { font-size: 16px; }
+  .nav-header .sub { font-size: 10px; opacity: .65; }
+  .nav-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* ── BOTTOM TAB BAR ── */
+  .tab-bar {
+    background: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    flex-shrink: 0;
+  }
+  .tab-item {
+    flex: 1;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 9px;
+    color: #999;
+    cursor: pointer;
+  }
+  .tab-item .ti { font-size: 18px; display: block; margin-bottom: 2px; }
+  .tab-item.active { color: #1a3a6b; }
+  .tab-item.active .ti { }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    background: linear-gradient(135deg, #1a3a6b, #254f96);
+    color: #fff;
+    padding: 20px 18px 24px;
+  }
+  .hero p { font-size: 11px; opacity: .75; margin-bottom: 12px; }
+  .hero h2 { font-size: 18px; margin-bottom: 4px; }
+  .search-box {
+    display: flex;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .search-box input {
+    flex: 1; padding: 9px 12px;
+    border: none; font-size: 13px; outline: none; color: #333;
+  }
+  .search-box button {
+    padding: 9px 14px;
+    background: #e8a020; border: none;
+    font-size: 13px; font-weight: bold; color: #1a3a6b;
+  }
+
+  /* ── SECTION TITLE ── */
+  .sec {
+    padding: 14px 18px 8px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .sec h3 { font-size: 13px; font-weight: bold; color: #1a3a6b; }
+  .sec a  { font-size: 11px; color: #254f96; }
+
+  /* ── CATEGORY CHIPS ── */
+  .chips {
+    display: flex; gap: 8px;
+    padding: 0 18px 12px;
+    overflow-x: auto;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+    padding: 5px 12px;
+    border-radius: 16px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .chip.active { background: #1a3a6b; color: #fff; border-color: #1a3a6b; }
+
+  /* ── ANNOUNCEMENT CARD ── */
+  .ann {
+    margin: 0 18px 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .ann:hover { border-color: #1a3a6b; }
+  .ann-top {
+    display: flex; gap: 10px;
+    padding: 14px;
+  }
+  .ann-bar { width: 3px; border-radius: 3px; flex-shrink: 0; }
+  .ann-meta { display: flex; gap: 6px; align-items: center; margin-bottom: 5px; flex-wrap: wrap; }
+  .ann h4 { font-size: 13px; color: #1a3a6b; margin-bottom: 4px; line-height: 1.4; }
+  .ann p  { font-size: 11px; color: #777; line-height: 1.5;
+    overflow: hidden; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .ann-footer {
+    padding: 8px 14px;
+    border-top: 1px solid #f5f5f5;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 10px; color: #aaa;
+  }
+  .rm { color: #254f96; font-weight: bold; font-size: 11px; }
+
+  /* ── BADGE ── */
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: bold; }
+  .b-aid     { background: #fee2e2; color: #b91c1c; }
+  .b-event   { background: #dbeafe; color: #1d4ed8; }
+  .b-medical { background: #ccfbf1; color: #0f766e; }
+  .b-vaccine { background: #dcfce7; color: #15803d; }
+  .b-program { background: #ede9fe; color: #6d28d9; }
+  .b-service { background: #fef9c3; color: #854d0e; }
+  .b-date    { font-size: 10px; color: #aaa; }
+
+  /* ── EVENT LIST ITEM ── */
+  .ev-item {
+    display: flex; gap: 12px; padding: 10px 18px;
+    border-bottom: 1px solid #f5f5f5; align-items: center;
+  }
+  .ev-box {
+    width: 38px; height: 38px;
+    background: #eff6ff;
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ev-box .dd { font-size: 14px; font-weight: bold; color: #1a3a6b; line-height: 1; }
+  .ev-box .mm { font-size: 9px; color: #254f96; text-transform: uppercase; }
+  .ev-info h5 { font-size: 12px; font-weight: bold; color: #1a3a6b; }
+  .ev-info span { font-size: 10px; color: #aaa; }
+
+  /* ── DETAIL SCREEN ── */
+  .detail-head {
+    background: #1a3a6b; color: #fff; padding: 16px 18px 20px;
+  }
+  .detail-head .back {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; opacity: .8; margin-bottom: 10px; cursor: pointer;
+  }
+  .detail-head h2 { font-size: 16px; line-height: 1.4; margin: 8px 0 10px; }
+  .detail-head .dmeta { font-size: 10px; opacity: .7; display: flex; gap: 12px; flex-wrap: wrap; }
+  .detail-body { padding: 16px 18px; }
+  .detail-body p { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+  .info-box {
+    background: #eff6ff; border-left: 3px solid #1a3a6b;
+    padding: 10px 13px; border-radius: 0 6px 6px 0; margin: 12px 0; font-size: 12px;
+  }
+  .info-box h4 { color: #1a3a6b; margin-bottom: 5px; font-size: 12px; }
+  .info-box p { color: #555; margin: 0; }
+  .req-list { list-style: none; margin-bottom: 12px; }
+  .req-list li {
+    font-size: 12px; color: #555; padding: 6px 0 6px 13px;
+    border-bottom: 1px solid #f5f5f5; position: relative;
+  }
+  .req-list li::before { content: '•'; position: absolute; left: 0; color: #1a3a6b; }
+  .detail-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-sm-p {
+    padding: 8px 14px; border-radius: 6px; font-size: 12px;
+    font-weight: bold; border: none; cursor: pointer;
+  }
+  .btn-p { background: #1a3a6b; color: #fff; }
+  .btn-o { background: #fff; color: #333; border: 1px solid #ccc; }
+
+  /* ── ADMIN SCREENS ── */
+  .admin-header {
+    background: #1a3a6b; color: #fff; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .admin-header h1 { font-size: 15px; }
+  .add-btn {
+    background: #e8a020; color: #1a3a6b; border: none;
+    padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold;
+  }
+
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 18px; }
+  .stat-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px; }
+  .stat-card .n { font-size: 24px; font-weight: bold; color: #1a3a6b; }
+  .stat-card .l { font-size: 10px; color: #888; margin-top: 3px; }
+
+  .list-item {
+    padding: 12px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .list-item:hover { background: #fafafa; }
+  .li-title { font-size: 13px; font-weight: bold; color: #1a3a6b; margin-bottom: 3px; }
+  .li-sub   { font-size: 10px; color: #aaa; }
+  .li-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+
+  .status { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: bold; }
+  .s-pub  { background: #dcfce7; color: #15803d; }
+  .s-dft  { background: #f3f4f6; color: #6b7280; }
+  .s-arc  { background: #fee2e2; color: #b91c1c; }
+
+  .action-row { display: flex; gap: 6px; }
+  .ib { width: 26px; height: 26px; border-radius: 5px; border: none; font-size: 11px; cursor: pointer; }
+  .ib-e { background: #dbeafe; }
+  .ib-d { background: #fee2e2; }
+
+  /* ── FILTER BAR ── */
+  .fbar { padding: 10px 18px; display: flex; gap: 8px; overflow-x: auto; }
+  .fbar::-webkit-scrollbar { display: none; }
+  .fbar select {
+    flex-shrink: 0; padding: 6px 10px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 11px; outline: none; background: #fff;
+  }
+
+  /* ── MODAL SHEET ── */
+  .sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.15);
+    padding: 16px;
+    z-index: 20;
+  }
+  .sheet-handle {
+    width: 36px; height: 4px; background: #ddd;
+    border-radius: 4px; margin: 0 auto 14px;
+  }
+  .sheet h3 { font-size: 14px; color: #1a3a6b; margin-bottom: 14px; font-weight: bold; }
+  .fg { margin-bottom: 11px; }
+  .fg label { font-size: 10px; font-weight: bold; color: #666; display: block; margin-bottom: 4px; }
+  .fg input, .fg select, .fg textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 13px; outline: none; font-family: Arial, sans-serif;
+  }
+  .fg input:focus, .fg select:focus { border-color: #1a3a6b; }
+  .fg textarea { min-height: 70px; resize: vertical; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sheet-foot { display: flex; gap: 8px; margin-top: 14px; }
+  .sheet-foot button { flex: 1; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
+  .sf-cancel { background: #f3f4f6; color: #555; }
+  .sf-publish { background: #1a3a6b; color: #fff; }
+
+  /* ── LOGIN SCREEN ── */
+  .login-screen { padding: 32px 24px; }
+  .login-screen .logo { text-align: center; margin-bottom: 24px; }
+  .login-screen .logo div { font-size: 40px; margin-bottom: 8px; }
+  .login-screen .logo h2 { font-size: 18px; color: #1a3a6b; font-weight: bold; }
+  .login-screen .logo p { font-size: 11px; color: #aaa; }
+  .auth-tabs { display: flex; background: #f3f4f6; border-radius: 8px; padding: 3px; margin-bottom: 18px; }
+  .auth-tabs span {
+    flex: 1; text-align: center; padding: 8px;
+    border-radius: 6px; font-size: 12px; font-weight: bold; color: #999;
+  }
+  .auth-tabs span.on { background: #fff; color: #1a3a6b; }
+  .login-screen .fg { margin-bottom: 12px; }
+  .login-screen .fg input { padding: 10px 12px; }
+  .btn-login { width: 100%; padding: 11px; background: #1a3a6b; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; margin-top: 6px; cursor: pointer; }
+  .or-div { text-align: center; color: #ccc; font-size: 11px; margin: 12px 0; }
+  .guest-btn { width: 100%; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; color: #555; cursor: pointer; }
+
+  /* ── NOTIF SCREEN ── */
+  .notif-item {
+    padding: 12px 18px; border-bottom: 1px solid #f0f0f0;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .notif-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .notif-text h5 { font-size: 12px; font-weight: bold; color: #1a3a6b; margin-bottom: 2px; }
+  .notif-text p  { font-size: 11px; color: #777; line-height: 1.5; }
+  .notif-text span { font-size: 10px; color: #ccc; }
+  .unread { background: #eff6ff; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SCREEN 1 — LOGIN ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">① Login</div>
+  <div class="phone">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll">
+      <div style="background:#1a3a6b;height:120px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:0;">
+        <div style="background:#fff;width:100%;border-radius:24px 24px 0 0;height:20px;"></div>
+      </div>
+      <div class="login-screen" style="padding-top:0;background:#fff;">
+        <div class="logo">
+          <div>🏛️</div>
+          <h2>BarangayConnect</h2>
+          <p>Barangay San Isidro Official App</p>
+        </div>
+        <div class="auth-tabs">
+          <span class="on">Sign In</span>
+          <span>Register</span>
+        </div>
+        <div class="fg"><label>EMAIL</label><input type="email" value="admin@barangay.gov.ph"/></div>
+        <div class="fg"><label>PASSWORD</label><input type="password" value="••••••••"/></div>
+        <div style="text-align:right;font-size:11px;color:#254f96;margin:-4px 0 10px;">Forgot password?</div>
+        <button class="btn-login">Sign In</button>
+        <div class="or-div">— or —</div>
+        <button class="guest-btn">👤 Continue as Resident</button>
+        <p style="text-align:center;font-size:10px;color:#ccc;margin-top:20px;">Barangay San Isidro • Calamba, Laguna</p>
+      </div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCREEN 2 — PUBLIC HOME ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">② Public Home</div>
+  <div class="phone">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll">
+      <div class="hero">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <h2>Barangay San Isidro</h2>
+            <p>Official Announcements &amp; Updates</p>
+          </div>
+          <div class="nav-icon">🔔</div>
+        </div>
+        <div class="search-box">
+          <input placeholder="Search announcements…"/>
+          <button>🔍</button>
+        </div>
+      </div>
+
+      <div class="chips">
+        <span class="chip active">All</span>
+        <span class="chip">🏥 Aid</span>
+        <span class="chip">🎉 Events</span>
+        <span class="chip">⚕️ Medical</span>
+        <span class="chip">💉 Vaccine</span>
+        <span class="chip">🤝 Programs</span>
+      </div>
+
+      <div class="sec"><h3>Latest Announcements</h3><a>See all</a></div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#b91c1c;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-aid">Aid Distribution</span><span class="b-date">Mar 20</span></div>
+            <h4>Ayuda Distribution Schedule — Q1 2025</h4>
+            <p>Distribution of cash assistance and food packages to qualified beneficiaries on March 28–30.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 Capt. Reyes &nbsp;·&nbsp; 👁 1,204</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#15803d;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-vaccine">Vaccination</span><span class="b-date">Mar 18</span></div>
+            <h4>Anti-Rabies Vaccination Drive — April 5</h4>
+            <p>Free anti-rabies vaccination for dogs and cats at the Covered Court. First come, first served.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 BHC Staff &nbsp;·&nbsp; 👁 876</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#1d4ed8;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-event">Barangay Events</span><span class="b-date">Mar 15</span></div>
+            <h4>Barangay Fiesta Celebration 2025</h4>
+            <p>Four-day celebration: cultural shows, sports events, food fair, and grand parade on May 18.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 Brgy. Office &nbsp;·&nbsp; 👁 2,341</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#0f766e;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-medical">Medical Mission</span><span class="b-date">Mar 22</span></div>
+            <h4>Free Medical Mission — April 12</h4>
+            <p>General check-up, blood pressure monitoring, and free medicines at BHC Grounds.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 BHC Staff &nbsp;·&nbsp; 👁 654</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div style="height:16px;"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item active"><span class="ti">🏠</span>Home</div>
+      <div class="tab-item"><span class="ti">📢</span>Announce</div>
+      <div class="tab-item"><span class="ti">🔍</span>Search</div>
+      <div class="tab-item"><span class="ti">🔔</span>Alerts</div>
+      <div class="tab-item"><span class="ti">👤</span>Profile</div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCREEN 3 — DETAIL ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">③ Announcement Detail</div>
+  <div class="phone">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll">
+      <div class="detail-head">
+        <div class="back">← Announcements</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-aid">Aid Distribution</span>
+          <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;">⭐ Priority</span>
+        </div>
+        <h2>Ayuda Distribution Schedule — Q1 2025</h2>
+        <div class="dmeta">
+          <span>📅 Mar 20, 2025</span>
+          <span>👤 Capt. Reyes</span>
+          <span>👁 1,204</span>
+        </div>
+      </div>
+      <div class="detail-body">
+        <p>The Office of the Barangay Captain announces the first quarter distribution of the <strong>Ayuda sa Barangay</strong> program to support qualified residents.</p>
+        <div class="info-box">
+          <h4>📅 Distribution Schedule</h4>
+          <p><strong>Mar 28:</strong> Sitio 1 &amp; 2 — 7:00 AM to 12:00 PM<br>
+          <strong>Mar 29:</strong> Sitio 3 &amp; 4 — 7:00 AM to 12:00 PM<br>
+          <strong>Mar 30:</strong> Sitio 5, 6 &amp; Remaining<br>
+          <strong>Venue:</strong> Barangay Covered Court</p>
+        </div>
+        <p><strong>Each household will receive:</strong></p>
+        <ul class="req-list">
+          <li>5 kg NFA Rice</li>
+          <li>Sardines (3 cans)</li>
+          <li>Cooking oil (1 liter)</li>
+          <li>Noodles (5 packs)</li>
+          <li>₱500 cash assistance voucher</li>
+        </ul>
+        <p><strong>Requirements:</strong></p>
+        <ul class="req-list">
+          <li>Valid government-issued ID</li>
+          <li>Barangay Clearance or Barangay ID</li>
+          <li>Authorization letter if claiming for others</li>
+        </ul>
+        <div class="info-box" style="background:#f0fdf4;border-color:#15803d;">
+          <h4 style="color:#15803d;">✅ Reminder</h4>
+          <p>One (1) package per household only. Follow your sitio schedule.</p>
+        </div>
+        <div class="detail-actions">
+          <button class="btn-sm-p btn-p">🔗 Share</button>
+          <button class="btn-sm-p btn-o">🖨 Print</button>
+        </div>
+        <div style="height:12px;"></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item"><span class="ti">🏠</span>Home</div>
+      <div class="tab-item active"><span class="ti">📢</span>Announce</div>
+      <div class="tab-item"><span class="ti">🔍</span>Search</div>
+      <div class="tab-item"><span class="ti">🔔</span>Alerts</div>
+      <div class="tab-item"><span class="ti">👤</span>Profile</div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCREEN 4 — SEARCH ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">④ Search</div>
+  <div class="phone">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll">
+      <div class="nav-header">
+        <div><h1>Search</h1><div class="sub">Find announcements &amp; events</div></div>
+      </div>
+
+      <div style="padding:14px 18px 10px;">
+        <div class="search-box" style="border:1px solid #ddd;">
+          <input value="vaccination" style="color:#333;"/>
+          <button>🔍</button>
+        </div>
+      </div>
+
+      <div class="fbar">
+        <select><option>All Categories</option><option>Vaccination</option><option>Aid Distribution</option><option>Medical Missions</option></select>
+        <select><option>Any Date</option><option>This Month</option><option>Last 3 Months</option></select>
+      </div>
+
+      <div style="padding:0 18px 8px;font-size:11px;color:#aaa;"><strong style="color:#333;">3 results</strong> for "vaccination"</div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#15803d;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-vaccine">Vaccination</span><span class="b-date">Mar 18</span></div>
+            <h4>Anti-Rabies <mark style="background:#fef08a;">Vaccination</mark> Drive</h4>
+            <p>Free anti-rabies vaccination for dogs and cats. First come, first served.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 BHC Staff &nbsp;·&nbsp; 👁 876</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#1d4ed8;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-vaccine">Vaccination</span><span class="b-date">Feb 10</span></div>
+            <h4>COVID-19 Booster <mark style="background:#fef08a;">Vaccination</mark></h4>
+            <p>Updated schedule for booster doses. Residents 60+ prioritized.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 BHC Staff &nbsp;·&nbsp; 👁 432</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div class="ann">
+        <div class="ann-top">
+          <div class="ann-bar" style="background:#0f766e;"></div>
+          <div style="flex:1;">
+            <div class="ann-meta"><span class="badge b-medical">Medical</span><span class="b-date">Jan 5</span></div>
+            <h4>Flu <mark style="background:#fef08a;">Vaccination</mark> for Children</h4>
+            <p>Free flu vaccination for children aged 6 months to 5 years.</p>
+          </div>
+        </div>
+        <div class="ann-footer"><span>👤 City Health &nbsp;·&nbsp; 👁 1,102</span><span class="rm">Read More →</span></div>
+      </div>
+
+      <div style="height:16px;"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item"><span class="ti">🏠</span>Home</div>
+      <div class="tab-item"><span class="ti">📢</span>Announce</div>
+      <div class="tab-item active"><span class="ti">🔍</span>Search</div>
+      <div class="tab-item"><span class="ti">🔔</span>Alerts</div>
+      <div class="tab-item"><span class="ti">👤</span>Profile</div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCREEN 5 — NOTIFICATIONS ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">⑤ Notifications</div>
+  <div class="phone">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll">
+      <div class="nav-header">
+        <div><h1>Notifications</h1><div class="sub">Stay updated</div></div>
+        <div class="nav-icon">✓</div>
+      </div>
+
+      <div style="padding:10px 18px 6px;font-size:11px;font-weight:bold;color:#aaa;text-transform:uppercase;letter-spacing:.5px;">Today</div>
+
+      <div class="notif-item unread">
+        <div class="notif-dot" style="background:#fee2e2;">🏥</div>
+        <div class="notif-text">
+          <h5>New Announcement: Ayuda Distribution</h5>
+          <p>Ayuda Distribution Schedule Q1 2025 is now published. Check venue and schedule.</p>
+          <span>2 hours ago</span>
+        </div>
+      </div>
+
+      <div class="notif-item unread">
+        <div class="notif-dot" style="background:#dcfce7;">💉</div>
+        <div class="notif-text">
+          <h5>Reminder: Anti-Rabies Drive</h5>
+          <p>Anti-Rabies Vaccination Drive is happening on April 5 at Covered Court.</p>
+          <span>5 hours ago</span>
+        </div>
+      </div>
+
+      <div style="padding:10px 18px 6px;font-size:11px;font-weight:bold;color:#aaa;text-transform:uppercase;letter-spacing:.5px;">Yesterday</div>
+
+      <div class="notif-item">
+        <div class="notif-dot" style="background:#ccfbf1;">⚕️</div>
+        <div class="notif-text">
+          <h5>Medical Mission Posted</h5>
+          <p>Free Medical Mission on April 12 at BHC Grounds. Registration details available.</p>
+          <span>1 day ago</span>
+        </div>
+      </div>
+
+      <div class="notif-item">
+        <div class="notif-dot" style="background:#dbeafe;">🎉</div>
+        <div class="notif-text">
+          <h5>Barangay Fiesta 2025</h5>
+          <p>Barangay Fiesta Celebration is set for May 15–18, 2025 at the Plaza.</p>
+          <span>2 days ago</span>
+        </div>
+      </div>
+
+      <div class="notif-item">
+        <div class="notif-dot" style="background:#ede9fe;">🤝</div>
+        <div class="notif-text">
+          <h5>Community Clean-Up Drive</h5>
+          <p>Join our quarterly clean-up drive on April 6. Sitio 3 to 6. 6:00 AM start.</p>
+          <span>3 days ago</span>
+        </div>
+      </div>
+
+      <div style="height:16px;"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item"><span class="ti">🏠</span>Home</div>
+      <div class="tab-item"><span class="ti">📢</span>Announce</div>
+      <div class="tab-item"><span class="ti">🔍</span>Search</div>
+      <div class="tab-item active"><span class="ti">🔔</span>Alerts</div>
+      <div class="tab-item"><span class="ti">👤</span>Profile</div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCREEN 6 — ADMIN DASHBOARD ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">⑥ Admin Dashboard</div>
+  <div class="phone">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll">
+      <div class="admin-header">
+        <div><h1>Dashboard</h1><div style="font-size:10px;opacity:.7;">Capt. Reyes — Admin</div></div>
+        <button class="add-btn">+ New</button>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="n">48</div><div class="l">Total Announcements</div></div>
+        <div class="stat-card"><div class="n">14</div><div class="l">Published This Month</div></div>
+        <div class="stat-card"><div class="n">3</div><div class="l">Pending Review</div></div>
+        <div class="stat-card"><div class="n">8.4K</div><div class="l">Portal Views (30d)</div></div>
+      </div>
+
+      <div class="sec"><h3>Recent Announcements</h3><a>View All</a></div>
+
+      <div class="list-item">
+        <div>
+          <div class="li-title">Ayuda Distribution — Q1 2025</div>
+          <div class="li-sub">Mar 28–30 • Covered Court</div>
+        </div>
+        <div class="li-right">
+          <span class="status s-pub">Published</span>
+          <span class="badge b-aid" style="font-size:9px;">Aid</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="li-title">Anti-Rabies Vaccination Drive</div>
+          <div class="li-sub">Apr 5 • Covered Court</div>
+        </div>
+        <div class="li-right">
+          <span class="status s-pub">Published</span>
+          <span class="badge b-vaccine" style="font-size:9px;">Vaccine</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="li-title">Free Medical Mission — BHC</div>
+          <div class="li-sub">Apr 12 • BHC Grounds</div>
+        </div>
+        <div class="li-right">
+          <span class="status s-dft">Draft</span>
+          <span class="badge b-medical" style="font-size:9px;">Medical</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="li-title">Community Clean-Up Drive</div>
+          <div class="li-sub">Apr 6 • Sitio 3–6</div>
+        </div>
+        <div class="li-right">
+          <span class="status s-dft">Draft</span>
+          <span class="badge b-program" style="font-size:9px;">Program</span>
+        </div>
+      </div>
+
+      <div style="height:16px;"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item active"><span class="ti">📊</span>Dashboard</div>
+      <div class="tab-item"><span class="ti">📢</span>Manage</div>
+      <div class="tab-item"><span class="ti">🔔</span>Alerts</div>
+      <div class="tab-item"><span class="ti">👥</span>Users</div>
+      <div class="tab-item"><span class="ti">⚙️</span>Settings</div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCREEN 7 — ADMIN MANAGE + MODAL ═══════════════════════════════ -->
+<div>
+  <div class="screen-label">⑦ Manage + Create Modal</div>
+  <div class="phone" style="position:relative;">
+    <div class="notch"><div class="notch-bar"></div></div>
+    <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+    <div class="scroll" style="filter:brightness(.85);">
+      <div class="admin-header">
+        <div><h1>Announcements</h1></div>
+        <button class="add-btn">+ New</button>
+      </div>
+      <div class="fbar">
+        <select><option>All Categories</option></select>
+        <select><option>All Status</option></select>
+      </div>
+      <div class="list-item">
+        <div><div class="li-title">Ayuda Distribution — Q1 2025</div><div class="li-sub">Mar 28–30</div></div>
+        <div class="li-right"><span class="status s-pub">Published</span><div class="action-row"><button class="ib ib-e">✏️</button><button class="ib ib-d">🗑</button></div></div>
+      </div>
+      <div class="list-item">
+        <div><div class="li-title">Anti-Rabies Vaccination Drive</div><div class="li-sub">Apr 5</div></div>
+        <div class="li-right"><span class="status s-pub">Published</span><div class="action-row"><button class="ib ib-e">✏️</button><button class="ib ib-d">🗑</button></div></div>
+      </div>
+      <div class="list-item">
+        <div><div class="li-title">Free Medical Mission — BHC</div><div class="li-sub">Apr 12</div></div>
+        <div class="li-right"><span class="status s-dft">Draft</span><div class="action-row"><button class="ib ib-e">✏️</button><button class="ib ib-d">🗑</button></div></div>
+      </div>
+    </div>
+    <!-- BOTTOM SHEET MODAL -->
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Create Announcement</h3>
+      <div class="fg"><label>TITLE</label><input type="text" placeholder="Enter title…"/></div>
+      <div class="row2">
+        <div class="fg"><label>CATEGORY</label>
+          <select><option>Aid Distribution</option><option>Events</option><option>Medical</option><option>Vaccination</option></select>
+        </div>
+        <div class="fg"><label>STATUS</label>
+          <select><option>Draft</option><option>Published</option></select>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>DATE FROM</label><input type="date"/></div>
+        <div class="fg"><label>DATE TO</label><input type="date"/></div>
+      </div>
+      <div class="fg"><label>VENUE</label><input type="text" placeholder="Location…"/></div>
+      <div class="fg"><label>CONTENT</label><textarea placeholder="Write details…"></textarea></div>
+      <div class="sheet-foot">
+        <button class="sf-cancel">Cancel</button>
+        <button class="sf-cancel">Save Draft</button>
+        <button class="sf-publish">Publish</button>
+      </div>
+    </div>
+    <div class="home-bar"><div></div></div>
+  </div>
+</div>
+
+</body>
+</html>
