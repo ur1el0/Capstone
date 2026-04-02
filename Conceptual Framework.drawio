@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="v3Z_Beg2cSotCHrrwbdH">
+    <mxGraphModel dx="1166" dy="1982" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Input&#xa;&#xa;- Announcements&#xa;- Schedules&#xa;- Events&#xa;- User Data&#xa;- Login Credentials" vertex="1">
+          <mxGeometry height="143" width="210" x="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Process&#xa;&#xa;- Authentication &amp; Access Control&#xa;- CRUD Operations&#xa;- Categorization&#xa;- Search &amp; Filtering&#xa;- API&#xa;- Database" vertex="1">
+          <mxGeometry height="140" width="210" x="60" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Output&#xa;&#xa;- Accessible Announcements&#xa;- Organized Schedules&#xa;- Event Updates&#xa;- Improved Communication&#xa;- Transparency&#xa;- Real-time Information" vertex="1">
+          <mxGeometry height="140" width="210" x="60" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Feedback&#xa;&#xa;- User Feedback&#xa;- System Improvements&#xa;- Continuous Updates" vertex="1">
+          <mxGeometry height="120" width="210" x="60" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="6" edge="1" parent="1" source="2" style="curved=1;startArrow=none;endArrow=block;exitX=0.498;exitY=1.011;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.499;entryY=-0.015;entryDx=0;entryDy=0;entryPerimeter=0;" target="3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+            <mxPoint x="164.79999999999998" y="143" as="sourcePoint" />
+            <mxPoint x="170" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7" edge="1" parent="1" source="3" style="startArrow=none;endArrow=block;exitX=0.501;exitY=1.008;exitDx=0;exitDy=0;entryX=0.501;entryY=-0.013;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" target="4" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="56.5" y="227" as="sourcePoint" />
+            <mxPoint x="57" y="333" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8" edge="1" parent="1" source="4" style="startArrow=none;endArrow=block;entryX=0.503;entryY=-0.017;entryDx=0;entryDy=0;entryPerimeter=0;" target="5" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="367" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9" edge="1" parent="1" source="5" style="startArrow=none;endArrow=block;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1.02;entryY=0.501;entryDx=0;entryDy=0;entryPerimeter=0;rounded=0;edgeStyle=orthogonalEdgeStyle;" target="3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="730" />
+              <mxPoint x="450" y="290" />
+            </Array>
+            <mxPoint x="120" y="197" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
