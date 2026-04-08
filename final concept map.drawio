@@ -1,0 +1,39 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="sET1uvvBfGZurrwaioO3">
+    <mxGraphModel dx="1496" dy="856" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-14" edge="1" parent="1" source="Kc8ie7_AXMw2HaYmjwNy-2" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;startSize=8;endSize=8;entryX=0.502;entryY=-0.014;entryDx=0;entryDy=0;entryPerimeter=0;" target="Kc8ie7_AXMw2HaYmjwNy-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-2" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;b&gt;Current Barangay Communication&lt;/b&gt;&lt;div&gt;- Facebook announcement&lt;/div&gt;&lt;div&gt;- Purok Leaders&lt;/div&gt;&lt;div&gt;- Manual / door-to-door&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="290" x="255" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-15" edge="1" parent="1" source="Kc8ie7_AXMw2HaYmjwNy-5" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;startSize=8;endSize=8;entryX=0.5;entryY=-0.005;entryDx=0;entryDy=0;entryPerimeter=0;" target="Kc8ie7_AXMw2HaYmjwNy-7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-5" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;b&gt;Identified Problems&lt;/b&gt;&lt;div&gt;- Inconsistent dissemination&lt;/div&gt;&lt;div&gt;- Missed announcements&lt;/div&gt;&lt;div&gt;- Limited access (devices, internet)&lt;/div&gt;&lt;div&gt;- Bad communication&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="280" x="260" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-16" edge="1" parent="1" source="Kc8ie7_AXMw2HaYmjwNy-7" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;startSize=8;endSize=8;entryX=0.501;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;" target="Kc8ie7_AXMw2HaYmjwNy-9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-7" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;b&gt;Proposed System&lt;/b&gt;&lt;div&gt;- Centralized information&lt;/div&gt;&lt;div&gt;- Announcement and schedule management&lt;/div&gt;&lt;div&gt;- Accessible via web and mobile&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="280" x="260" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-17" edge="1" parent="1" source="Kc8ie7_AXMw2HaYmjwNy-9" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;startSize=8;endSize=8;entryX=0.499;entryY=-0.014;entryDx=0;entryDy=0;entryPerimeter=0;" target="Kc8ie7_AXMw2HaYmjwNy-11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-9" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;b&gt;Communication Approach&lt;/b&gt;&lt;div&gt;- Hybrid communication&lt;/div&gt;&lt;div&gt;- Digital system + traditional methods&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="205" x="297.5" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="Kc8ie7_AXMw2HaYmjwNy-11" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;b&gt;Expected Outcomes&lt;/b&gt;&lt;div&gt;- Improved Accessibility&lt;/div&gt;&lt;div&gt;- Organized information&lt;/div&gt;&lt;div&gt;- Reduced missed announcements&lt;/div&gt;&lt;div&gt;- Better awareness&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="222.5" x="288.75" y="930" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
