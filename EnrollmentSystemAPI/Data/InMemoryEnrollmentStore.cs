@@ -11,7 +11,7 @@ public class InMemoryEnrollmentStore
 
     public List<Student> Students { get; } =
     [
-        new Student { Id = 1, FirstName = "Roosc", LastName = "Zaño", Age = 21, SectionId = 1, Gender = "M", Grades = 85 },
+        new Student { Id = 1, FirstName = "Roose", LastName = "Zaño", Age = 21, SectionId = 1, Gender = "M", Grades = 85 },
         new Student { Id = 2, FirstName = "Mike", LastName = "Zaño", Age = 31, SectionId = 1, Gender = "M", Grades = 90 }
     ];
 }

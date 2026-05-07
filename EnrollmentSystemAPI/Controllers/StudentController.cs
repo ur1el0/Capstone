@@ -7,14 +7,14 @@ namespace EnrollmentSystemApi.Controllers;
 
 [ApiController]
 [Route("api/section/{sectionId}/student")]
-public class StudentController(IStudentService studentServices, ISectionService sectionService) : ControllerBase
+public class StudentController(IStudentService studentService, ISectionService sectionService) : ControllerBase
 {
     [HttpGet]
     public ActionResult<List<StudentResponseDTO>> GetAll(int sectionId)
     {
         var section = sectionService.GetSectionById(sectionId);
         if (section is null) return NotFound();
-        var students = studentServices.GetStudentsBySectionCode(section.Code);
+        var students = studentService.GetStudentsBySectionCode(section.Code);
         return Ok(students);
     }
 
@@ -23,7 +23,7 @@ public class StudentController(IStudentService studentServices, ISectionService 
     {
         var section = sectionService.GetSectionById(sectionId);
         if (section is null) return NotFound();
-        var student = studentServices.GetStudentBySectionCodeAndId(section.Code, studentId);
+        var student = studentService.GetStudentBySectionCodeAndId(section.Code, studentId);
         if (student == null) return NotFound();
         return Ok(student);
     }
@@ -38,7 +38,7 @@ public class StudentController(IStudentService studentServices, ISectionService 
     {
         var section = sectionService.GetSectionById(sectionId);
         if (section is null) return NotFound();
-        var students = studentServices.GetStudentsBySectionCode(section.Code, firstName, lastName, gender, age);
+        var students = studentService.GetStudentsBySectionCode(section.Code, firstName, lastName, gender, age);
         return Ok(students);
     }
 
@@ -53,7 +53,7 @@ public class StudentController(IStudentService studentServices, ISectionService 
             dto.GeneratedGrade = grade;
         }
 
-        var created = studentServices.CreateInSection(section.Code, dto);
+        var created = studentService.CreateInSection(section.Code, dto);
         if (created is null) return BadRequest();
         return CreatedAtAction(nameof(GetById), new { sectionId, studentId = created.Id }, created);
     }
@@ -63,7 +63,7 @@ public class StudentController(IStudentService studentServices, ISectionService 
     {
         var section = sectionService.GetSectionById(sectionId);
         if (section is null) return NotFound();
-        var ok = studentServices.UpdateInSection(section.Code, studentId, dto);
+        var ok = studentService.UpdateInSection(section.Code, studentId, dto);
         return ok ? NoContent() : NotFound();
     }
 
@@ -72,7 +72,7 @@ public class StudentController(IStudentService studentServices, ISectionService 
     {
         var section = sectionService.GetSectionById(sectionId);
         if (section is null) return NotFound();
-        var ok = studentServices.PatchInSection(section.Code, studentId, dto);
+        var ok = studentService.PatchInSection(section.Code, studentId, dto);
         return ok ? NoContent() : NotFound();
     }
 
@@ -81,7 +81,7 @@ public class StudentController(IStudentService studentServices, ISectionService 
     {
         var section = sectionService.GetSectionById(sectionId);
         if (section is null) return NotFound();
-        var ok = studentServices.DeleteInSection(section.Code, studentId);
+        var ok = studentService.DeleteInSection(section.Code, studentId);
         return ok ? NoContent() : NotFound();
     }
 }
