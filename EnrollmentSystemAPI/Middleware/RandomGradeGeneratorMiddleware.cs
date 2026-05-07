@@ -9,6 +9,7 @@ public class RandomGradeGeneratorMiddleware(RequestDelegate next)
     public async Task InvokeAsync(HttpContext context)
     {
         var grade = Random.Next(75, 101);
+        context.Items["GeneratedGrade"] = grade;
         context.Response.Headers["GeneratedGrade"] = grade.ToString();
         await next(context);
     }
